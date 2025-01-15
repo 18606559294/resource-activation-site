@@ -25,12 +25,17 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
+          cache: 'npm'
           
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install -g pnpm
+          pnpm install
         
       - name: Build
-        run: npm run build
+        run: pnpm build
+        env:
+          CI: false
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
