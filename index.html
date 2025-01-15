@@ -9,20 +9,20 @@
     <title>资源收集和激活工具更新平台</title>
     
     <!-- 预加载关键资源 -->
-    <link rel="preload" href="./css/modern.css" as="style">
-    <link rel="preload" href="./js/app.js" as="script">
+    <link rel="preload" href="/css/modern.css" as="style">
+    <link rel="preload" href="/js/app.js" as="script">
     
     <!-- 样式表 -->
-    <link rel="stylesheet" href="./css/styles.css">
-    <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./css/animations.css">
-    <link rel="stylesheet" href="./css/mobile.css">
-    <link rel="stylesheet" href="./css/themes.css">
-    <link rel="stylesheet" href="./css/ui-feedback.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/components.css">
+    <link rel="stylesheet" href="/css/animations.css">
+    <link rel="stylesheet" href="/css/mobile.css">
+    <link rel="stylesheet" href="/css/themes.css">
+    <link rel="stylesheet" href="/css/ui-feedback.css">
     
     <!-- PWA 支持 -->
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="./icons/icon-192x192.png">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
     
     <!-- 字体加载 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -88,7 +88,7 @@
                     </div>
                     <h3>资源更新</h3>
                     <p>提供最新的资源文件下载，保持您的工具始终是最新版本。</p>
-                    <a href="./resources.html" class="card-link">查看资源</a>
+                    <a href="/resources.html" class="card-link">查看资源</a>
                 </div>
                 
                 <!-- 激活工具卡片 -->
@@ -101,7 +101,7 @@
                     </div>
                     <h3>激活工具</h3>
                     <p>安全可靠的激活解决方案，支持多种系统和软件。</p>
-                    <a href="./toolbox.html" class="card-link">浏览工具</a>
+                    <a href="/toolbox.html" class="card-link">浏览工具</a>
                 </div>
                 
                 <!-- 安全中心卡片 -->
@@ -113,7 +113,7 @@
                     </div>
                     <h3>安全中心</h3>
                     <p>所有工具经过安全检测，确保无毒无害。</p>
-                    <a href="./security.html" class="card-link">了解更多</a>
+                    <a href="/security.html" class="card-link">了解更多</a>
                 </div>
             </div>
         </section>
@@ -150,17 +150,17 @@
                 <div class="footer-section">
                     <h4>快速链接</h4>
                     <ul>
-                        <li><a href="./resources.html">资源下载</a></li>
-                        <li><a href="./toolbox.html">工具箱</a></li>
-                        <li><a href="./security.html">安全说明</a></li>
-                        <li><a href="./feedback.html">问题反馈</a></li>
+                        <li><a href="/resources.html">资源下载</a></li>
+                        <li><a href="/toolbox.html">工具箱</a></li>
+                        <li><a href="/security.html">安全说明</a></li>
+                        <li><a href="/feedback.html">问题反馈</a></li>
                     </ul>
                 </div>
                 <div class="footer-section">
                     <h4>联系方式</h4>
                     <ul>
                         <li><a href="https://github.com/18606559294/resource-activation-site" target="_blank" rel="noopener">GitHub</a></li>
-                        <li><a href="./feedback.html">反馈建议</a></li>
+                        <li><a href="/feedback.html">反馈建议</a></li>
                     </ul>
                 </div>
             </div>
@@ -171,12 +171,12 @@
     </footer>
 
     <!-- JavaScript -->
-    <script type="module" src="./main.js"></script>
+    <script type="module" src="/main.js"></script>
     <script>
         // 注册 Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js')
+                navigator.serviceWorker.register('/service-worker.js')
                     .then(registration => {
                         console.log('ServiceWorker registration successful');
                     })
