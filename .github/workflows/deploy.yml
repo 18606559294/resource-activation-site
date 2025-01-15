@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -29,18 +29,20 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: |
-          npm install
-          npm ci
+        run: npm install
 
       - name: Build
         run: npm run build
         env:
           CI: false
 
+      - name: Add CNAME
+        run: echo "ndtool.cn" > dist/CNAME
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: dist
           branch: gh-pages
+          token: ${{ secrets.GITHUB_TOKEN }}
           clean: true
