@@ -1,0 +1,98 @@
+.status-container {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.status-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.status-online {
+    background-color: #4CAF50;
+}
+
+.status-offline {
+    background-color: #f44336;
+}
+
+.status-details {
+    margin-top: 10px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.update-history {
+    margin-top: 20px;
+}
+
+.update-item {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.update-time {
+    color: #666;
+    font-size: 0.9em;
+}
+
+.back-button {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #2196F3;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    transition: background-color 0.3s;
+}
+
+.back-button:hover {
+    background-color: #1976D2;
+}
+
+#lastUpdate {
+    color: #666;
+    font-size: 0.9em;
+    margin-top: 20px;
+}
+
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #1a1a1a;
+        color: #fff;
+    }
+
+    .status-card {
+        background: #2d2d2d;
+        color: #fff;
+    }
+
+    .status-details {
+        color: #ccc;
+    }
+
+    .update-item {
+        border-bottom-color: #444;
+    }
+
+    .update-time {
+        color: #ccc;
+    }
+
+    #lastUpdate {
+        color: #ccc;
+    }
+}

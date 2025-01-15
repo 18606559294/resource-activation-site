@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源下载</title>
+    <link rel="stylesheet" href="./src/css/styles.css">
+    <link rel="stylesheet" href="./src/css/components.css">
+    <link rel="stylesheet" href="./src/css/resources.css">
+</head>
+<body>
+    <div class="resources-container">
+        <a href="index.html" class="back-button">返回主页</a>
+        <h1>资源下载</h1>
+        
+        <div class="resources-grid">
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <img src="./src/assets/images/windows.svg" alt="Windows图标">
+                </div>
+                <div class="resource-info">
+                    <h3>Windows 10 专业版</h3>
+                    <p>版本：21H2</p>
+                    <p>大小：4.8GB</p>
+                    <p>更新时间：2025-01-15</p>
+                    <div class="resource-actions">
+                        <button class="download-btn" data-resource="win10-pro">下载</button>
+                        <button class="info-btn" data-resource="win10-pro">详情</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <img src="./src/assets/images/windows11.svg" alt="Windows 11图标">
+                </div>
+                <div class="resource-info">
+                    <h3>Windows 11 专业版</h3>
+                    <p>版本：23H2</p>
+                    <p>大小：5.2GB</p>
+                    <p>更新时间：2025-01-10</p>
+                    <div class="resource-actions">
+                        <button class="download-btn" data-resource="win11-pro">下载</button>
+                        <button class="info-btn" data-resource="win11-pro">详情</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="resource-card">
+                <div class="resource-icon">
+                    <img src="./src/assets/images/office.svg" alt="Office图标">
+                </div>
+                <div class="resource-info">
+                    <h3>Office 2024 专业增强版</h3>
+                    <p>版本：2024</p>
+                    <p>大小：2.8GB</p>
+                    <p>更新时间：2025-01-12</p>
+                    <div class="resource-actions">
+                        <button class="download-btn" data-resource="office2024">下载</button>
+                        <button class="info-btn" data-resource="office2024">详情</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="resourceModal" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <h2 id="modalTitle"></h2>
+                <div id="modalBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./src/js/resources.js"></script>
+</body>
+</html>

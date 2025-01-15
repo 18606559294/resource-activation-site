@@ -1,0 +1,78 @@
+{
+  "meta": {
+    "language": "en",
+    "direction": "ltr"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "search": "Search",
+    "noResults": "No results found",
+    "offline": "You are offline",
+    "online": "Network connection restored"
+  },
+  "title": "Resource Collection and Activation Tools Update",
+  "nav": {
+    "home": "Home",
+    "feedback": "Feedback",
+    "security": "Security",
+    "resources": "Resources"
+  },
+  "card1": {
+    "title": "Active Management of Activation Tools",
+    "description": "This role provides management and updates for activation tools, promptly responding to user needs for updated resources, ensuring compatibility and accessibility across different Windows versions."
+  },
+  "card2": {
+    "title": "User Feedback and Problem Resolution",
+    "description": "Users often leave comments about activation issues and other concerns. Site management provides immediate comprehensive solutions, creating an interactive and mutually supportive community."
+  },
+  "card3": {
+    "title": "Resource Security Considerations",
+    "description": "The platform emphasizes security, ensuring all shared resources are tested for viruses and malware, and reminds users of potential conflicts that may interfere with built-in security software."
+  },
+  "card4": {
+    "title": "Dynamic Resource Links and User Accessibility",
+    "description": "Users can easily browse the resource platform through public links, quickly accessing updated resources, thereby enhancing user experience and convenience."
+  },
+  "feedback": {
+    "title": "Issue Feedback",
+    "description": "Please describe the issue you encountered",
+    "placeholder": "Enter your issue description here...",
+    "submit": "Submit Feedback",
+    "success": "Feedback submitted",
+    "error": "Submission failed, please try again"
+  },
+  "security": {
+    "title": "Security Instructions",
+    "virusScan": "Virus Scan",
+    "malwareScan": "Malware Detection",
+    "compatibility": "Compatibility Check",
+    "warning": "Security Warning",
+    "notice": "Important Notice"
+  },
+  "errors": {
+    "networkError": "Network error, please check your connection",
+    "serverError": "Server error, please try again later",
+    "notFound": "Requested resource not found",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Access to this resource is forbidden"
+  },
+  "accessibility": {
+    "skipToMain": "Skip to main content",
+    "languageSwitch": "Switch language",
+    "darkMode": "Toggle dark mode",
+    "menuOpen": "Open menu",
+    "menuClose": "Close menu"
+  }
+}

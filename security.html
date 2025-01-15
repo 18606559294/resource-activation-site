@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-i18n="security.title">互联网安全提示</title>
+    <link rel="stylesheet" href="./src/css/styles.css">
+    <link rel="stylesheet" href="./src/css/components.css">
+    <link rel="stylesheet" href="./src/css/security.css">
+</head>
+<body>
+    <div class="security-container">
+        <button class="back-button" onclick="window.location.href='index.html'" data-i18n="security.back">返回主页</button>
+        <h1 data-i18n="security.header">互联网安全提示</h1>
+        
+        <div class="security-grid">
+            <div class="security-item" onclick="showModal('privacy')">
+                <div class="security-icon">🔒</div>
+                <h2 data-i18n="security.privacy.title">隐私保护</h2>
+                <p data-i18n="security.privacy.description">了解如何保护您的个人信息和在线隐私。</p>
+            </div>
+            
+            <div class="security-item" onclick="showModal('password')">
+                <div class="security-icon">🔑</div>
+                <h2 data-i18n="security.password.title">密码安全</h2>
+                <p data-i18n="security.password.description">创建和管理强密码的最佳实践。</p>
+            </div>
+            
+            <div class="security-item" onclick="showModal('phishing')">
+                <div class="security-icon">🎣</div>
+                <h2 data-i18n="security.phishing.title">防范钓鱼</h2>
+                <p data-i18n="security.phishing.description">识别和避免网络钓鱼攻击。</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 模态框 -->
+    <div class="modal" onclick="closeModal(event)">
+        <div class="modal-content">
+            <button class="close-button" onclick="closeModal()">&times;</button>
+            <h2 id="modalTitle"></h2>
+            <div id="modalContent"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script type="module" src="./src/js/security.js"></script>
+</body>
+</html>

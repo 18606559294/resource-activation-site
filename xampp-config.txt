@@ -1,0 +1,29 @@
+# XAMPP 配置指南
+
+## 1. Apache 配置
+- 端口: 80 (HTTP), 443 (HTTPS)
+- 文档根目录: C:/xampp/htdocs/resource-activation-site
+
+## 2. 安全设置
+- 更改默认密码
+- 限制访问IP
+- 启用 SSL
+
+## 3. 域名设置
+- 本地域名: resource-activation.local
+- 外部域名: 等待配置
+
+## 4. 防火墙规则
+- 开放端口: 80, 443
+- 允许 Apache 通过防火墙
+- 配置入站规则
+
+## 5. SSL 证书信息
+- 证书类型: Self-signed (开发环境)
+- 有效期: 365天
+- 密钥长度: 2048位
+
+## 6. 备份策略
+- 备份周期: 每周
+- 备份内容: 网站文件、数据库
+- 备份位置: C:/xampp/backup

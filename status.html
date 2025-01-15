@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统状态监控</title>
+    <link rel="stylesheet" href="./src/css/styles.css">
+    <link rel="stylesheet" href="./src/css/components.css">
+    <link rel="stylesheet" href="./src/css/status.css">
+</head>
+<body>
+    <div class="language-switcher">
+        <button onclick="changeLanguage('zh')">中文</button>
+        <button onclick="changeLanguage('en')">English</button>
+    </div>
+    
+    <div class="status-container">
+        <h1 data-i18n="status.title">系统状态监控</h1>
+        
+        <div class="status-card">
+            <h2 data-i18n="status.github">GitHub Pages 状态</h2>
+            <div>
+                <span class="status-indicator status-online"></span>
+                <span id="githubStatusText" data-i18n="status.online">在线</span>
+            </div>
+            <div class="status-details">
+                <p>最后更新时间: <span id="lastUpdate">-</span></p>
+                <p>仓库地址: <a href="https://github.com/18606559294/resource-activation-site" target="_blank">resource-activation-site</a></p>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <h2 data-i18n="status.updates">最近更新</h2>
+            <div class="update-history" id="updateHistory">
+                <!-- 更新历史将从 GitHub API 获取 -->
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="./src/js/status.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js');
+            });
+        }
+    </script>
+</body>
+</html>
