@@ -7,9 +7,9 @@ import './css/themes.css';
 import './css/components.css';
 
 // 导入所有 JavaScript 文件
-import './js/app.js';
-import './js/animations.js';
-import './js/theme-manager.js';
-import './js/components.js';
-import './js/tools-manager.js';
-import './i18n.js';
+import './src/js/app.js';
+import './src/js/animations.js';
+import './src/js/theme-manager.js';
+import './src/js/components.js';
+import './src/js/tools-manager.js';
+import './src/i18n.js';

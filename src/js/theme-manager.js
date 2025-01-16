@@ -1,5 +1,12 @@
 // 主题管理器
 class ThemeManager {
+    /** @type {string[]} */
+    themes;
+    /** @type {string} */
+    currentTheme;
+    /** @type {boolean} */
+    isDark;
+
     constructor() {
         this.themes = [
             'default',
@@ -13,8 +20,13 @@ class ThemeManager {
             'sunset'
         ];
         
-        this.currentTheme = localStorage.getItem('theme') || 'default';
-        this.isDark = localStorage.getItem('isDark') === 'true' || 
+        /** @type {string | null} */
+        const storedTheme = localStorage.getItem('theme');
+        this.currentTheme = storedTheme !== null ? storedTheme : 'default';
+        
+        /** @type {string | null} */
+        const storedDarkMode = localStorage.getItem('isDark');
+        this.isDark = storedDarkMode === 'true' || 
                       window.matchMedia('(prefers-color-scheme: dark)').matches;
         
         this.init();
@@ -30,11 +42,21 @@ class ThemeManager {
         
         // 监听系统主题变化
         window.matchMedia('(prefers-color-scheme: dark)')
-            .addEventListener('change', e => this.applyDarkMode(e.matches));
+            .addEventListener('change', 
+                /** @param {MediaQueryListEvent} e */
+                e => this.applyDarkMode(e.matches)
+            );
     }
     
     createThemeSelector() {
+        /** @type {HTMLElement | null} */
         const navbar = document.querySelector('.navbar-container');
+        if (!navbar) {
+            console.error('Navbar container not found');
+            return;
+        }
+        
+        /** @type {HTMLDivElement} */
         const themeSelector = document.createElement('div');
         themeSelector.className = 'theme-selector';
         
@@ -58,7 +80,10 @@ class ThemeManager {
             themeOption.className = 'theme-option';
             themeOption.setAttribute('data-theme', theme);
             themeOption.textContent = this.getThemeName(theme);
-            themeOption.addEventListener('click', () => this.applyTheme(theme));
+            themeOption.addEventListener('click', 
+                /** @param {MouseEvent} event */
+                (event) => this.applyTheme(theme)
+            );
             themeMenu.appendChild(themeOption);
         });
         
@@ -70,28 +95,45 @@ class ThemeManager {
                 <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
             </svg>
         `;
-        darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
+        darkModeToggle.addEventListener('click', 
+            /** @param {MouseEvent} e */
+            () => this.toggleDarkMode()
+        );
         
         themeSelector.appendChild(themeButton);
         themeSelector.appendChild(themeMenu);
         themeSelector.appendChild(darkModeToggle);
         
         // 显示/隐藏主题菜单
-        themeButton.addEventListener('click', () => {
-            themeMenu.classList.toggle('show');
-        });
+            themeButton.addEventListener('click', 
+                /** @param {MouseEvent} event */
+                (event) => {
+                    themeMenu.classList.toggle('show');
+                }
+            );
         
         // 点击外部关闭菜单
-        document.addEventListener('click', (e) => {
-            if (!themeSelector.contains(e.target)) {
-                themeMenu.classList.remove('show');
+        document.addEventListener('click', 
+            /** @param {MouseEvent} event */
+            (event) => {
+                if (!themeSelector.contains(/** @type {Node} */(event.target))) {
+                    themeMenu.classList.remove('show');
+                }
             }
-        });
+        );
         
         navbar.appendChild(themeSelector);
     }
     
+    /**
+     * 应用主题
+     * @param {string} theme 主题名称
+     */
     applyTheme(theme) {
+        // 添加切换动画
+        document.documentElement.classList.add('theme-transition');
+        
+        // 设置新主题
         document.documentElement.setAttribute('data-theme', theme);
         localStorage.setItem('theme', theme);
         this.currentTheme = theme;
@@ -99,21 +141,42 @@ class ThemeManager {
         // 更新选中状态
         const options = document.querySelectorAll('.theme-option');
         options.forEach(option => {
-            option.classList.toggle('active', option.dataset.theme === theme);
+            const btn = /** @type {HTMLButtonElement} */(option);
+            btn.classList.toggle('active', btn.dataset.theme === theme);
+            btn.setAttribute('aria-pressed', btn.dataset.theme === theme ? 'true' : 'false');
         });
+        
+        // 移除动画
+        setTimeout(() => {
+            document.documentElement.classList.remove('theme-transition');
+        }, 300);
     }
     
+    /**
+     * 切换深色模式
+     * @returns {void}
+     */
     toggleDarkMode() {
         this.isDark = !this.isDark;
         this.applyDarkMode(this.isDark);
     }
     
+    /**
+     * 应用深色模式
+     * @param {boolean} isDark 是否启用深色模式
+     * @returns {void}
+     */
     applyDarkMode(isDark) {
         document.documentElement.classList.toggle('dark', isDark);
         localStorage.setItem('isDark', isDark);
         this.isDark = isDark;
     }
     
+    /**
+     * 获取主题名称
+     * @param {string} theme 主题标识符
+     * @returns {string} 主题显示名称
+     */
     getThemeName(theme) {
         const names = {
             'default': '默认蓝',
@@ -130,7 +193,19 @@ class ThemeManager {
     }
 }
 
+/**
+ * @typedef {Object} Window
+ * @property {ThemeManager} themeManager
+ */
+
+/**
+ * @typedef {Object} Storage
+ * @property {(key: string) => string | null} getItem
+ * @property {(key: string, value: string) => void} setItem
+ */
+
 // 初始化主题管理器
 document.addEventListener('DOMContentLoaded', () => {
+    /** @type {ThemeManager} */
     window.themeManager = new ThemeManager();
 });
