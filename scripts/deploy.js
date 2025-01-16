@@ -1,8 +1,17 @@
-const { execSync } = require('child_process');
-const fs = require('fs');
-const path = require('path');
+import { execSync } from 'child_process';
+import fs from 'fs';
+import path from 'path';
+
+/**
+ * @typedef {Object} Config
+ * @property {string} branch
+ * @property {string} buildCommand
+ * @property {string} distDir
+ * @property {string} deployBranch
+ */
 
 // 配置
+/** @type {Config} */
 const config = {
   branch: 'main',  // 部署分支
   buildCommand: 'npm run build',  // 构建命令
@@ -10,7 +19,10 @@ const config = {
   deployBranch: 'gh-pages'  // 部署分支
 };
 
-// 执行命令并打印输出
+/**
+ * 执行命令并打印输出
+ * @param {string} command 要执行的命令
+ */
 function exec(command) {
   try {
     execSync(command, { stdio: 'inherit' });
@@ -20,9 +32,30 @@ function exec(command) {
   }
 }
 
+// 检查部署锁
+function checkDeployLock() {
+  const lockFile = '.deploy.lock';
+  if (fs.existsSync(lockFile)) {
+    console.error('❌ Deployment is already in progress. Please wait for the current deployment to finish.');
+    process.exit(1);
+  }
+  fs.writeFileSync(lockFile, process.pid.toString());
+}
+
+// 清理部署锁
+function cleanupDeployLock() {
+  const lockFile = '.deploy.lock';
+  if (fs.existsSync(lockFile)) {
+    fs.unlinkSync(lockFile);
+  }
+}
+
 // 主函数
 async function deploy() {
   console.log('🚀 Starting deployment process...');
+
+  // 检查部署锁
+  checkDeployLock();
 
   // 确保我们在正确的分支上
   console.log(`📋 Checking current branch...`);
@@ -69,6 +102,9 @@ async function deploy() {
   } catch (error) {
     console.error('❌ Deployment failed:', error);
     process.exit(1);
+  } finally {
+    // 清理部署锁
+    cleanupDeployLock();
   }
 }
 
