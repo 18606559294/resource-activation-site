@@ -1,12 +1,16 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'path';
+import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   root: './',
   base: '/resource-activation-site/',
+  plugins: [tsconfigPaths()],
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
+    sourcemap: true,
+    minify: 'terser',
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
@@ -15,12 +19,29 @@ export default defineConfig({
         security: resolve(__dirname, 'security.html'),
         status: resolve(__dirname, 'status.html'),
         toolbox: resolve(__dirname, 'toolbox.html')
+      },
+      output: {
+        manualChunks: {
+          vendor: ['axios', 'lodash-es', 'date-fns']
+        }
       }
     }
   },
   server: {
     port: 3000,
-    strictPort: false,
-    host: true
+    strictPort: true,
+    host: true,
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      }
+    }
+  },
+  resolve: {
+    alias: {
+      '@': resolve(__dirname, './src')
+    }
   }
 });

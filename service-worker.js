@@ -50,8 +50,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const request = event.request;
 
-  // 忽略非 GET 请求
-  if (request.method !== 'GET') {
+  // 忽略非 GET 请求和非同源请求
+  if (request.method !== 'GET' || !isSameOrigin(request.url)) {
     return;
   }
 
@@ -70,6 +70,13 @@ self.addEventListener('fetch', (event) => {
   // 其他请求使用网络优先策略
   event.respondWith(networkFirst(request));
 });
+
+// 检查是否为同源请求
+function isSameOrigin(url) {
+  const origin = new URL(self.location.origin);
+  const requestUrl = new URL(url);
+  return origin.host === requestUrl.host;
+}
 
 // 缓存优先策略
 async function cacheFirst(request) {
@@ -98,13 +105,36 @@ async function networkFirst(request) {
 async function fetchAndCache(request) {
   const response = await fetch(request);
   
-  // 只缓存成功的响应
-  if (response.ok) {
+  // 只缓存成功的响应，且排除敏感路径
+  if (response.ok && !isSensitivePath(request.url)) {
     const cache = await caches.open(DYNAMIC_CACHE);
     cache.put(request, response.clone());
+    
+    // 添加缓存验证头
+    const headers = new Headers(response.headers);
+    headers.set('X-Cache-Date', new Date().toISOString());
+    const verifiedResponse = new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: headers
+    });
+    
+    cache.put(request, verifiedResponse.clone());
+    return verifiedResponse;
   }
   
   return response;
+}
+
+// 检查是否为敏感路径
+function isSensitivePath(url) {
+  const sensitivePaths = [
+    '/api/',
+    '/config/',
+    '/downloads/',
+    '/tools/'
+  ];
+  return sensitivePaths.some(path => url.includes(path));
 }
 
 // 判断是否为静态资源
@@ -121,10 +151,23 @@ self.addEventListener('sync', (event) => {
 
 // 推送通知
 self.addEventListener('push', (event) => {
+  // 检查用户是否已授权通知权限
+  if (Notification.permission !== 'granted') {
+    return;
+  }
+
+  // 验证通知数据
+  const notificationData = event.data?.text();
+  if (!notificationData) {
+    return;
+  }
+
   const options = {
-    body: event.data.text(),
+    body: notificationData,
     icon: '/icon.png',
-    badge: '/badge.png'
+    badge: '/badge.png',
+    requireInteraction: false,
+    silent: true
   };
 
   event.waitUntil(

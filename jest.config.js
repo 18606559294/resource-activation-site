@@ -1,19 +1,17 @@
-module.exports = {
-  testEnvironment: 'jsdom',
-  moduleFileExtensions: ['js', 'json'],
+export default {
+  testEnvironment: 'node',
   transform: {
-    '^.+\\.js$': 'babel-jest'
+    '^.+\\.(js|ts)$': 'babel-jest'
   },
   moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/js/$1'
+    '^@/(.*)$': '<rootDir>/src/$1'
   },
   testMatch: [
-    '<rootDir>/**/__tests__/**/*.js',
-    '<rootDir>/**/*.{spec,test}.js'
+    '<rootDir>/src/tests/**/*.{spec,test}.{js,ts}'
   ],
   collectCoverageFrom: [
-    'js/**/*.js',
-    '!js/**/*.test.js',
+    'src/**/*.{js,ts}',
+    '!src/**/*.{spec,test}.{js,ts}',
     '!**/node_modules/**'
   ],
   coverageDirectory: 'coverage',
