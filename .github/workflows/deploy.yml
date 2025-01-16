@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - gh-pages  # 使用gh-pages分支而不是main分支
+      - main  # 监听main分支的push
     paths:
       - 'dist/**'
       - 'public/**'
@@ -31,11 +31,16 @@ jobs:
       - name: Build project
         run: npm run build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: dist
+      - name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v3
+      - name: Deploy to gh-pages
+        run: |
+          git checkout --orphan gh-pages
+          git rm -rf .
+          cp -r dist/* .
+          git add .
+          git commit -m "Deploy to GitHub Pages"
+          git push -f origin gh-pages
