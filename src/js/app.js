@@ -3,6 +3,7 @@ import { i18nManager } from './modules/i18n-manager.js';
 import { uiFeedback } from './modules/ui-feedback.js';
 import { interactionManager } from './modules/interaction-manager.js';
 import { languageSwitcher } from './components/language-switcher.js';
+import './animation.js'; // 启用动画效果
 
 // 应用初始化类
 class App {

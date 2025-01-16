@@ -1,4 +1,6 @@
 // 工具管理器
+import { downloadManager } from './download-manager.js';
+
 class ToolsManager {
     constructor() {
         this.toolsContainer = document.getElementById('tools-container');
@@ -44,17 +46,9 @@ class ToolsManager {
 
     async downloadTool(toolId) {
         try {
-            const tool = this.tools.find(t => t.id === toolId);
-            if (!tool) {
-                throw new Error('工具不存在');
-            }
-
-            // 直接从 tools 目录下载文件
-            window.location.href = `/tools/${tool.path}`;
-
+            await downloadManager.downloadTool(toolId);
         } catch (error) {
-            console.error('下载失败:', error);
-            this.showError('下载失败，请稍后重试');
+            this.showError('下载失败：' + error.message);
         }
     }
 
