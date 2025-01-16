@@ -1,55 +1,82 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <title data-i18n="security.title">互联网安全提示</title>
+    <title data-i18n="security.title">安全中心</title>
     <link rel="stylesheet" href="./src/css/styles.css">
     <link rel="stylesheet" href="./src/css/components.css">
     <link rel="stylesheet" href="./src/css/security.css">
+    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
 </head>
 <body>
-    <div class="security-container">
-        <button class="back-button" onclick="window.location.href='index.html'" data-i18n="security.back">返回主页</button>
-        <h1 data-i18n="security.header">互联网安全提示</h1>
-        
-        <div class="security-grid">
-            <div class="security-item" onclick="showModal('privacy')">
-                <div class="security-icon">🔒</div>
-                <h2 data-i18n="security.privacy.title">隐私保护</h2>
-                <p data-i18n="security.privacy.description">了解如何保护您的个人信息和在线隐私。</p>
-            </div>
+    <div class="nav-controls">
+        <!-- 语言切换 -->
+        <div class="language-switcher" role="navigation" aria-label="语言选择">
+            <button data-lang="zh" aria-pressed="true">中文</button>
+            <button data-lang="en" aria-pressed="false">English</button>
+        </div>
+    </div>
+    <div class="background-gradient"></div>
+    <div class="page-container">
+        <!-- 左侧安全内容 -->
+        <div class="security-section">
+            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="security.back">返回主页</button>
+            <h1 data-i18n="security.title">安全中心</h1>
             
-            <div class="security-item" onclick="showModal('password')">
-                <div class="security-icon">🔑</div>
-                <h2 data-i18n="security.password.title">密码安全</h2>
-                <p data-i18n="security.password.description">创建和管理强密码的最佳实践。</p>
+            <div class="security-content">
+                <div class="security-item">
+                    <h2 data-i18n="security.subtitle1">安全检测</h2>
+                    <p data-i18n="security.text1">所有工具均经过严格的安全检测，确保无毒无害。</p>
+                </div>
+                
+                <div class="security-item">
+                    <h2 data-i18n="security.subtitle2">使用说明</h2>
+                    <p data-i18n="security.text2">请按照说明文档正确使用工具，避免因不当操作导致的安全问题。</p>
+                </div>
+                
+                <div class="security-item">
+                    <h2 data-i18n="security.subtitle3">免责声明</h2>
+                    <p data-i18n="security.text3">本平台提供的工具仅供学习交流使用，请勿用于商业用途。</p>
+                </div>
             </div>
-            
-            <div class="security-item" onclick="showModal('phishing')">
-                <div class="security-icon">🎣</div>
-                <h2 data-i18n="security.phishing.title">防范钓鱼</h2>
-                <p data-i18n="security.phishing.description">识别和避免网络钓鱼攻击。</p>
-            </div>
+        </div>
+
+        <!-- 右侧广告部分 -->
+        <div class="ads-section">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="XXXXXXXXXX"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
     </div>
 
-    <!-- 模态框 -->
-    <div class="modal" onclick="closeModal(event)">
-        <div class="modal-content">
-            <button class="close-button" onclick="closeModal()">&times;</button>
-            <h2 id="modalTitle"></h2>
-            <div id="modalContent"></div>
-        </div>
-    </div>
-
-    <!-- JavaScript -->
-    <script type="module" src="./src/js/modules/i18n.js"></script>
     <script type="module" src="./src/js/security.js"></script>
+    <script type="module" src="./src/js/modules/i18n.js"></script>
+    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js');
+            });
+        }
+
+        // 初始化DeepSeekChat
+        const chat = new DeepSeekChat('your-api-key-here');
+        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
+    </script>
 </body>
 </html>

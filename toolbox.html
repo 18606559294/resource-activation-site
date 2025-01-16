@@ -1,80 +1,95 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <title>激活工具管理</title>
+    <title data-i18n="toolbox.title">工具箱</title>
     <link rel="stylesheet" href="./src/css/styles.css">
     <link rel="stylesheet" href="./src/css/components.css">
     <link rel="stylesheet" href="./src/css/toolbox.css">
+    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
 </head>
 <body>
-    <div class="toolbox-container">
-        <a href="index.html" class="back-button">返回主页</a>
-        <h1>激活工具管理</h1>
-        
-        <div class="tools-grid">
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <img src="./src/assets/images/windows.svg" alt="Windows图标">
-                </div>
-                <div class="tool-info">
-                    <h3>Windows 10 激活工具</h3>
-                    <p>版本：2.1.0</p>
-                    <p>更新时间：2025-01-15</p>
-                    <div class="tool-actions">
-                        <button class="download-btn" data-tool="win10">下载</button>
-                        <button class="info-btn" data-tool="win10">详情</button>
+    <div class="nav-controls">
+        <!-- 语言切换 -->
+        <div class="language-switcher" role="navigation" aria-label="语言选择">
+            <button data-lang="zh" aria-pressed="true">中文</button>
+            <button data-lang="en" aria-pressed="false">English</button>
+        </div>
+    </div>
+    <div class="background-gradient"></div>
+    <div class="page-container">
+        <!-- 左侧工具箱内容 -->
+        <div class="toolbox-section">
+            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="toolbox.back">返回主页</button>
+            <h1 data-i18n="toolbox.title">工具箱</h1>
+            
+            <div class="toolbox-content">
+                <div class="toolbox-category">
+                    <h2 data-i18n="toolbox.category1">系统工具</h2>
+                    <div class="toolbox-list">
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.tool1">系统信息</h3>
+                            <p data-i18n="toolbox.tool1_desc">查看系统硬件和软件信息</p>
+                        </div>
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.tool2">性能监控</h3>
+                            <p data-i18n="toolbox.tool2_desc">实时监控系统性能指标</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <img src="./src/assets/images/windows11.svg" alt="Windows 11图标">
-                </div>
-                <div class="tool-info">
-                    <h3>Windows 11 激活工具</h3>
-                    <p>版本：1.5.2</p>
-                    <p>更新时间：2025-01-10</p>
-                    <div class="tool-actions">
-                        <button class="download-btn" data-tool="win11">下载</button>
-                        <button class="info-btn" data-tool="win11">详情</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <img src="./src/assets/images/office.svg" alt="Office图标">
-                </div>
-                <div class="tool-info">
-                    <h3>Office 激活工具</h3>
-                    <p>版本：3.0.1</p>
-                    <p>更新时间：2025-01-12</p>
-                    <div class="tool-actions">
-                        <button class="download-btn" data-tool="office">下载</button>
-                        <button class="info-btn" data-tool="office">详情</button>
+                
+                <div class="toolbox-category">
+                    <h2 data-i18n="toolbox.category2">网络工具</h2>
+                    <div class="toolbox-list">
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.tool3">网络诊断</h3>
+                            <p data-i18n="toolbox.tool3_desc">网络连接测试和诊断</p>
+                        </div>
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.tool4">端口扫描</h3>
+                            <p data-i18n="toolbox.tool4_desc">扫描开放端口和服务</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="toolModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2 id="modalTitle"></h2>
-                <div id="modalBody"></div>
-            </div>
+        <!-- 右侧广告部分 -->
+        <div class="ads-section">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="XXXXXXXXXX"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
     </div>
 
-    <script type="module" src="./src/js/modules/i18n.js"></script>
     <script type="module" src="./src/js/toolbox.js"></script>
+    <script type="module" src="./src/js/modules/i18n.js"></script>
+    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js');
+            });
+        }
+
+        // 初始化DeepSeekChat
+        const chat = new DeepSeekChat('your-api-key-here');
+        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
+    </script>
 </body>
 </html>

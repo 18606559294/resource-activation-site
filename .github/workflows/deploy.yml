@@ -28,12 +28,10 @@ jobs:
           cache: 'npm'
           
       - name: Install dependencies
-        run: |
-          npm install -g pnpm
-          pnpm install
+        run: npm install
         
       - name: Build
-        run: pnpm build
+        run: npm run build
         env:
           CI: false
         

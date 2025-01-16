@@ -74,5 +74,23 @@
     "darkMode": "Toggle dark mode",
     "menuOpen": "Open menu",
     "menuClose": "Close menu"
+  },
+  "resources": {
+    "win11": {
+      "title": "Windows 11 Pro"
+    },
+    "office": {
+      "title": "Office 2024 Pro Plus"
+    },
+    "modal": {
+      "title": "Resource Details",
+      "body": "Resource detailed information"
+    }
+  },
+  "toolbox": {
+    "modal": {
+      "title": "Tool Details",
+      "body": "Tool detailed information"
+    }
   }
 }

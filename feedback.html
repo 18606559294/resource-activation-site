@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
@@ -13,11 +16,15 @@
     <link rel="stylesheet" href="./src/css/components.css">
     <link rel="stylesheet" href="./src/css/ui-feedback.css">
     <link rel="stylesheet" href="./src/css/feedback.css">
+    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
 </head>
 <body>
-    <div class="language-switcher">
-        <button onclick="changeLanguage('zh')">中文</button>
-        <button onclick="changeLanguage('en')">English</button>
+    <div class="nav-controls">
+        <!-- 语言切换 -->
+        <div class="language-switcher" role="navigation" aria-label="语言选择">
+            <button data-lang="zh" aria-pressed="true">中文</button>
+            <button data-lang="en" aria-pressed="false">English</button>
+        </div>
     </div>
     <div class="background-gradient"></div>
     <div class="page-container">
@@ -29,22 +36,22 @@
             <div class="feedback-form">
                 <div id="statusMessage" class="status"></div>
                 <div class="form-group">
-                    <label for="name">您的称呼：</label>
+                    <label for="name" data-i18n="feedback.form.name">您的称呼：</label>
                     <input type="text" id="name" name="name" required>
                 </div>
                 
                 <div class="form-group">
-                    <label for="contact">联系方式（选填）：</label>
+                    <label for="contact" data-i18n="feedback.form.contact">联系方式（选填）：</label>
                     <input type="text" id="contact" name="contact">
                 </div>
                 
                 <div class="form-group">
-                    <label for="question">问题描述：</label>
+                    <label for="question" data-i18n="feedback.form.question">问题描述：</label>
                     <textarea id="question" name="question" required></textarea>
                 </div>
                 
                 <div class="form-group">
-                    <button onclick="submitFeedback()">提交问题</button>
+                    <button onclick="submitFeedback()" data-i18n="feedback.form.submit">提交问题</button>
                 </div>
             </div>
             
@@ -55,22 +62,31 @@
 
         <!-- 右侧广告部分 -->
         <div class="ads-section">
-            <div class="ad-block" id="ad-block-1"></div>
-            <div class="ad-block" id="ad-block-2"></div>
-            <div class="ad-block" id="ad-block-3"></div>
-            <div class="ad-block" id="ad-block-4"></div>
-            <div class="ad-block" id="ad-block-5"></div>
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="XXXXXXXXXX"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
     </div>
 
     <script type="module" src="./src/js/feedback.js"></script>
     <script type="module" src="./src/js/modules/i18n.js"></script>
+    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js');
             });
         }
+
+        // 初始化DeepSeekChat
+        const chat = new DeepSeekChat('your-api-key-here');
+        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
     </script>
 </body>
 </html>

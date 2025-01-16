@@ -1,55 +1,103 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.github.com; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <title>系统状态监控</title>
+    <title data-i18n="status.title">系统状态</title>
     <link rel="stylesheet" href="./src/css/styles.css">
     <link rel="stylesheet" href="./src/css/components.css">
     <link rel="stylesheet" href="./src/css/status.css">
+    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
 </head>
 <body>
-    <div class="language-switcher">
-        <button onclick="changeLanguage('zh')">中文</button>
-        <button onclick="changeLanguage('en')">English</button>
+    <div class="nav-controls">
+        <!-- 语言切换 -->
+        <div class="language-switcher" role="navigation" aria-label="语言选择">
+            <button data-lang="zh" aria-pressed="true">中文</button>
+            <button data-lang="en" aria-pressed="false">English</button>
+        </div>
     </div>
-    
-    <div class="status-container">
-        <h1 data-i18n="status.title">系统状态监控</h1>
-        
-        <div class="status-card">
-            <h2 data-i18n="status.github">GitHub Pages 状态</h2>
-            <div>
-                <span class="status-indicator status-online"></span>
-                <span id="githubStatusText" data-i18n="status.online">在线</span>
-            </div>
-            <div class="status-details">
-                <p>最后更新时间: <span id="lastUpdate">-</span></p>
-                <p>仓库地址: <a href="https://github.com/18606559294/resource-activation-site" target="_blank">resource-activation-site</a></p>
+    <div class="background-gradient"></div>
+    <div class="page-container">
+        <!-- 左侧状态内容 -->
+        <div class="status-section">
+            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="status.back">返回主页</button>
+            <h1 data-i18n="status.title">系统状态</h1>
+            
+            <div class="status-content">
+                <div class="status-item">
+                    <h2 data-i18n="status.subtitle1">服务器状态</h2>
+                    <div class="status-indicator">
+                        <span class="status-dot online"></span>
+                        <span data-i18n="status.online">在线</span>
+                    </div>
+                </div>
+                
+                <div class="status-item">
+                    <h2 data-i18n="status.subtitle2">服务状态</h2>
+                    <div class="service-status">
+                        <div class="service-item">
+                            <span class="service-name" data-i18n="status.service1">API服务</span>
+                            <span class="status-dot online"></span>
+                        </div>
+                        <div class="service-item">
+                            <span class="service-name" data-i18n="status.service2">数据库服务</span>
+                            <span class="status-dot online"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="status-item">
+                    <h2 data-i18n="status.subtitle3">系统信息</h2>
+                    <div class="system-info">
+                        <div class="info-item">
+                            <span data-i18n="status.info1">版本号：</span>
+                            <span>1.0.0</span>
+                        </div>
+                        <div class="info-item">
+                            <span data-i18n="status.info2">最后更新时间：</span>
+                            <span>2023-10-15</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 
-        <div class="status-card">
-            <h2 data-i18n="status.updates">最近更新</h2>
-            <div class="update-history" id="updateHistory">
-                <!-- 更新历史将从 GitHub API 获取 -->
-            </div>
+        <!-- 右侧广告部分 -->
+        <div class="ads-section">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="XXXXXXXXXX"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
     </div>
 
     <script type="module" src="./src/js/status.js"></script>
     <script type="module" src="./src/js/modules/i18n.js"></script>
+    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./service-worker.js');
             });
         }
+
+        // 初始化DeepSeekChat
+        const chat = new DeepSeekChat('your-api-key-here');
+        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
     </script>
 </body>
 </html>

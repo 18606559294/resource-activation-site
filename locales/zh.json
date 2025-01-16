@@ -74,5 +74,23 @@
     "darkMode": "切换深色模式",
     "menuOpen": "打开菜单",
     "menuClose": "关闭菜单"
+  },
+  "resources": {
+    "win11": {
+      "title": "Windows 11 专业版"
+    },
+    "office": {
+      "title": "Office 2024 专业增强版"
+    },
+    "modal": {
+      "title": "资源详情",
+      "body": "资源详细信息"
+    }
+  },
+  "toolbox": {
+    "modal": {
+      "title": "工具详情",
+      "body": "工具详细信息"
+    }
   }
 }

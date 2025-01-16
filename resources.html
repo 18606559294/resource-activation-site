@@ -1,82 +1,95 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
+    <!-- Google AdSense -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
     <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <title>资源下载</title>
+    <title data-i18n="resources.title">资源中心</title>
     <link rel="stylesheet" href="./src/css/styles.css">
     <link rel="stylesheet" href="./src/css/components.css">
     <link rel="stylesheet" href="./src/css/resources.css">
+    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
 </head>
 <body>
-    <div class="resources-container">
-        <a href="index.html" class="back-button">返回主页</a>
-        <h1>资源下载</h1>
-        
-        <div class="resources-grid">
-            <div class="resource-card">
-                <div class="resource-icon">
-                    <img src="./src/assets/images/windows.svg" alt="Windows图标">
-                </div>
-                <div class="resource-info">
-                    <h3>Windows 10 专业版</h3>
-                    <p>版本：21H2</p>
-                    <p>大小：4.8GB</p>
-                    <p>更新时间：2025-01-15</p>
-                    <div class="resource-actions">
-                        <button class="download-btn" data-resource="win10-pro">下载</button>
-                        <button class="info-btn" data-resource="win10-pro">详情</button>
+    <div class="nav-controls">
+        <!-- 语言切换 -->
+        <div class="language-switcher" role="navigation" aria-label="语言选择">
+            <button data-lang="zh" aria-pressed="true">中文</button>
+            <button data-lang="en" aria-pressed="false">English</button>
+        </div>
+    </div>
+    <div class="background-gradient"></div>
+    <div class="page-container">
+        <!-- 左侧资源内容 -->
+        <div class="resources-section">
+            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="resources.back">返回主页</button>
+            <h1 data-i18n="resources.title">资源中心</h1>
+            
+            <div class="resources-content">
+                <div class="resources-category">
+                    <h2 data-i18n="resources.category1">开发工具</h2>
+                    <div class="resources-list">
+                        <div class="resource-item">
+                            <h3 data-i18n="resources.tool1">代码编辑器</h3>
+                            <p data-i18n="resources.tool1_desc">推荐使用Visual Studio Code</p>
+                        </div>
+                        <div class="resource-item">
+                            <h3 data-i18n="resources.tool2">版本控制</h3>
+                            <p data-i18n="resources.tool2_desc">Git和GitHub使用指南</p>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="resource-card">
-                <div class="resource-icon">
-                    <img src="./src/assets/images/windows11.svg" alt="Windows 11图标">
-                </div>
-                <div class="resource-info">
-                    <h3>Windows 11 专业版</h3>
-                    <p>版本：23H2</p>
-                    <p>大小：5.2GB</p>
-                    <p>更新时间：2025-01-10</p>
-                    <div class="resource-actions">
-                        <button class="download-btn" data-resource="win11-pro">下载</button>
-                        <button class="info-btn" data-resource="win11-pro">详情</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="resource-card">
-                <div class="resource-icon">
-                    <img src="./src/assets/images/office.svg" alt="Office图标">
-                </div>
-                <div class="resource-info">
-                    <h3>Office 2024 专业增强版</h3>
-                    <p>版本：2024</p>
-                    <p>大小：2.8GB</p>
-                    <p>更新时间：2025-01-12</p>
-                    <div class="resource-actions">
-                        <button class="download-btn" data-resource="office2024">下载</button>
-                        <button class="info-btn" data-resource="office2024">详情</button>
+                
+                <div class="resources-category">
+                    <h2 data-i18n="resources.category2">学习资源</h2>
+                    <div class="resources-list">
+                        <div class="resource-item">
+                            <h3 data-i18n="resources.learn1">官方文档</h3>
+                            <p data-i18n="resources.learn1_desc">各工具官方文档链接</p>
+                        </div>
+                        <div class="resource-item">
+                            <h3 data-i18n="resources.learn2">教程视频</h3>
+                            <p data-i18n="resources.learn2_desc">精选教学视频合集</p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div id="resourceModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h2 id="modalTitle"></h2>
-                <div id="modalBody"></div>
-            </div>
+        <!-- 右侧广告部分 -->
+        <div class="ads-section">
+            <ins class="adsbygoogle"
+                style="display:block"
+                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                data-ad-slot="XXXXXXXXXX"
+                data-ad-format="auto"
+                data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
         </div>
     </div>
 
     <script type="module" src="./src/js/resources.js"></script>
+    <script type="module" src="./src/js/modules/i18n.js"></script>
+    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js');
+            });
+        }
+
+        // 初始化DeepSeekChat
+        const chat = new DeepSeekChat('your-api-key-here');
+        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
+    </script>
 </body>
 </html>

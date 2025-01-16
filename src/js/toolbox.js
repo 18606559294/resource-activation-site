@@ -3,7 +3,7 @@ import { showNotification, showLoading, hideLoading } from './components.js';
 
 const toolsInfo = {
     'win10': {
-        name: 'Windows 10 激活工具',
+        name: 'toolbox.win10.title',
         version: '2.1.0',
         size: '2.5MB',
         updateTime: '2025-01-15',
@@ -33,7 +33,7 @@ const toolsInfo = {
         downloadUrl: '/api/download/win10-activator'
     },
     'win11': {
-        name: 'Windows 11 激活工具',
+        name: 'resources.win11.title',
         version: '1.5.2',
         size: '2.8MB',
         updateTime: '2025-01-10',
@@ -63,7 +63,7 @@ const toolsInfo = {
         downloadUrl: '/api/download/win11-activator'
     },
     'office': {
-        name: 'Office 激活工具',
+        name: 'resources.office.title',
         version: '3.0.1',
         size: '3.2MB',
         updateTime: '2025-01-12',
@@ -99,40 +99,57 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeToolbox();
 });
 
-// 初始化工具箱
+/**
+ * 初始化工具箱
+ */
 function initializeToolbox() {
     // 添加下载按钮事件监听
-    document.querySelectorAll('.download-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-            const toolId = btn.dataset.tool;
-            await downloadTool(toolId);
-        });
+    /** @type {NodeListOf<HTMLElement>} */
+    const downloadButtons = document.querySelectorAll('.download-btn');
+    downloadButtons.forEach(btn => {
+        const toolId = /** @type {keyof typeof toolsInfo} */ (btn.dataset.tool);
+        if (toolId && toolsInfo[toolId]) {
+            btn.addEventListener('click', async () => {
+                await downloadTool(toolId);
+            });
+        }
     });
 
     // 添加详情按钮事件监听
-    document.querySelectorAll('.info-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            const toolId = btn.dataset.tool;
-            showToolInfo(toolId);
-        });
+    /** @type {NodeListOf<HTMLElement>} */
+    const infoButtons = document.querySelectorAll('.info-btn');
+    infoButtons.forEach(btn => {
+        const toolId = /** @type {keyof typeof toolsInfo} */ (btn.dataset.tool);
+        if (toolId && toolsInfo[toolId]) {
+            btn.addEventListener('click', () => {
+                showToolInfo(toolId);
+            });
+        }
     });
 
     // 添加模态框关闭按钮事件监听
     const modal = document.getElementById('toolModal');
-    const closeBtn = modal.querySelector('.close');
-    
-    closeBtn.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
-
-    window.addEventListener('click', (event) => {
-        if (event.target === modal) {
-            modal.style.display = 'none';
+    if (modal) {
+        const closeBtn = modal.querySelector('.close');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
         }
-    });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    }
+    
 }
 
-// 显示工具信息
+/**
+ * 显示工具信息
+ * @param {keyof typeof toolsInfo} toolId 工具ID
+ */
 function showToolInfo(toolId) {
     const tool = toolsInfo[toolId];
     if (!tool) return;
@@ -140,6 +157,8 @@ function showToolInfo(toolId) {
     const modal = document.getElementById('toolModal');
     const modalTitle = document.getElementById('modalTitle');
     const modalBody = document.getElementById('modalBody');
+    
+    if (!modal || !modalTitle || !modalBody) return;
 
     modalTitle.textContent = tool.name;
     modalBody.innerHTML = `
@@ -154,7 +173,10 @@ function showToolInfo(toolId) {
     modal.style.display = 'block';
 }
 
-// 下载工具
+/**
+ * 下载工具
+ * @param {keyof typeof toolsInfo} toolId 工具ID
+ */
 async function downloadTool(toolId) {
     const tool = toolsInfo[toolId];
     if (!tool) return;
@@ -166,8 +188,10 @@ async function downloadTool(toolId) {
         const response = await axios.get(tool.downloadUrl, {
             responseType: 'blob',
             onDownloadProgress: (progressEvent) => {
-                const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                showNotification(`下载进度: ${percentCompleted}%`, 'info');
+                if (progressEvent.total) {
+                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+                    showNotification(`下载进度: ${percentCompleted}%`, 'info');
+                }
             }
         });
 
