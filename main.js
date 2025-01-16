@@ -1,5 +1,5 @@
 // 导入所有样式文件
-import './styles.css';
+import './css/styles.css';
 import './css/ui-feedback.css';
 import './css/animations.css';
 import './css/mobile.css';
