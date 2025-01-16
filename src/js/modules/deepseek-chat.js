@@ -1,19 +1,25 @@
 // DeepSeek AI 智能客服模块
+import crypto from 'crypto';
+
 export class DeepSeekChat {
-  /** @type {string} */
-  apiKey = '';
+  /** @type {Buffer | null} */
+  #encryptionKey = null;
+  /** @type {string | undefined} */
+  #apiKey;
   /** @type {HTMLElement | null} */
   chatContainer = null;
   
-  /**
-   * @param {string} apiKey - DeepSeek API密钥
-   */
-  constructor(apiKey) {
-    if (!apiKey) {
-      throw new Error('API key is required');
+  constructor() {
+    this.#initializeEncryption();
+    /** @type {string | undefined} */
+    this.#apiKey = this.#decryptAPIKey(process.env.DEEPSEEK_API_KEY);
+    if (!this.#apiKey) {
+      console.warn('DeepSeek API key not found, chat will be disabled');
+      return;
     }
-    this.apiKey = apiKey;
     this.initChat();
+    /** @type {Array<{role: string, content: string}>} */
+    this.messageHistory = [];
   }
 
   initChat() {
@@ -109,7 +115,7 @@ export class DeepSeekChat {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`
+        'Authorization': `Bearer ${this.#apiKey}`
       },
       body: JSON.stringify({
         model: 'deepseek-chat',
@@ -153,11 +159,68 @@ export class DeepSeekChat {
     if (!this.chatContainer) return;
     this.chatContainer.classList.toggle('hidden');
   }
+
+  #initializeEncryption() {
+    try {
+      // 生成32字节的随机密钥
+      this.#encryptionKey = crypto.randomBytes(32);
+    } catch (error) {
+      console.error('Failed to initialize encryption:', error);
+      throw new Error('Failed to initialize encryption', { cause: error });
+    }
+  }
+
+  /**
+   * 解密API密钥
+   * @param {string | undefined} encryptedKey - 加密的API密钥
+   * @returns {string | undefined} 解密后的API密钥
+   */
+  #decryptAPIKey(encryptedKey) {
+    if (!encryptedKey || !this.#encryptionKey) return undefined;
+    try {
+      const [ivHex, encryptedData] = encryptedKey.split(':');
+      const iv = Buffer.from(ivHex, 'hex');
+      const decipher = crypto.createDecipheriv(
+        'aes-256-cbc', 
+        this.#encryptionKey.toString('hex'), 
+        iv
+      );
+      let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+      decrypted += decipher.final('utf8');
+      return decrypted;
+    } catch (error) {
+      console.error('Failed to decrypt API key:', error);
+      return undefined;
+    }
+  }
+
+  /**
+   * 加密API密钥
+   * @param {string | undefined} apiKey - 原始API密钥
+   * @returns {string | undefined} 加密后的API密钥
+   */
+  #encryptAPIKey(apiKey) {
+    if (!apiKey || !this.#encryptionKey) return undefined;
+    try {
+      const iv = crypto.randomBytes(16);
+      const cipher = crypto.createCipheriv(
+        'aes-256-cbc',
+        this.#encryptionKey.toString('hex'),
+        iv
+      );
+      let encrypted = cipher.update(apiKey, 'utf8', 'hex');
+      encrypted += cipher.final('hex');
+      return `${iv.toString('hex')}:${encrypted}`;
+    } catch (error) {
+      console.error('Failed to encrypt API key:', error);
+      return undefined;
+    }
+  }
 }
 
 // 初始化智能客服
 try {
-  const deepseekChat = new DeepSeekChat('sk-718a2c0f3a8843209cb8eb54529cfba2');
+  const deepseekChat = new DeepSeekChat();
 } catch (error) {
   console.error('Failed to initialize DeepSeek chat:', error);
 }
