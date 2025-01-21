@@ -88,8 +88,9 @@
         }
 
         // 初始化DeepSeekChat
-        const chat = new DeepSeekChat('your-api-key-here');
-        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
+        const apiKey = process.env.DEEPSEEK_API_KEY || 'sk-718a2c0f3a8843209cb8eb54529cfba2';
+        const chat = new DeepSeekChat(apiKey);
+        // 移除自动显示的定时器，改为用户主动触发
     </script>
 </body>
 </html>
