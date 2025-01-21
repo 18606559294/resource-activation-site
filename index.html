@@ -234,10 +234,9 @@
         }
 
         // 初始化DeepSeekChat
-        const chat = new DeepSeekChat('your-api-key-here');
-        // 移除自动显示的逻辑
-        // setTimeout(() => chat.toggleChat(true), 3000); // 如有需要再调用 chat.toggleChat(true);
-
+        const apiKey = process.env.DEEPSEEK_API_KEY || 'sk-718a2c0f3a8843209cb8eb54529cfba2';
+        const chat = new DeepSeekChat(apiKey);
+        // 不自动显示聊天窗口，由用户主动点击触发
     </script>
 </body>
 </html>
