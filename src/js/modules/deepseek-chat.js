@@ -12,7 +12,7 @@ export class DeepSeekChat {
   constructor() {
     this.#initializeEncryption();
     /** @type {string | undefined} */
-    this.#apiKey = this.#decryptAPIKey(process.env.DEEPSEEK_API_KEY);
+    this.#apiKey = 'sk-718a2c0f3a8843209cb8eb54529cfba2';
     if (!this.#apiKey) {
       console.warn('DeepSeek API key not found, chat will be disabled');
       return;
