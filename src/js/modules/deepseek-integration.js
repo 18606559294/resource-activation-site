@@ -1,21 +1,15 @@
 // DeepSeek AI 集成模块
 import { DeepSeekChat } from './deepseek-chat.js';
 
-class DeepSeekIntegration {
-    // ...（其他代码不变）
+export class DeepSeekIntegration {
+    private chatInstance: DeepSeekChat | null = null;
 
-    /** @param {string | undefined} apiKey - DeepSeek API密钥 */
-    constructor(apiKey) {
-        if (!apiKey) {
-            throw new Error('API key is required');
-        }
-        this.apiKey = apiKey;
+    constructor() {
         this.init();
     }
 
-    init() {
+    private init(): void {
         try {
-            // 使用传入的apiKey初始化聊天实例
             this.chatInstance = new DeepSeekChat();
             this.integrateWithPages();
         } catch (error) {
@@ -23,14 +17,44 @@ class DeepSeekIntegration {
         }
     }
 
+    private integrateWithPages(): void {
+        const pages = [
+            'index.html',
+            'resources.html',
+            'security.html',
+            'status.html',
+            'toolbox.html',
+            'feedback.html'
+        ];
 
-    // ...（其他代码不变）
+        if (this.chatInstance) {
+            this.addChatButton();
+        }
+    }
+
+    private addChatButton(): void {
+        const chatButton = document.createElement('button');
+        chatButton.id = 'deepseek-chat-button';
+        chatButton.className = 'chat-trigger-button';
+        chatButton.textContent = '智能客服';
+        chatButton.addEventListener('click', () => this.toggleChat());
+
+        const header = document.querySelector('header');
+        if (header) {
+            header.appendChild(chatButton);
+        }
+    }
+
+    private toggleChat(): void {
+        if (this.chatInstance) {
+            this.chatInstance.toggleChat();
+        }
+    }
 }
 
-
+// 初始化DeepSeek集成
 try {
-    // 不传入apiKey，DeepSeekChat内部会处理解密逻辑
-    const deepseekIntegration = new DeepSeekIntegration(undefined);
+    new DeepSeekIntegration();
 } catch (error) {
     console.error('Failed to initialize DeepSeek integration:', error);
 }
