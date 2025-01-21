@@ -6,6 +6,16 @@ header('Access-Control-Allow-Headers: Content-Type');
 
 require_once __DIR__ . '/../config/database.php';
 
+// 添加数据库连接测试
+function testDatabaseConnection() {
+    try {
+        $db = Database::getConnection();
+        return ['status' => 'success', 'message' => 'Database connection successful'];
+    } catch (Exception $e) {
+        return ['status' => 'error', 'message' => $e->getMessage()];
+    }
+}
+
 class BackupAPI {
     private $db;
     private $backupDir = __DIR__ . '/../backups/';
@@ -129,6 +139,13 @@ class BackupAPI {
 
 // 处理请求
 $backupAPI = new BackupAPI();
+
+// 添加测试路由
+if (isset($_GET['test_db'])) {
+    header('Content-Type: application/json');
+    echo json_encode(testDatabaseConnection());
+    exit;
+}
 
 switch ($_SERVER['REQUEST_METHOD']) {
     case 'POST':

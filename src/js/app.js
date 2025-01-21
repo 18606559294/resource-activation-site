@@ -7,50 +7,56 @@ import './animation.js'; // 启用动画效果
 
 // 应用初始化类
 class App {
+  initialized: boolean;
+
   constructor() {
     this.initialized = false;
     this.init();
   }
 
-  async init() {
+  async init(retryCount: number = 3): Promise<void> {
     try {
       // 防止重复初始化
       if (this.initialized) {
         return;
       }
 
-      // 显示加载状态
-      document.body.classList.add('loading');
+      // 显示加载状态和进度
+      this.showLoadingState('正在初始化应用...');
 
       // 初始化国际化
-      await i18nManager.init();
+      await this.retryOperation(
+        () => i18nManager.init(),
+        '初始化语言失败',
+        retryCount
+      );
 
       // 初始化页面交互
       this.initializePageInteractions();
 
       // 设置主题
-      this.setupTheme();
+      await this.setupTheme();
 
       // 初始化完成
       this.initialized = true;
-      document.body.classList.remove('loading');
+      this.hideLoadingState();
 
       // 显示欢迎消息
       this.showWelcomeMessage();
 
-    } catch (error) {
+    } catch (error: any) { // any fix
       console.error('Failed to initialize application:', error);
-      uiFeedback.showToast('应用初始化失败，请刷新页面重试', 'error');
+      this.handleInitError(error, retryCount);
     }
   }
 
-  initializePageInteractions() {
+  initializePageInteractions(): void {
     // 初始化卡片点击事件
-    document.querySelectorAll('.card').forEach(card => {
-      card.addEventListener('click', (event) => this.handleCardClick(event));
-      
+    document.querySelectorAll('.card').forEach((card: Element) => {
+      card.addEventListener('click', (event: Event) => this.handleCardClick(event));
+
       // 添加键盘支持
-      card.addEventListener('keydown', (event) => {
+      card.addEventListener('keydown', (event: KeyboardEvent) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           this.handleCardClick(event);
@@ -76,29 +82,78 @@ class App {
     });
   }
 
-  setupTheme() {
-    // 检测系统主题
+  // 显示加载状态
+  showLoadingState(message: string): void {
+    document.body.classList.add('loading');
+    uiFeedback.showLoading(message);
+  }
+
+  // 隐藏加载状态
+  hideLoadingState(): void {
+    document.body.classList.remove('loading');
+    uiFeedback.hideLoading();
+  }
+
+  // 处理初始化错误
+  async handleInitError(error: Error, retryCount: number): Promise<void> {
+    if (retryCount > 0) {
+      uiFeedback.showToast('初始化失败，正在重试...', 'warning');
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      await this.init(retryCount - 1);
+    } else {
+      uiFeedback.showToast('应用初始化失败，请刷新页面重试', 'error');
+    }
+  }
+
+  // 重试操作
+  async retryOperation<T>(operation: () => Promise<T>, errorMessage: string, retryCount: number = 3): Promise<T> {
+    for (let i = 0; i < retryCount; i++) {
+      try {
+        return await operation();
+      } catch (error) {
+        if (i === retryCount - 1) throw error;
+        console.warn(`${errorMessage}，重试中...`, error);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      }
+    }
+    throw new Error('Retry failed');
+  }
+
+  async setupTheme(): Promise<void> {
+    // 从本地存储获取主题设置
+    const savedTheme = localStorage.getItem('theme');
     const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-    
-    // 初始设置
-    this.updateTheme(prefersDark.matches);
-    
+
+    // 设置初始主题
+    if (savedTheme) {
+      this.updateTheme(savedTheme === 'dark');
+    } else {
+      this.updateTheme(prefersDark.matches);
+    }
+
     // 监听系统主题变化
-    prefersDark.addEventListener('change', (event) => {
-      this.updateTheme(event.matches);
+    prefersDark.addEventListener('change', (event: MediaQueryListEvent) => {
+      if (!savedTheme) {
+        this.updateTheme(event.matches);
+      }
     });
   }
 
-  updateTheme(isDark) {
+  updateTheme(isDark: boolean): void {
     document.documentElement.classList.toggle('dark-theme', isDark);
     // 更新主题色
     const themeColor = isDark ? '#1a1a1a' : '#ffffff';
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', themeColor);
+    const metaTheme = document.querySelector('meta[name="theme-color"]');
+    if (metaTheme) {
+      metaTheme.setAttribute('content', themeColor);
+    }
+    localStorage.setItem('theme', isDark ? 'dark' : 'light');
   }
 
-  async handleCardClick(event) {
-    const card = event.currentTarget;
+  async handleCardClick(event: Event): Promise<void> {
+    const card  = event.currentTarget as HTMLElement;
     const action = card.dataset.action;
+
 
     try {
       switch (action) {
@@ -121,22 +176,28 @@ class App {
     }
   }
 
-  async navigateToPage(url) {
+  async navigateToPage(url: string, retryCount: number = 3): Promise<void> {
     try {
       // 显示加载状态
-      uiFeedback.showLoading(i18nManager.getTranslation(['common', 'loading']));
-      
-      // 模拟页面加载延迟
-      await new Promise(resolve => setTimeout(resolve, 500));
-      
+      this.showLoadingState(i18nManager.getTranslation(['common', 'navigating']));
+
+      // 预加载页面
+      await this.retryOperation(async () => {
+        const response = await fetch(url);
+        if (!response.ok) throw new Error('Navigation failed');
+      }, '页面加载失败', retryCount);
+
       // 跳转到目标页面
       window.location.href = url;
+    } catch (error) {
+      console.error('Navigation failed:', error);
+      uiFeedback.showToast(i18nManager.getTranslation(['errors', 'navigationError']), 'error');
     } finally {
-      uiFeedback.hideLoading();
+      this.hideLoadingState();
     }
   }
 
-  async checkForUpdates() {
+  async checkForUpdates(): Promise<void> {
     try {
       // 检查服务工作线程更新
       if ('serviceWorker' in navigator) {
@@ -148,9 +209,9 @@ class App {
     }
   }
 
-  showWelcomeMessage() {
+  showWelcomeMessage(): void {
     const hour = new Date().getHours();
-    let greeting;
+    let greeting: string;
 
     if (hour < 6) {
       greeting = 'greetings.night';

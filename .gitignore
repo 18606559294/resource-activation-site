@@ -60,3 +60,4 @@ Thumbs.db
 
 # Deployment lock
 .deploy.lock
+.aider*
