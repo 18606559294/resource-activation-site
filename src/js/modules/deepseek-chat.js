@@ -12,7 +12,8 @@ export class DeepSeekChat {
   constructor() {
     this.#initializeEncryption();
     /** @type {string | undefined} */
-    this.#apiKey = 'sk-718a2c0f3a8843209cb8eb54529cfba2';
+    // 使用环境变量或配置文件中的API密钥
+    this.#apiKey = process.env.DEEPSEEK_API_KEY || 'sk-718a2c0f3a8843209cb8eb54529cfba2';
     if (!this.#apiKey) {
       console.warn('DeepSeek API key not found, chat will be disabled');
       return;
@@ -119,7 +120,10 @@ export class DeepSeekChat {
       },
       body: JSON.stringify({
         model: 'deepseek-chat',
-        messages: [{ role: 'user', content: message }],
+        messages: [
+          ...this.messageHistory,
+          { role: 'user', content: message }
+        ],
         temperature: 0.7,
         max_tokens: 500
       })
