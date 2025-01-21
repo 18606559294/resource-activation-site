@@ -1,96 +1,13 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-     crossorigin="anonymous"></script>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <title data-i18n="resources.title">资源中心</title>
-    <link rel="stylesheet" href="./src/css/styles.css">
-    <link rel="stylesheet" href="./src/css/components.css">
-    <link rel="stylesheet" href="./src/css/resources.css">
-    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
-</head>
-<body>
-    <div class="nav-controls">
-        <!-- 语言切换 -->
-        <div class="language-switcher" role="navigation" aria-label="语言选择">
-            <button data-lang="zh" aria-pressed="true">中文</button>
-            <button data-lang="en" aria-pressed="false">English</button>
-        </div>
-    </div>
-    <div class="background-gradient"></div>
-    <div class="page-container">
-        <!-- 左侧资源内容 -->
-        <div class="resources-section">
-            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="resources.back">返回主页</button>
-            <h1 data-i18n="resources.title">资源中心</h1>
-            
-            <div class="resources-content">
-                <div class="resources-category">
-                    <h2 data-i18n="resources.category1">开发工具</h2>
-                    <div class="resources-list">
-                        <div class="resource-item">
-                            <h3 data-i18n="resources.tool1">代码编辑器</h3>
-                            <p data-i18n="resources.tool1_desc">推荐使用Visual Studio Code</p>
-                        </div>
-                        <div class="resource-item">
-                            <h3 data-i18n="resources.tool2">版本控制</h3>
-                            <p data-i18n="resources.tool2_desc">Git和GitHub使用指南</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="resources-category">
-                    <h2 data-i18n="resources.category2">学习资源</h2>
-                    <div class="resources-list">
-                        <div class="resource-item">
-                            <h3 data-i18n="resources.learn1">官方文档</h3>
-                            <p data-i18n="resources.learn1_desc">各工具官方文档链接</p>
-                        </div>
-                        <div class="resource-item">
-                            <h3 data-i18n="resources.learn2">教程视频</h3>
-                            <p data-i18n="resources.learn2_desc">精选教学视频合集</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- 右侧广告部分 -->
-        <div class="ads-section">
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="XXXXXXXXXX"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </div>
-
-    <script type="module" src="./src/js/resources.js"></script>
-    <script type="module" src="./src/js/modules/i18n.js"></script>
+    </head>
+    <body>
     <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js');
-            });
-        }
-
-        // 初始化DeepSeekChat
-        const apiKey = process.env.DEEPSEEK_API_KEY || 'sk-718a2c0f3a8843209cb8eb54529cfba2';
-        const chat = new DeepSeekChat(apiKey);
-        // 移除自动显示的定时器，改为用户主动触发
+    // ...其他代码
+    // 不需要在此处初始化DeepSeekChat，DeepSeekIntegration会处理
     </script>
 </body>
+
 </html>
