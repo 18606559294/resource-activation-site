@@ -235,7 +235,9 @@
 
         // 初始化DeepSeekChat
         const chat = new DeepSeekChat('your-api-key-here');
-        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
+        // 移除自动显示的逻辑
+        // setTimeout(() => chat.toggleChat(true), 3000); // 如有需要再调用 chat.toggleChat(true);
+
     </script>
 </body>
 </html>
