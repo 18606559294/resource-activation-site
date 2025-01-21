@@ -70,7 +70,7 @@ class DeepSeekIntegration {
 
 // 初始化DeepSeek集成
 try {
-  const deepseekIntegration = new DeepSeekIntegration('sk-718a2c0f3a8843209cb8eb54529cfba2');
+  const deepseekIntegration = new DeepSeekIntegration(process.env.DEEPSEEK_API_KEY);
 } catch (error) {
   console.error('Failed to initialize DeepSeek integration:', error);
 }
