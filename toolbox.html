@@ -1,95 +1,81 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <title data-i18n="toolbox.title">工具箱</title>
-    <link rel="stylesheet" href="./src/css/styles.css">
-    <link rel="stylesheet" href="./src/css/components.css">
-    <link rel="stylesheet" href="./src/css/toolbox.css">
-    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>工具箱 - 资源激活工具站</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/toolbox.css">
 </head>
 <body>
-    <div class="nav-controls">
-        <!-- 语言切换 -->
-        <div class="language-switcher" role="navigation" aria-label="语言选择">
-            <button data-lang="zh" aria-pressed="true">中文</button>
-            <button data-lang="en" aria-pressed="false">English</button>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">资源激活</a>
+            <nav>
+                <a href="toolbox.html" class="active">工具</a>
+                <a href="resources.html">资源</a>
+                <a href="security.html">安全</a>
+                <a href="status.html">状态</a>
+            </nav>
         </div>
-    </div>
-    <div class="background-gradient"></div>
-    <div class="page-container">
-        <!-- 左侧工具箱内容 -->
-        <div class="toolbox-section">
-            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="toolbox.back">返回主页</button>
-            <h1 data-i18n="toolbox.title">工具箱</h1>
+    </header>
+
+    <main class="container">
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" placeholder="搜索工具...">
+                <button>搜索</button>
+            </div>
+        </section>
+
+        <section class="toolbox-content">
+            <h1>工具箱</h1>
             
-            <div class="toolbox-content">
-                <div class="toolbox-category">
-                    <h2 data-i18n="toolbox.category1">系统工具</h2>
-                    <div class="toolbox-list">
+            <div class="category-grid">
+                <div class="category-card">
+                    <h2>系统工具</h2>
+                    <div class="tool-list">
                         <div class="tool-item">
-                            <h3 data-i18n="toolbox.tool1">系统信息</h3>
-                            <p data-i18n="toolbox.tool1_desc">查看系统硬件和软件信息</p>
+                            <h3>系统信息</h3>
+                            <p>查看系统硬件和软件信息</p>
+                            <a href="#" class="btn">使用</a>
                         </div>
                         <div class="tool-item">
-                            <h3 data-i18n="toolbox.tool2">性能监控</h3>
-                            <p data-i18n="toolbox.tool2_desc">实时监控系统性能指标</p>
+                            <h3>性能监控</h3>
+                            <p>实时监控系统性能指标</p>
+                            <a href="#" class="btn">使用</a>
                         </div>
                     </div>
                 </div>
                 
-                <div class="toolbox-category">
-                    <h2 data-i18n="toolbox.category2">网络工具</h2>
-                    <div class="toolbox-list">
+                <div class="category-card">
+                    <h2>网络工具</h2>
+                    <div class="tool-list">
                         <div class="tool-item">
-                            <h3 data-i18n="toolbox.tool3">网络诊断</h3>
-                            <p data-i18n="toolbox.tool3_desc">网络连接测试和诊断</p>
+                            <h3>网络诊断</h3>
+                            <p>网络连接测试和诊断</p>
+                            <a href="#" class="btn">使用</a>
                         </div>
                         <div class="tool-item">
-                            <h3 data-i18n="toolbox.tool4">端口扫描</h3>
-                            <p data-i18n="toolbox.tool4_desc">扫描开放端口和服务</p>
+                            <h3>端口扫描</h3>
+                            <p>扫描开放端口和服务</p>
+                            <a href="#" class="btn">使用</a>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
+    </main>
 
-        <!-- 右侧广告部分 -->
-        <div class="ads-section">
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="XXXXXXXXXX"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 资源激活工具站</p>
         </div>
-    </div>
+    </footer>
 
-    <script type="module" src="./src/js/toolbox.js"></script>
-    <script type="module" src="./src/js/modules/i18n.js"></script>
+    <script type="module" src="./src/js/index.js"></script>
     <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js');
-            });
-        }
-
-        // 初始化DeepSeekChat
-        const chat = new DeepSeekChat('your-api-key-here');
-        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
-    </script>
 </body>
 </html>

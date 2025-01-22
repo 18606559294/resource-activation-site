@@ -1,21 +1,28 @@
 // 国际化模块
+declare global {
+    interface Window {
+        trackError?: (error: { type: string; language: string; error: string }) => void;
+    }
+}
+
 class I18nManager {
-    /** @type {string} */
-    currentLanguage;
-    /** @type {Record<string, any>} */
-    translations;
-    /** @type {Set<(lang: string) => void>} */
-    callbacks;
+    currentLanguage: string;
+    translations: Record<string, any>;
+    callbacks: Set<(lang: string) => void>;
 
     constructor() {
-        /** @type {string | null} */
-        const storedLang = localStorage.getItem('language');
+        const storedLang: string | null = localStorage.getItem('language');
         this.currentLanguage = storedLang !== null ? storedLang : 'zh';
         this.translations = {};
         this.callbacks = new Set();
     }
 
+    isInitializing: boolean = false;
+
     async init() {
+        if (this.isInitializing) return;
+        this.isInitializing = true;
+        
         try {
             const response = await fetch(`/locales/${this.currentLanguage}.json`);
             if (!response.ok) {
@@ -26,10 +33,20 @@ class I18nManager {
             this.notifyCallbacks();
         } catch (error) {
             console.error('Failed to load translations:', error);
+            // 记录错误日志
+            if (typeof window.trackError === 'function') {
+                window.trackError({
+                    type: 'i18n_load_failed',
+                    language: this.currentLanguage,
+                    error: error instanceof Error ? error.message : String(error)
+                });
+            }
             // 回退到默认语言
             if (this.currentLanguage !== 'zh') {
                 this.setLanguage('zh');
             }
+        } finally {
+            this.isInitializing = false;
         }
     }
 
@@ -50,31 +67,44 @@ class I18nManager {
      * @param {Record<string, string>} [params] - 插值参数
      * @returns {string}
      */
-    translate(key, params = {}) {
-        /** @type {string} */
-        let text = key;
-        try {
-            text = /** @type {string} */ (key.split('.').reduce(
-                (/** @type {Record<string, any> | string} */ obj, /** @type {string} */ k) => {
-                    if (typeof obj === 'object' && obj !== null) {
-                        const value = obj[k];
-                        return typeof value === 'string' ? value : key;
-                    }
-                    return key;
-                },
-                /** @type {Record<string, any> | string} */ (this.translations)
-            ));
-        } catch {
-            // 如果解析失败，返回原始key
+    translate(key: string, params: Record<string, string> = {}) {
+        if (!key || typeof key !== 'string') {
+            console.warn('Invalid translation key:', key);
             return key;
         }
-        
-        // 处理插值
-        Object.entries(params).forEach(([key, value]) => {
-            text = text.replace(new RegExp(`{${key}}`, 'g'), value);
-        });
 
-        return text;
+    let text: string = key;
+        try {
+            const result = key.split('.').reduce((obj, k) => {
+                if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+                    const value = obj[k];
+                    if (typeof value === 'string') {
+                        return value;
+                    }
+                    if (value && typeof value === 'object') {
+                        return value;
+                    }
+                }
+                return key;
+            }, this.translations);
+            text = typeof result === 'string' ? result : key;
+        } catch (error) {
+            console.warn(`Translation failed for key "${key}":`, error);
+            return key;
+        }
+
+        // 处理插值并转义HTML
+        return Object.entries(params).reduce((result, [paramKey, paramValue]) => {
+            const safeValue = typeof paramValue === 'string' 
+                ? paramValue
+                    .replace(/&/g, '&')
+                    .replace(/</g, '<')
+                    .replace(/>/g, '>')
+                    .replace(/"/g, '"')
+                    .replace(/'/g, '&#039;')
+                : paramValue;
+            return result.replace(new RegExp(`{${paramKey}}`, 'g'), safeValue);
+        }, text);
     }
 
     updatePageContent() {

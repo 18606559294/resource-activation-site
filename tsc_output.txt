@@ -1,0 +1,4 @@
+﻿
+> resource-activation-site@1.0.0 tsc
+> tsc
+

@@ -1,13 +1,14 @@
 // DeepSeek AI 智能客服模块
-import crypto from 'crypto';
+const crypto = require('crypto');
 
-export class DeepSeekChat {
-    private encryptionKey: Buffer | null = null;
-    private apiKey: string | undefined;
-    private chatContainer: HTMLElement | null = null;
-    private messageHistory: Array<{role: string, content: string}> = [];
-
+module.exports = class DeepSeekChat {
     constructor() {
+        this.encryptionKey = null;
+        this.apiKey = undefined;
+        this.chatContainer = null;
+        /** @type {Array<{role: string, content: string}>} */
+        this.messageHistory = [];
+
         this.initializeEncryption();
         // 从加密密钥中解密API密钥
         const encryptedApiKey = 'YOUR_ENCRYPTED_API_KEY'; // 将YOUR_ENCRYPTED_API_KEY替换为实际加密后的密钥
@@ -21,7 +22,7 @@ export class DeepSeekChat {
         this.initChat();
     }
 
-    private initializeEncryption(): void {
+    initializeEncryption() {
         try {
             this.encryptionKey = crypto.randomBytes(32);
         } catch (error) {
@@ -30,7 +31,7 @@ export class DeepSeekChat {
         }
     }
 
-    public initChat(): void {
+    initChat() {
         try {
             this.createChatWindow();
             this.initEventListeners();
@@ -39,7 +40,7 @@ export class DeepSeekChat {
         }
     }
 
-    private createChatWindow(): void {
+    createChatWindow() {
         if (!document.body) {
             throw new Error('Document body not found');
         }
@@ -62,12 +63,12 @@ export class DeepSeekChat {
         document.body.appendChild(this.chatContainer);
     }
 
-    private initEventListeners(): void {
+    initEventListeners() {
         if (!this.chatContainer) return;
 
         const sendBtn = this.chatContainer.querySelector('.send-btn');
         const closeBtn = this.chatContainer.querySelector('.close-btn');
-        const input = this.chatContainer.querySelector('.chat-input') as HTMLInputElement;
+        const input = this.chatContainer.querySelector('.chat-input');
 
         if (!sendBtn || !closeBtn || !input) {
             throw new Error('Failed to find required chat elements');
@@ -75,20 +76,22 @@ export class DeepSeekChat {
 
         sendBtn.addEventListener('click', () => this.sendMessage());
         closeBtn.addEventListener('click', () => this.toggleChat());
-        input.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') this.sendMessage();
+        input.addEventListener('keydown', (e) => {
+            if (e instanceof KeyboardEvent && e.key === 'Enter') {
+                this.sendMessage();
+            }
         });
     }
 
-    public toggleChat(): void {
+    toggleChat() {
         if (!this.chatContainer) return;
         this.chatContainer.classList.toggle('visible');
     }
 
-    private async sendMessage(): Promise<void> {
+    async sendMessage() {
         if (!this.chatContainer) return;
 
-        const input = this.chatContainer.querySelector('.chat-input') as HTMLInputElement;
+        const input = /** @type {HTMLInputElement} */ (this.chatContainer.querySelector('.chat-input'));
         if (!input) return;
 
         const message = input.value.trim();
@@ -106,7 +109,12 @@ export class DeepSeekChat {
         }
     }
 
-    private async queryDeepSeek(message: string): Promise<string> {
+    /**
+     * 查询 DeepSeek API 获取回复
+     * @param {string} message 用户消息
+     * @returns {Promise<string>} 返回 AI 的回复
+     */
+    async queryDeepSeek(message) {
         if (!message || !this.apiKey) {
             throw new Error('Message or API key is missing');
         }
@@ -136,7 +144,12 @@ export class DeepSeekChat {
         return data.choices[0].message.content;
     }
 
-    private appendMessage(sender: 'user' | 'assistant' | 'error', message: string): void {
+    /**
+     * 添加消息到聊天窗口
+     * @param {'user' | 'assistant' | 'error'} sender 消息发送者
+     * @param {string} message 消息内容
+     */
+    appendMessage(sender, message) {
         if (!this.chatContainer) return;
 
         const messagesDiv = this.chatContainer.querySelector('.messages');
@@ -156,7 +169,12 @@ export class DeepSeekChat {
         }
     }
 
-    private decryptAPIKey(encryptedKey: string): string | undefined {
+    /**
+     * 解密 API 密钥
+     * @param {string} encryptedKey 加密后的 API 密钥
+     * @returns {string | undefined} 返回解密后的 API 密钥，如果解密失败则返回 undefined
+     */
+    decryptAPIKey(encryptedKey) {
         if (!encryptedKey || !this.encryptionKey) return undefined;
         try {
             const [ivHex, encryptedData] = encryptedKey.split(':');

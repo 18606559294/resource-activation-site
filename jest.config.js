@@ -1,20 +1,12 @@
 export default {
-  testEnvironment: 'node',
+  preset: 'ts-jest',
+  testEnvironment: 'jsdom',
+  setupFilesAfterEnv: ['./jest.setup.js'],
   transform: {
-    '^.+\\.(js|ts)$': 'babel-jest'
+    '^.+\\.js$': 'babel-jest',
   },
-  moduleNameMapper: {
-    '^@/(.*)$': '<rootDir>/src/$1'
-  },
-  testMatch: [
-    '<rootDir>/src/tests/**/*.{spec,test}.{js,ts}'
+  transformIgnorePatterns: [
+    '/node_modules/(?!(deepseek-chat)/)',
   ],
-  collectCoverageFrom: [
-    'src/**/*.{js,ts}',
-    '!src/**/*.{spec,test}.{js,ts}',
-    '!**/node_modules/**'
-  ],
-  coverageDirectory: 'coverage',
-  coverageReporters: ['text', 'lcov'],
-  setupFilesAfterEnv: ['<rootDir>/jest.setup.js']
+  moduleFileExtensions: ['js', 'json', 'jsx', 'ts', 'tsx', 'node'],
 };

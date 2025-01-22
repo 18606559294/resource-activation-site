@@ -1,14 +1,124 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
-    </head>
-    <body>
-    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>资源激活工具站</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="/" class="logo">资源激活</a>
+            <nav>
+                <a href="toolbox.html">工具</a>
+                <a href="resources.html">资源</a>
+                <a href="security.html">安全</a>
+                <a href="status.html">状态</a>
+            </nav>
+        </div>
+    </header>
 
-    <script>
-        // ...其他代码
-        // 不需要在此处初始化DeepSeekChat，DeepSeekIntegration会处理
-    </script>
+    <main class="container">
+        <aside class="ad-sidebar">
+            <!-- 横幅广告 -->
+            <div class="ad-container ad-banner">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
+                    crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-4468142418161903"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="auto"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+
+            <!-- 文字广告 -->
+            <div class="ad-container ad-text">
+                <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
+                    crossorigin="anonymous"></script>
+                <ins class="adsbygoogle"
+                    style="display:block"
+                    data-ad-client="ca-pub-4468142418161903"
+                    data-ad-slot="XXXXXXXXXX"
+                    data-ad-format="text"
+                    data-full-width-responsive="true"></ins>
+                <script>
+                    (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </aside>
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" placeholder="搜索工具或资源...">
+                <button>搜索</button>
+            </div>
+        </section>
+
+        <section class="tool-categories">
+            <h2>工具分类</h2>
+            <div class="category-grid">
+                <div class="category-card">
+                    <h3>系统工具</h3>
+                    <ul>
+                        <li><a href="#">激活工具</a></li>
+                        <li><a href="#">优化工具</a></li>
+                        <li><a href="#">诊断工具</a></li>
+                    </ul>
+                </div>
+                <div class="category-card">
+                    <h3>开发工具</h3>
+                    <ul>
+                        <li><a href="#">代码生成</a></li>
+                        <li><a href="#">API 测试</a></li>
+                        <li><a href="#">数据库工具</a></li>
+                    </ul>
+                </div>
+                <div class="category-card">
+                    <h3>安全工具</h3>
+                    <ul>
+                        <li><a href="#">加密工具</a></li>
+                        <li><a href="#">漏洞扫描</a></li>
+                        <li><a href="#">网络监控</a></li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="featured-tools">
+            <h2>推荐工具</h2>
+            <div class="tool-grid">
+                <div class="tool-card">
+                    <h3>激活助手</h3>
+                    <p>一键激活系统，支持多种版本</p>
+                    <a href="#" class="btn">立即使用</a>
+                </div>
+                <div class="tool-card">
+                    <h3>系统优化</h3>
+                    <p>提升系统性能，清理垃圾文件</p>
+                    <a href="#" class="btn">立即使用</a>
+                </div>
+                <div class="tool-card">
+                    <h3>安全检测</h3>
+                    <p>全面系统安全检测与修复</p>
+                    <a href="#" class="btn">立即使用</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 资源激活工具站</p>
+        </div>
+    </footer>
+
+    <script type="module" src="./src/js/index.js"></script>
+    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
 </body>
 </html>

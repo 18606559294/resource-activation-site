@@ -1,36 +1,30 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <!-- Google AdSense -->
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
-     crossorigin="anonymous"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
-    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
-    <meta http-equiv="X-Content-Type-Options" content="nosniff">
-    <meta http-equiv="X-Frame-Options" content="DENY">
-    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
-    <title data-i18n="status.title">系统状态</title>
-    <link rel="stylesheet" href="./src/css/styles.css">
-    <link rel="stylesheet" href="./src/css/components.css">
-    <link rel="stylesheet" href="./src/css/status.css">
-    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>系统状态 - 资源激活工具站</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/status.css">
 </head>
 <body>
-    <div class="nav-controls">
-        <!-- 语言切换 -->
-        <div class="language-switcher" role="navigation" aria-label="语言选择">
-            <button data-lang="zh" aria-pressed="true">中文</button>
-            <button data-lang="en" aria-pressed="false">English</button>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo">资源激活</a>
+            <nav>
+                <a href="toolbox.html">工具</a>
+                <a href="resources.html">资源</a>
+                <a href="security.html">安全</a>
+                <a href="status.html" class="active">状态</a>
+            </nav>
         </div>
-    </div>
-    <div class="background-gradient"></div>
-    <div class="page-container">
-        <!-- 左侧状态内容 -->
-        <div class="status-section">
-            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="status.back">返回主页</button>
-            <h1 data-i18n="status.title">系统状态</h1>
+    </header>
+
+    <main class="container">
+        <section class="status-section">
+            <h1>系统状态</h1>
             
             <div class="status-content">
                 <div class="status-item">
@@ -71,33 +65,16 @@
             </div>
         </div>
 
-        <!-- 右侧广告部分 -->
-        <div class="ads-section">
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="XXXXXXXXXX"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 资源激活工具站</p>
         </div>
-    </div>
+    </footer>
 
-    <script type="module" src="./src/js/status.js"></script>
-    <script type="module" src="./src/js/modules/i18n.js"></script>
+    <script type="module" src="./src/js/index.js"></script>
     <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js');
-            });
-        }
-
-        // 初始化DeepSeekChat
-        const chat = new DeepSeekChat('your-api-key-here');
-        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
-    </script>
 </body>
 </html>
