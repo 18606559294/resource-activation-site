@@ -31,21 +31,6 @@
     "vite": "^4.5.9",
     "vite-plugin-pwa": "^0.14.3"
   },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "jsdom",
-    "moduleFileExtensions": [
-      "js",
-      "ts"
-    ],
-    "transform": {
-      "^.+\\.ts$": "ts-jest"
-    },
-    "testMatch": [
-      "**/__tests__/**/*.test.[jt]s?(x)",
-      "**/?(*.)+(spec|test).[jt]s?(x)"
-    ]
-  },
   "dependencies": {
     "axios": "^1.7.9",
     "vite-tsconfig-paths": "^5.1.4",
