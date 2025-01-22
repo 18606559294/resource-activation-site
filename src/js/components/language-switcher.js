@@ -1,4 +1,4 @@
-import { i18nManager } from '../modules/i18n-manager.js';
+import i18nManager from '../modules/i18n-manager.js';
 import { uiFeedback } from '../modules/ui-feedback.js';
 
 class LanguageSwitcher {
