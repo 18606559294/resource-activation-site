@@ -38,18 +38,47 @@ export class I18nManager {
      * Updates all page content with translations
      */
     updatePageContent() {
+        // 添加MutationObserver监听DOM变化
+        if (!this.observer) {
+            this.observer = new MutationObserver(mutations => {
+                mutations.forEach(() => this.translatePage());
+            });
+            this.observer.observe(document.body, {
+                subtree: true,
+                childList: true,
+                attributes: false,
+                characterData: false
+            });
+        }
+        this.translatePage();
+    }
+
+    translatePage() {
         const elements = document.querySelectorAll('[data-i18n]');
         elements.forEach(element => {
             const key = element.getAttribute('data-i18n');
-            if (key) { // 检查 key 是否为 null
-              const translation = this.getTranslation(key);
-              if (translation) {
-                  if (element instanceof HTMLInputElement && element.type === 'text') {
-                      element.placeholder = translation;
-                  } else if(element) { // 检查 element 是否存在
-                      element.textContent = translation;
-                  }
-              }
+            const attr = element.getAttribute('data-i18n-attr') || 'text';
+            
+            if (key) {
+                const translation = this.getTranslation(key);
+                if (translation) {
+                    switch(attr) {
+                        case 'text':
+                            element.textContent = translation;
+                            break;
+                        case 'placeholder':
+                            element.placeholder = translation;
+                            break;
+                        case 'title':
+                            element.title = translation;
+                            break;
+                        case 'value':
+                            element.value = translation;
+                            break;
+                        default:
+                            element.setAttribute(attr, translation);
+                    }
+                }
             }
         });
         this.notifyObservers();
@@ -65,19 +94,29 @@ export class I18nManager {
     getTranslation(path, replacements = {}) {
         const keys = path.split('.');
         let current = this.translations[this.currentLanguage];
+        
+        try {
+            for (const key of keys) {
+                if (!current || typeof current !== 'object') {
+                    throw new Error(`Invalid translation path: ${path}`);
+                }
+                current = current[key];
+            }
 
-        for (const key of keys) {
-          if (typeof current !== 'object' || current === null || current === undefined) { // 检查 current 是否为对象且不为 null
+            let translation = typeof current === 'string' ? current : JSON.stringify(current);
+            translation = this.replacePlaceholders(translation, replacements);
+            
+            // 记录缺失的翻译键
+            if (translation === path) {
+                console.warn(`Missing translation: ${path}`);
+                this.trackMissingKey(path);
+            }
+            
+            return translation;
+        } catch (error) {
+            console.error(`Translation error: ${error.message}`);
             return this.getFallbackTranslation(path, replacements);
-          }
-          current = current[key];
         }
-
-        if (typeof current !== 'string') { // 检查 current 是否为字符串
-          return this.getFallbackTranslation(path, replacements);
-        }
-
-        return this.replacePlaceholders(current, replacements);
     }
 
 
@@ -90,16 +129,29 @@ export class I18nManager {
     getFallbackTranslation(path, replacements = {}) {
         const keys = path.split('.');
         let current = this.translations[this.fallbackLanguage];
+        
+        try {
+            for (const key of keys) {
+                if (!current || typeof current !== 'object') {
+                    throw new Error(`Invalid fallback path: ${path}`);
+                }
+                current = current[key];
+            }
 
-        for (const key of keys) {
-          if (typeof current !== 'object' || current === null || current === undefined) { // 检查 current 是否为对象且不为 null
+            let translation = typeof current === 'string' ? current : JSON.stringify(current);
+            translation = this.replacePlaceholders(translation, replacements);
+            
+            // 记录备用语言缺失键
+            if (translation === path) {
+                console.error(`Missing fallback translation: ${path}`);
+                this.trackMissingKey(path, true);
+            }
+            
+            return translation;
+        } catch (error) {
+            console.error(`Fallback translation error: ${error.message}`);
             return path;
-          }
-          current = current[key];
         }
-
-
-        return typeof current === 'string' ? this.replacePlaceholders(current, replacements) : path; // 检查 current 是否为字符串
     }
 
     /**
@@ -113,6 +165,12 @@ export class I18nManager {
                 observer.onLanguageChange(this.currentLanguage);
             }
         });
+    }
+
+    toggleLanguage() {
+        this.currentLanguage = this.currentLanguage === 'zh' ? 'en' : 'zh';
+        this.updatePageContent();
+        localStorage.setItem('preferredLanguage', this.currentLanguage);
     }
     // ... (其他方法不变)
 }
