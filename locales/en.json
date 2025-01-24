@@ -1,5 +1,166 @@
 {
-  "language": {
-    "switcher": "中文"
+  "languages": {
+    "zh": "中文",
+    "en": "English"
+  },
+  "accessibility": {
+    "currentLanguage": "Current language: {{language}}",
+    "switchTo": "Switch to {{language}}"
+  },
+  "messages": {
+    "languageChanged": "Language changed",
+    "languageChangeFailed": "Failed to change language, please try again"
+  },
+  "site": {
+    "title": "Resource Activation Tools"
+  },
+  "nav": {
+    "home": "Back to Home",
+    "tools": "Tools",
+    "resources": "Resources",
+    "security": "Security",
+    "status": "Status"
+  },
+  "toolbox": {
+    "pageTitle": "Toolbox - Resource Activation Tools",
+    "title": "Toolbox",
+    "search": {
+      "placeholder": "Search tools...",
+      "button": "Search"
+    },
+    "system": {
+      "title": "System Tools",
+      "sysinfo": {
+        "title": "System Information",
+        "description": "View system hardware and software information"
+      },
+      "performance": {
+        "title": "Performance Monitor",
+        "description": "Real-time system performance monitoring"
+      }
+    },
+    "network": {
+      "title": "Network Tools",
+      "diagnostic": {
+        "title": "Network Diagnostics",
+        "description": "Network connectivity testing and diagnostics"
+      },
+      "portscan": {
+        "title": "Port Scanner",
+        "description": "Scan for open ports and services"
+      }
+    }
+  },
+  "resources": {
+    "pageTitle": "Resource Center - Resource Activation Tools",
+    "title": "Resource Center",
+    "system": {
+      "alt": "System Resources Icon",
+      "title": "System Resources",
+      "iso": "System Images",
+      "drivers": "Drivers",
+      "patches": "System Patches"
+    },
+    "dev": {
+      "alt": "Development Resources Icon",
+      "title": "Development Resources",
+      "sdk": "SDK Downloads",
+      "api": "API Documentation",
+      "examples": "Code Examples"
+    },
+    "security": {
+      "alt": "Security Resources Icon",
+      "title": "Security Resources",
+      "patches": "Security Patches",
+      "guides": "Security Guides",
+      "vulndb": "Vulnerability Database"
+    }
+  },
+  "categories": {
+    "title": "Tool Categories",
+    "system": {
+      "title": "System Tools",
+      "activation": "Activation Tools",
+      "optimization": "Optimization Tools",
+      "diagnostic": "Diagnostic Tools"
+    },
+    "dev": {
+      "title": "Development Tools",
+      "codeGen": "Code Generation",
+      "apiTest": "API Testing",
+      "database": "Database Tools"
+    },
+    "security": {
+      "pageTitle": "Security Center - Resource Activation Tools",
+      "title": "Security Center",
+      "sections": {
+        "detection": {
+          "title": "Security Check",
+          "description": "All tools undergo strict security testing to ensure they are safe and virus-free."
+        },
+        "instructions": {
+          "title": "Usage Instructions",
+          "description": "Please follow the documentation to use tools correctly and avoid security issues caused by improper operation."
+        },
+        "disclaimer": {
+          "title": "Disclaimer",
+          "description": "The tools provided by this platform are for learning and communication purposes only, not for commercial use."
+        }
+      }
+    }
+  },
+  "status": {
+    "pageTitle": "System Status - Resource Activation Tools",
+    "title": "System Status",
+    "sections": {
+      "server": {
+        "title": "Server Status",
+        "online": "Online",
+        "offline": "Offline"
+      },
+      "services": {
+        "title": "Service Status",
+        "api": "API Service",
+        "database": "Database Service"
+      },
+      "system": {
+        "title": "System Information",
+        "version": "Version: ",
+        "lastUpdate": "Last Updated: "
+      }
+    }
+  },
+  "common": {
+    "use": "Use Now"
+  },
+  "footer": {
+    "copyright": "© 2023 Resource Activation Tools"
+  },
+  "feedback": {
+    "title": "Feedback & Solutions",
+    "form": {
+      "name": "Your Name:",
+      "namePlaceholder": "Enter your name",
+      "contact": "Contact (Optional):",
+      "contactPlaceholder": "Email/Phone/WeChat",
+      "question": "Issue Description:",
+      "questionPlaceholder": "Please describe your issue in detail...",
+      "submit": "Submit"
+    },
+    "history": {
+      "title": "History",
+      "noData": "No feedback history",
+      "date": "Submitted on:",
+      "status": {
+        "pending": "Pending",
+        "processing": "Processing",
+        "resolved": "Resolved",
+        "closed": "Closed"
+      }
+    },
+    "status": {
+      "success": "Feedback submitted successfully",
+      "error": "Submission failed, please try again"
+    }
   }
 }

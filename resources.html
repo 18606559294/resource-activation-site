@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>资源中心 - 资源激活工具站</title>
+    <title data-i18n="resources.pageTitle">资源中心 - 资源激活工具站</title>
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/resources.css">
@@ -12,12 +12,16 @@
 <body>
     <header class="navbar">
         <div class="container">
-            <a href="index.html" class="logo">资源激活</a>
+            <a href="index.html" class="logo" data-i18n="nav.home">资源激活</a>
             <nav>
-                <a href="toolbox.html">工具</a>
-                <a href="resources.html">资源</a>
-                <a href="security.html">安全</a>
-                <a href="status.html">状态</a>
+                <a href="toolbox.html" data-i18n="nav.tools">工具</a>
+                <a href="resources.html" class="active" data-i18n="nav.resources">资源</a>
+                <a href="security.html" data-i18n="nav.security">安全</a>
+                <a href="status.html" data-i18n="nav.status">状态</a>
+                <div class="language-switcher" role="navigation" aria-label="语言选择">
+                    <button data-lang="zh" aria-label="切换到中文">中文</button>
+                    <button data-lang="en" aria-label="Switch to English">English</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -25,39 +29,39 @@
     <div class="background-gradient"></div>
     <main class="container">
         <section class="resource-section">
-            <h1 class="page-title">资源中心</h1>
+            <h1 class="page-title" data-i18n="resources.title">资源中心</h1>
             <div class="resource-grid">
                 <div class="resource-card animate__animated animate__fadeInUp">
                     <div class="card-icon">
-                        <img src="./src/assets/images/windows.svg" alt="系统资源">
+                        <img src="./src/assets/images/windows.svg" alt="系统资源" data-i18n-alt="resources.system.alt">
                     </div>
-                    <h3>系统资源</h3>
+                    <h3 data-i18n="resources.system.title">系统资源</h3>
                     <ul>
-                        <li><a href="#" class="resource-link">系统镜像</a></li>
-                        <li><a href="#" class="resource-link">驱动程序</a></li>
-                        <li><a href="#" class="resource-link">系统补丁</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.system.iso">系统镜像</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.system.drivers">驱动程序</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.system.patches">系统补丁</a></li>
                     </ul>
                 </div>
                 <div class="resource-card animate__animated animate__fadeInUp animate__delay-1s">
                     <div class="card-icon">
-                        <img src="./src/assets/images/python.svg" alt="开发资源">
+                        <img src="./src/assets/images/python.svg" alt="开发资源" data-i18n-alt="resources.dev.alt">
                     </div>
-                    <h3>开发资源</h3>
+                    <h3 data-i18n="resources.dev.title">开发资源</h3>
                     <ul>
-                        <li><a href="#" class="resource-link">SDK下载</a></li>
-                        <li><a href="#" class="resource-link">API文档</a></li>
-                        <li><a href="#" class="resource-link">代码示例</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.dev.sdk">SDK下载</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.dev.api">API文档</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.dev.examples">代码示例</a></li>
                     </ul>
                 </div>
                 <div class="resource-card animate__animated animate__fadeInUp animate__delay-2s">
                     <div class="card-icon">
-                        <img src="./src/assets/images/security.svg" alt="安全资源">
+                        <img src="./src/assets/images/security.svg" alt="安全资源" data-i18n-alt="resources.security.alt">
                     </div>
-                    <h3>安全资源</h3>
+                    <h3 data-i18n="resources.security.title">安全资源</h3>
                     <ul>
-                        <li><a href="#" class="resource-link">安全补丁</a></li>
-                        <li><a href="#" class="resource-link">安全指南</a></li>
-                        <li><a href="#" class="resource-link">漏洞数据库</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.security.patches">安全补丁</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.security.guides">安全指南</a></li>
+                        <li><a href="#" class="resource-link" data-i18n="resources.security.vulndb">漏洞数据库</a></li>
                     </ul>
                 </div>
             </div>
@@ -66,11 +70,13 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2023 资源激活工具站</p>
+            <p data-i18n="footer.copyright">&copy; 2023 资源激活工具站</p>
         </div>
     </footer>
 
-    <script type="module" src="./src/js/index.js"></script>
+    <script type="module" src="./src/js/modules/i18n-manager.js"></script>
+    <script type="module" src="./src/js/components/language-switcher.js"></script>
+    <script type="module" src="./src/js/resources.js"></script>
     <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
 </body>
 </html>

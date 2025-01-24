@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>资源激活工具站</title>
+    <title data-i18n="site.title">资源激活工具站</title>
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
 </head>
 <body>
     <header class="navbar">
         <div class="container">
-            <a href="/" class="logo">资源激活</a>
+            <a href="/" class="logo" data-i18n="nav.home">资源激活</a>
             <nav>
-                <a href="toolbox.html">工具</a>
-                <a href="resources.html">资源</a>
-                <a href="security.html">安全</a>
-                <a href="status.html">状态</a>
-                <a href="#" data-i18n="language.switcher" onclick="i18n.toggleLanguage()">English</a>
+                <a href="toolbox.html" data-i18n="nav.tools">工具</a>
+                <a href="resources.html" data-i18n="nav.resources">资源</a>
+                <a href="security.html" data-i18n="nav.security">安全</a>
+                <a href="status.html" data-i18n="nav.status">状态</a>
+                <div class="language-switcher">
+                    <button data-lang="zh" aria-label="切换到中文">中文</button>
+                    <button data-lang="en" aria-label="Switch to English">English</button>
+                </div>
             </nav>
         </div>
     </header>
@@ -56,58 +59,58 @@
         </aside>
         <section class="search-section">
             <div class="search-box">
-                <input type="text" placeholder="搜索工具或资源...">
-                <button>搜索</button>
+                <input type="text" data-i18n-placeholder="search.placeholder">
+                <button data-i18n="search.button">搜索</button>
             </div>
         </section>
 
         <section class="tool-categories">
-            <h2>工具分类</h2>
+            <h2 data-i18n="categories.title">工具分类</h2>
             <div class="category-grid">
                 <div class="category-card">
-                    <h3>系统工具</h3>
+                    <h3 data-i18n="categories.system.title">系统工具</h3>
                     <ul>
-                        <li><a href="#">激活工具</a></li>
-                        <li><a href="#">优化工具</a></li>
-                        <li><a href="#">诊断工具</a></li>
+                        <li><a href="#" data-i18n="categories.system.activation">激活工具</a></li>
+                        <li><a href="#" data-i18n="categories.system.optimization">优化工具</a></li>
+                        <li><a href="#" data-i18n="categories.system.diagnostic">诊断工具</a></li>
                     </ul>
                 </div>
                 <div class="category-card">
-                    <h3>开发工具</h3>
+                    <h3 data-i18n="categories.dev.title">开发工具</h3>
                     <ul>
-                        <li><a href="#">代码生成</a></li>
-                        <li><a href="#">API 测试</a></li>
-                        <li><a href="#">数据库工具</a></li>
+                        <li><a href="#" data-i18n="categories.dev.codeGen">代码生成</a></li>
+                        <li><a href="#" data-i18n="categories.dev.apiTest">API 测试</a></li>
+                        <li><a href="#" data-i18n="categories.dev.database">数据库工具</a></li>
                     </ul>
                 </div>
                 <div class="category-card">
-                    <h3>安全工具</h3>
+                    <h3 data-i18n="categories.security.title">安全工具</h3>
                     <ul>
-                        <li><a href="#">加密工具</a></li>
-                        <li><a href="#">漏洞扫描</a></li>
-                        <li><a href="#">网络监控</a></li>
+                        <li><a href="#" data-i18n="categories.security.encryption">加密工具</a></li>
+                        <li><a href="#" data-i18n="categories.security.scan">漏洞扫描</a></li>
+                        <li><a href="#" data-i18n="categories.security.monitor">网络监控</a></li>
                     </ul>
                 </div>
             </div>
         </section>
 
         <section class="featured-tools">
-            <h2>推荐工具</h2>
+            <h2 data-i18n="featured.title">推荐工具</h2>
             <div class="tool-grid">
                 <div class="tool-card">
-                    <h3>激活助手</h3>
-                    <p>一键激活系统，支持多种版本</p>
-                    <a href="#" class="btn">立即使用</a>
+                    <h3 data-i18n="featured.activation.title">激活助手</h3>
+                    <p data-i18n="featured.activation.description">一键激活系统，支持多种版本</p>
+                    <a href="#" class="btn" data-i18n="common.use">立即使用</a>
                 </div>
                 <div class="tool-card">
-                    <h3>系统优化</h3>
-                    <p>提升系统性能，清理垃圾文件</p>
-                    <a href="#" class="btn">立即使用</a>
+                    <h3 data-i18n="featured.optimization.title">系统优化</h3>
+                    <p data-i18n="featured.optimization.description">提升系统性能，清理垃圾文件</p>
+                    <a href="#" class="btn" data-i18n="common.use">立即使用</a>
                 </div>
                 <div class="tool-card">
-                    <h3>安全检测</h3>
-                    <p>全面系统安全检测与修复</p>
-                    <a href="#" class="btn">立即使用</a>
+                    <h3 data-i18n="featured.security.title">安全检测</h3>
+                    <p data-i18n="featured.security.description">全面系统安全检测与修复</p>
+                    <a href="#" class="btn" data-i18n="common.use">立即使用</a>
                 </div>
             </div>
         </section>
@@ -115,11 +118,12 @@
 
     <footer>
         <div class="container">
-            <p>&copy; 2023 资源激活工具站</p>
+            <p data-i18n="footer.copyright">&copy; 2023 资源激活工具站</p>
         </div>
     </footer>
 
     <script type="module" src="./src/js/modules/i18n-manager.js"></script>
+    <script type="module" src="./src/js/components/language-switcher.js"></script>
     <script type="module" src="./src/js/index.js"></script>
     <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
 </body>
