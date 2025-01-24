@@ -1,14 +1,24 @@
+const WS_CONFIG = {
+    development: 'ws://localhost:8765',
+    production: 'wss://your-domain.com/ws'
+};
+
 class RealtimeUpdates {
     constructor() {
         this.ws = null;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 5;
         this.reconnectDelay = 3000; // 3秒
+        this.isConnecting = false;
         this.connect();
     }
 
     connect() {
-        this.ws = new WebSocket('ws://localhost:8765');
+        if (this.isConnecting) return;
+        
+        this.isConnecting = true;
+        const wsUrl = WS_CONFIG[process.env.NODE_ENV || 'development'];
+        this.ws = new WebSocket(wsUrl);
 
         this.ws.onopen = () => {
             console.log('WebSocket连接已建立');
@@ -31,13 +41,33 @@ class RealtimeUpdates {
     }
 
     attemptReconnect() {
+        if (this.isConnecting) return;
+        
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
             this.reconnectAttempts++;
             console.log(`尝试重新连接... (${this.reconnectAttempts}/${this.maxReconnectAttempts})`);
-            setTimeout(() => this.connect(), this.reconnectDelay);
+            
+            // 使用指数退避算法
+            const delay = Math.min(1000 * Math.pow(2, this.reconnectAttempts), 30000);
+            setTimeout(() => {
+                this.isConnecting = false;
+                this.connect();
+            }, delay);
         } else {
             console.error('达到最大重连次数，请刷新页面重试');
+            // 显示重连失败提示
+            this.showReconnectFailedNotification();
         }
+    }
+
+    showReconnectFailedNotification() {
+        const notification = document.createElement('div');
+        notification.className = 'websocket-error-notification';
+        notification.innerHTML = `
+            <p>连接服务器失败</p>
+            <button onclick="window.location.reload()">刷新页面</button>
+        `;
+        document.body.appendChild(notification);
     }
 
     handleUpdate(data) {

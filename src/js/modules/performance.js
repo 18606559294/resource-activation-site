@@ -1,7 +1,22 @@
+const API_ENDPOINTS = {
+  development: {
+    metrics: '/api/metrics',
+    logs: '/api/logs',
+    errors: '/api/errors'
+  },
+  production: {
+    metrics: 'https://api.your-domain.com/metrics',
+    logs: 'https://api.your-domain.com/logs',
+    errors: 'https://api.your-domain.com/errors'
+  }
+};
+
 // 性能监控模块
 class PerformanceMonitor {
   constructor() {
     this.metrics = {};
+    this.pendingMetrics = [];
+    this.isProcessingQueue = false;
     this.initObservers();
   }
 
@@ -53,7 +68,91 @@ class PerformanceMonitor {
     return keyMetrics.includes(entry.name);
   }
 
-  async sendToAnalytics(metric) {
+  // 压缩数据
+  async compressData(data) {
+    const jsonString = JSON.stringify(data);
+    const encoder = new TextEncoder();
+    const compressed = await new Promise((resolve) => {
+      const compressed = [];
+      const ds = new DeflateStream({
+        ondata(chunk) {
+          compressed.push(chunk);
+        },
+        onend() {
+          resolve(Buffer.concat(compressed));
+        }
+      });
+      ds.write(encoder.encode(jsonString));
+      ds.end();
+    });
+    return compressed;
+  }
+
+  // 存储到本地
+  storeLocally(metric) {
+    try {
+      const storedMetrics = JSON.parse(localStorage.getItem('pendingMetrics') || '[]');
+      storedMetrics.push({
+        ...metric,
+        timestamp: Date.now()
+      });
+      localStorage.setItem('pendingMetrics', JSON.stringify(storedMetrics));
+    } catch (error) {
+      console.error('Failed to store metric locally:', error);
+    }
+  }
+
+  // 发送队列中的指标
+  async processQueue() {
+    if (this.isProcessingQueue) return;
+    
+    this.isProcessingQueue = true;
+    try {
+      while (this.pendingMetrics.length > 0) {
+        const batch = this.pendingMetrics.splice(0, 10); // 每次处理10条
+        await this.sendBatch(batch);
+      }
+
+      // 处理本地存储的指标
+      const storedMetrics = JSON.parse(localStorage.getItem('pendingMetrics') || '[]');
+      if (storedMetrics.length > 0) {
+        await this.sendBatch(storedMetrics);
+        localStorage.removeItem('pendingMetrics');
+      }
+    } catch (error) {
+      console.error('Failed to process metric queue:', error);
+    } finally {
+      this.isProcessingQueue = false;
+    }
+  }
+
+  // 批量发送指标
+  async sendBatch(metrics) {
+    const env = process.env.NODE_ENV || 'development';
+    const endpoints = API_ENDPOINTS[env];
+
+    try {
+      const compressedData = await this.compressData(metrics);
+      const response = await fetch(endpoints.metrics, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/octet-stream',
+          'Content-Encoding': 'deflate'
+        },
+        body: compressedData
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+    } catch (error) {
+      // 存储失败的指标
+      metrics.forEach(metric => this.storeLocally(metric));
+      throw error;
+    }
+  }
+
+  async sendToAnalytics(metric, retries = 3) {
     try {
       // 记录日志
       this.logToFile(metric);
@@ -63,28 +162,18 @@ class PerformanceMonitor {
         this.triggerAlert(metric);
       }
 
-      // 发送到分析服务
-      const response = await fetch('/api/metrics', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          name: metric.name,
-          value: metric.value,
-          type: metric.entryType,
-          timestamp: Date.now(),
-          userAgent: navigator.userAgent,
-          pageUrl: window.location.href
-        })
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      // 添加到待处理队列
+      this.pendingMetrics.push(metric);
+      
+      // 启动队列处理
+      await this.processQueue();
     } catch (error) {
+      if (retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        return this.sendToAnalytics(metric, retries - 1);
+      }
       console.error('Failed to send metric:', error);
-      this.logError(error);
+      this.storeLocally(metric);
     }
   }
 
