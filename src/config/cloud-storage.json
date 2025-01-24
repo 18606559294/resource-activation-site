@@ -3,6 +3,12 @@
     "lanzou": {
       "name": "蓝奏云",
       "tools": {
+        "idm-registration": {
+          "url": "https://wwsa.lanzouu.com/b00y9v0dla",
+          "name": "IDM注册码",
+          "description": "Internet Download Manager软件注册码",
+          "extractCode": "9xlu"
+        },
         "python-dev": {
           "url": "https://wwwq.lanzouj.com/your-link",
           "name": "Python开发环境安装包",
