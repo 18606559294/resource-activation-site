@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-i18n-loading="true">
+<html data-i18n-loading="true" lang="zh">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -32,7 +32,10 @@
     <main class="container">
         <section class="search-section">
             <div class="search-box">
-                <input type="text" data-i18n-placeholder="toolbox.search.placeholder" data-i18n-default-placeholder="搜索工具">
+                <input type="text" 
+                       data-i18n-placeholder="toolbox.search.placeholder" 
+                       data-i18n-default-placeholder="搜索工具..." 
+                       placeholder="搜索工具...">
                 <button data-i18n="toolbox.search.button" data-i18n-default="搜索">搜索</button>
             </div>
         </section>
@@ -41,20 +44,6 @@
             <h1 data-i18n="toolbox.title" data-i18n-default="工具箱">工具箱</h1>
             
             <div class="category-grid">
-                <div class="category-card">
-                    <h2 data-i18n="toolbox.software.title" data-i18n-default="软件工具">软件工具</h2>
-                    <div class="tool-list">
-                        <div class="tool-item">
-                            <h3 data-i18n="toolbox.software.idm.title" data-i18n-default="IDM注册码">IDM注册码</h3>
-                            <p data-i18n="toolbox.software.idm.description" data-i18n-default="Internet Download Manager软件注册码">Internet Download Manager软件注册码</p>
-                            <div class="tool-actions">
-                                <a href="https://wwsa.lanzouu.com/b00y9v0dla" class="btn download-btn" data-tool="idm-registration" data-i18n="common.download" data-i18n-default="下载" target="_blank">下载</a>
-                                <span class="extract-code" data-i18n="toolbox.software.idm.extractCode" data-i18n-default="提取码：9xlu">提取码：9xlu</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="category-card">
                     <h2 data-i18n="toolbox.system.title" data-i18n-default="系统工具">系统工具</h2>
                     <div class="tool-list">
@@ -83,6 +72,25 @@
                             <h3 data-i18n="toolbox.network.portscan.title" data-i18n-default="端口扫描">端口扫描</h3>
                             <p data-i18n="toolbox.network.portscan.description" data-i18n-default="扫描开放端口和服务">扫描开放端口和服务</p>
                             <a href="#" class="btn" data-i18n="common.use" data-i18n-default="使用">使用</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <h2 data-i18n="toolbox.software.title" data-i18n-default="软件工具">软件工具</h2>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.software.idm.title" data-i18n-default="IDM注册码">IDM注册码</h3>
+                            <p data-i18n="toolbox.software.idm.description" data-i18n-default="Internet Download Manager软件注册码">Internet Download Manager软件注册码</p>
+                            <div class="tool-actions">
+                                <a href="https://wwsa.lanzouu.com/b00y9v0dla" class="btn download-btn" 
+                                   data-i18n="toolbox.software.idm.download" 
+                                   data-i18n-default="下载" 
+                                   target="_blank">下载</a>
+                                <span class="extract-code" 
+                                      data-i18n="toolbox.software.idm.extractCode" 
+                                      data-i18n-default="提取码：9xlu">提取码：9xlu</span>
+                            </div>
                         </div>
                     </div>
                 </div>

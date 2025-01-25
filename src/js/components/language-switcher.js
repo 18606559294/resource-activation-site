@@ -44,34 +44,49 @@ class LanguageSwitcher {
      * @param {boolean} [isSystemChange=false] - 是否是系统触发的变化
      */
     async switchLanguage(lang, isSystemChange = false) {
-        try {
-            // 显示切换状态
-            const button = this.buttons.get(lang);
-            const loadingClass = 'is-loading';
-            button.classList.add(loadingClass);
-            button.disabled = true;
+        // 获取目标语言按钮
+        const button = this.buttons.get(lang);
+        if (!button) {
+            console.error('Language button not found:', lang);
+            return;
+        }
 
-            // 切换语言
+        // 禁用所有按钮
+        this.buttons.forEach(btn => btn.disabled = true);
+
+        try {
+            // 显示加载状态
+            button.classList.add('is-loading');
+            
+            // 尝试切换语言
             await i18nManager.setLanguage(lang);
 
-            // 更新按钮状态
+            // 成功切换后更新UI
             this.updateButtonStates(lang);
-
-            // 如果不是系统触发的变化，保存用户偏好
+            
             if (!isSystemChange) {
-                localStorage.setItem('preferredLanguage', lang);
+                // 显示成功提示
+                uiFeedback.showToast(
+                    i18nManager.getTranslation('messages.languageChanged') || '语言已切换',
+                    'success'
+                );
             }
 
-            // 显示成功提示
-            uiFeedback.showToast(i18nManager.getTranslation('messages.languageChanged'), 'success');
         } catch (error) {
-            console.error('语言切换失败:', error);
-            uiFeedback.showToast(i18nManager.getTranslation('messages.languageChangeFailed'), 'error');
+            console.error('Failed to switch language:', error);
+            
+            // 显示错误提示
+            uiFeedback.showToast(
+                i18nManager.getTranslation('messages.languageChangeFailed') || '语言切换失败',
+                'error'
+            );
+
         } finally {
-            // 恢复按钮状态
-            const button = this.buttons.get(lang);
-            button.classList.remove('is-loading');
-            button.disabled = false;
+            // 恢复所有按钮状态
+            this.buttons.forEach(btn => {
+                btn.disabled = false;
+                btn.classList.remove('is-loading');
+            });
         }
     }
 
@@ -82,19 +97,31 @@ class LanguageSwitcher {
     updateButtonStates(currentLang) {
         this.buttons.forEach((button, lang) => {
             const isActive = lang === currentLang;
+            
+            // 更新按钮状态
             button.setAttribute('aria-pressed', isActive.toString());
             button.classList.toggle('active', isActive);
             
-            // 更新无障碍标签
-            const labelKey = isActive ? 'currentLanguage' : 'switchTo';
-            const ariaLabel = i18nManager.getTranslation(['accessibility', labelKey], {
-                language: i18nManager.getTranslation(['languages', lang])
-            });
-            button.setAttribute('aria-label', ariaLabel);
+            try {
+                // 更新无障碍标签
+                const labelKey = isActive ? 'currentLanguage' : 'switchTo';
+                const language = i18nManager.getTranslation(`languages.${lang}`) || lang;
+                const ariaLabel = i18nManager.getTranslation(`accessibility.${labelKey}`, { language });
+                if (ariaLabel) {
+                    button.setAttribute('aria-label', ariaLabel);
+                }
 
-            // 更新按钮文本
-            const buttonText = i18nManager.getTranslation(['languages', lang]);
-            button.textContent = buttonText;
+                // 更新按钮文本
+                const buttonText = i18nManager.getTranslation(`languages.${lang}`) || lang.toUpperCase();
+                button.textContent = buttonText;
+            } catch (error) {
+                console.warn('Failed to update button text:', error);
+                // 使用默认显示
+                const defaultText = button.getAttribute('data-i18n-default');
+                if (defaultText) {
+                    button.textContent = defaultText;
+                }
+            }
         });
     }
 

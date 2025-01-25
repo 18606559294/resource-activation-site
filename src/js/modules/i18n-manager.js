@@ -48,13 +48,33 @@ export class I18nManager {
      * 初始化国际化管理器
      */
     async init() {
-        // 初始化系统语言检测
-        this.initSystemLanguageDetection();
-        // 加载初始语言包
-        await this.initializeTranslations();
-        // 设置初始语言
-        const preferredLang = localStorage.getItem('preferredLanguage') || this.getSystemLanguage();
-        await this.setLanguage(preferredLang);
+        try {
+            // 获取初始语言
+            const savedLang = localStorage.getItem('preferredLanguage');
+            const systemLang = this.getSystemLanguage();
+            const initialLang = savedLang || systemLang;
+            
+            // 预加载所有语言包
+            await Promise.all([
+                this.loadLanguage('zh'),
+                this.loadLanguage('en')
+            ]);
+
+            // 设置初始语言
+            await this.setLanguage(initialLang);
+            
+            // 初始化系统语言检测
+            this.initSystemLanguageDetection();
+            
+            console.log('I18n initialized:', {
+                current: this.currentLanguage,
+                loaded: Array.from(this.loadedLanguages)
+            });
+        } catch (error) {
+            console.error('Failed to initialize i18n:', error);
+            // 使用默认语言作为后备方案
+            this.fallbackToDefault();
+        }
     }
 
     /**
@@ -207,22 +227,42 @@ export class I18nManager {
         }
 
         try {
-            // 按需加载语言包
+            // 确保语言包已加载
             if (!this.loadedLanguages.has(lang)) {
                 await this.loadLanguage(lang);
             }
 
+            if (!this.translations[lang]) {
+                throw new Error(`Missing translations for ${lang}`);
+            }
+
+            // 更新当前语言
+            const oldLang = this.currentLanguage;
             this.currentLanguage = lang;
-            localStorage.setItem('preferredLanguage', lang);
             document.documentElement.lang = lang;
+
+            // 保存用户偏好
+            localStorage.setItem('preferredLanguage', lang);
+
+            // 更新页面内容
             this.updatePageContent();
             this.notifyObservers();
+
+            console.log('Language changed:', {
+                from: oldLang,
+                to: lang,
+                translations: Object.keys(this.translations[lang]).length
+            });
         } catch (error) {
-            console.error(`切换语言失败 ${lang}:`, error);
-            // 切换失败时回退到备用语言
+            console.error('Language change failed:', error);
+
+            // 恢复之前的语言
             if (lang !== this.fallbackLanguage) {
+                console.log('Falling back to default language');
                 await this.setLanguage(this.fallbackLanguage);
             }
+
+            throw error; // 让调用者知道切换失败
         }
     }
 
@@ -230,13 +270,51 @@ export class I18nManager {
      * 更新页面所有翻译内容
      */
     updatePageContent() {
-        // 先执行一次翻译
-        this.translatePage();
-        
-        // 延迟移除loading状态，确保翻译完成
-        setTimeout(() => {
-            document.documentElement.removeAttribute('data-i18n-loading');
-        }, 100);
+        const elements = document.querySelectorAll('[data-i18n]');
+        let translationsApplied = 0;
+
+        elements.forEach(element => {
+            try {
+                const key = element.getAttribute('data-i18n');
+                const attr = element.getAttribute('data-i18n-attr') || 'text';
+                const translation = this.getTranslation(key);
+
+                if (translation) {
+                    translationsApplied++;
+                    switch(attr) {
+                        case 'text':
+                            element.textContent = translation;
+                            break;
+                        case 'placeholder':
+                            element.placeholder = translation;
+                            break;
+                        case 'title':
+                            element.title = translation;
+                            break;
+                        case 'value':
+                            element.value = translation;
+                            break;
+                        case 'html':
+                            element.innerHTML = translation;
+                            break;
+                        default:
+                            element.setAttribute(attr, translation);
+                    }
+                }
+            } catch (error) {
+                console.error('Translation error for element:', element, error);
+                // 使用默认内容作为后备
+                const defaultText = element.getAttribute('data-i18n-default');
+                if (defaultText) {
+                    element.textContent = defaultText;
+                }
+            }
+        });
+
+        console.log('Page content updated:', {
+            elements: elements.length,
+            translated: translationsApplied
+        });
 
         // DOM变化监听
         if (!this.observer) {
