@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/status.css">
-    <link rel="stylesheet" href="./src/css/i18n.css">
+    <link rel="stylesheet" href="./css/i18n.css">
 </head>
 <body>
     <header class="navbar">
@@ -20,8 +20,8 @@
                 <a href="security.html" data-i18n="nav.security">安全</a>
                 <a href="status.html" class="active" data-i18n="nav.status">状态</a>
                 <div class="language-switcher" role="navigation" aria-label="语言选择">
-                    <button data-lang="zh" aria-label="切换到中文">中文</button>
-                    <button data-lang="en" aria-label="Switch to English">English</button>
+                    <button data-lang="zh" aria-label="切换到中文" data-i18n="languages.zh">中文</button>
+                    <button data-lang="en" aria-label="Switch to English" data-i18n="languages.en">English</button>
                 </div>
             </nav>
         </div>
@@ -77,6 +77,15 @@
         </div>
     </footer>
 
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.i18nManager) {
+                i18nManager.addObserver(() => {
+                    document.documentElement.removeAttribute('data-i18n-loading');
+                });
+            }
+        });
+    </script>
     <script type="module" src="./src/js/modules/i18n-manager.js"></script>
     <script type="module" src="./src/js/components/language-switcher.js"></script>
     <script type="module" src="./src/js/status.js"></script>

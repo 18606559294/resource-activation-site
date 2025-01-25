@@ -7,7 +7,7 @@
     <title data-i18n="site.title">资源激活工具站</title>
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
-    <link rel="stylesheet" href="./src/css/i18n.css">
+    <link rel="stylesheet" href="./css/i18n.css">
 </head>
 <body>
     <header class="navbar">
@@ -126,8 +126,7 @@
     <script type="module">
         // 等待i18n管理器初始化完成
         document.addEventListener('DOMContentLoaded', () => {
-            const i18nManager = window.i18nManager;
-            if (i18nManager) {
+            if (window.i18nManager) {
                 i18nManager.addObserver(() => {
                     document.documentElement.removeAttribute('data-i18n-loading');
                 });
