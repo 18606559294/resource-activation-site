@@ -11,7 +11,7 @@
 export class I18nManager {
     constructor() {
         // 当前语言,默认使用系统语言
-        this.currentLanguage = this.getSystemLanguage();
+        this.currentLanguage = 'en'; // 默认英语，等待初始化完成后再设置
         // 翻译内容缓存
         this.translations = {};
         // 语言变化观察者
@@ -22,11 +22,29 @@ export class I18nManager {
         this.loadedLanguages = new Set();
         // 日期时间格式化器
         this.dateTimeFormatter = new Intl.DateTimeFormat();
+        
+        // 等待DOM加载完成
+        // 确保在DOMContentLoaded之后初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                setTimeout(() => this.init(), 0);
+            });
+        } else {
+            setTimeout(() => this.init(), 0);
+        }
+    }
 
+    /**
+     * 初始化国际化管理器
+     */
+    async init() {
         // 初始化系统语言检测
         this.initSystemLanguageDetection();
         // 加载初始语言包
-        this.initializeTranslations();
+        await this.initializeTranslations();
+        // 设置初始语言
+        const preferredLang = localStorage.getItem('preferredLanguage') || this.getSystemLanguage();
+        await this.setLanguage(preferredLang);
     }
 
     /**
@@ -96,7 +114,7 @@ export class I18nManager {
         }
 
         try {
-            const response = await fetch(`/locales/${lang}.json`);
+            const response = await fetch(`./locales/${lang}.json`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -142,10 +160,23 @@ export class I18nManager {
      * 更新页面所有翻译内容
      */
     updatePageContent() {
+        // 先执行一次翻译
+        this.translatePage();
+        
+        // 延迟移除loading状态，确保翻译完成
+        setTimeout(() => {
+            document.documentElement.removeAttribute('data-i18n-loading');
+        }, 100);
+
         // DOM变化监听
         if (!this.observer) {
             this.observer = new MutationObserver(mutations => {
-                mutations.forEach(() => this.translatePage());
+                mutations.forEach(mutation => {
+                    // 仅当新增节点时才触发翻译
+                    if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+                        this.translatePage();
+                    }
+                });
             });
             this.observer.observe(document.body, {
                 subtree: true,
@@ -154,7 +185,6 @@ export class I18nManager {
                 characterData: false
             });
         }
-        this.translatePage();
     }
 
     /**
@@ -301,5 +331,11 @@ export class I18nManager {
     }
 }
 
-// 创建并导出单例实例
-export default new I18nManager();
+// 创建单例实例
+const i18nManager = new I18nManager();
+
+// 导出实例
+export default i18nManager;
+
+// 添加到window对象以便在HTML中访问
+window.i18nManager = i18nManager;

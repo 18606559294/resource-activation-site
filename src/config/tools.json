@@ -1,6 +1,21 @@
 {
     "tools": [
         {
+            "id": "idm-registration",
+            "name": "IDM注册码",
+            "description": "Internet Download Manager软件注册码",
+            "category": "software",
+            "version": "2024",
+            "size": "1KB",
+            "path": "idm-registration",
+            "requiresAuth": false,
+            "cloudStorage": {
+                "type": "lanzou",
+                "url": "https://wwsa.lanzouu.com/b00y9v0dla",
+                "extractCode": "9xlu"
+            }
+        },
+        {
             "id": "dll-fixer",
             "name": "DLL修复工具",
             "description": "修复系统DLL文件问题，解决程序启动错误",

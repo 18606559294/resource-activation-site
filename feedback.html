@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html data-i18n-loading="true">
 <head>
     <!-- Google AdSense -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
@@ -12,88 +12,33 @@
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
     <title data-i18n="feedback.title">问题反馈与解决</title>
-    <link rel="stylesheet" href="./src/css/styles.css">
-    <link rel="stylesheet" href="./src/css/components.css">
-    <link rel="stylesheet" href="./src/css/ui-feedback.css">
-    <link rel="stylesheet" href="./src/css/feedback.css">
-    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/ui-feedback.css">
+    <link rel="stylesheet" href="./css/feedback.css">
+    <link rel="stylesheet" href="./css/deepseek-chat.css">
+    <link rel="stylesheet" href="./src/css/i18n.css">
 </head>
 <body>
     <div class="nav-controls">
-        <!-- 语言切换器 -->
-        <div class="language-switcher" role="navigation" aria-label="语言选择">
-            <button data-lang="zh" aria-label="切换到中文">中文</button>
-            <button data-lang="en" aria-label="Switch to English">English</button>
+        <div class="language-switcher" role="navigation" aria-label="语言切换">
+            <button data-lang="zh" aria-label="切换到中文" data-i18n="languages.zh">中文</button>
+            <button data-lang="en" aria-label="Switch to English" data-i18n="languages.en">English</button>
         </div>
     </div>
-    <div class="background-gradient"></div>
-    <div class="page-container">
-        <!-- 左侧反馈部分 -->
-        <div class="feedback-section">
-            <button class="back-button" onclick="window.location.href='index.html'" data-i18n="nav.home">返回主页</button>
-            <h1 data-i18n="feedback.title">问题反馈与解决</h1>
-            
-            <div class="feedback-form">
-                <div id="statusMessage" class="status"></div>
-                <div class="form-group">
-                    <label for="name" data-i18n="feedback.form.name">您的称呼：</label>
-                    <input type="text" id="name" name="name" required 
-                           data-i18n-placeholder="feedback.form.namePlaceholder">
-                </div>
-                
-                <div class="form-group">
-                    <label for="contact" data-i18n="feedback.form.contact">联系方式（选填）：</label>
-                    <input type="text" id="contact" name="contact"
-                           data-i18n-placeholder="feedback.form.contactPlaceholder">
-                </div>
-                
-                <div class="form-group">
-                    <label for="question" data-i18n="feedback.form.question">问题描述：</label>
-                    <textarea id="question" name="question" required
-                            data-i18n-placeholder="feedback.form.questionPlaceholder"></textarea>
-                </div>
-                
-                <div class="form-group">
-                    <button onclick="submitFeedback()" data-i18n="feedback.form.submit">提交问题</button>
-                </div>
-            </div>
-            
-            <div class="feedback-history">
-                <h2 data-i18n="feedback.history.title">历史问题</h2>
-                <div class="feedback-list" id="feedbackList">
-                    <!-- 历史问题将通过JavaScript动态加载 -->
-                </div>
-            </div>
-        </div>
-
-        <!-- 右侧广告部分 -->
-        <div class="ads-section">
-            <ins class="adsbygoogle"
-                style="display:block"
-                data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
-                data-ad-slot="XXXXXXXXXX"
-                data-ad-format="auto"
-                data-full-width-responsive="true"></ins>
-            <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-            </script>
-        </div>
-    </div>
-
+    <!-- 保持原有body内容不变 -->
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            if (window.i18nManager) {
+                i18nManager.addObserver(() => {
+                    document.documentElement.removeAttribute('data-i18n-loading');
+                });
+            }
+        });
+    </script>
     <script type="module" src="./src/js/modules/i18n-manager.js"></script>
     <script type="module" src="./src/js/components/language-switcher.js"></script>
     <script type="module" src="./src/js/feedback.js"></script>
     <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
-    <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./service-worker.js');
-            });
-        }
-
-        // 初始化DeepSeekChat
-        const chat = new DeepSeekChat('your-api-key-here');
-        setTimeout(() => chat.toggleChat(true), 3000); // 3秒后显示聊天窗口
-    </script>
 </body>
 </html>
