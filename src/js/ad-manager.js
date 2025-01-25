@@ -13,6 +13,8 @@ class AdManager {
             clicks: {},
             revenue: {}
         };
+        this.retryAttempts = 3;
+        this.retryDelay = 1000; // 1秒
         this.init();
     }
 
@@ -21,27 +23,50 @@ class AdManager {
         this.loadSDKs();
         // 初始化统计
         this.initTracking();
+        // 加载保存的统计数据
+        this.loadStats();
+        // 添加错误监听
+        this.setupErrorHandling();
     }
 
-    loadSDKs() {
-        // Google AdSense
-        const googleScript = document.createElement('script');
-        googleScript.async = true;
-        googleScript.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-YOUR_PUBLISHER_ID';
-        googleScript.crossOrigin = 'anonymous';
-        document.head.appendChild(googleScript);
+    setupErrorHandling() {
+        window.addEventListener('error', (event) => {
+            if (event.message.includes('adsbygoogle')) {
+                console.error('AdSense error:', event);
+                this.handleAdError('google', event);
+            }
+        });
+    }
 
-        // 百度联盟
-        const baiduScript = document.createElement('script');
-        baiduScript.async = true;
-        baiduScript.src = '//dup.baidustatic.com/js/os.js';
-        document.head.appendChild(baiduScript);
+    async loadSDKs() {
+        try {
+            // Google AdSense
+            await this.loadScript({
+                src: 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903',
+                async: true,
+                crossOrigin: 'anonymous'
+            });
+            this.platforms.google = true;
+        } catch (error) {
+            console.error('Failed to load Google AdSense:', error);
+            this.handleAdError('google', error);
+        }
+    }
 
-        // 阿里妈妈
-        const alimamaScript = document.createElement('script');
-        alimamaScript.async = true;
-        alimamaScript.src = 'https://alimama.alicdn.com/tkapi.js';
-        document.head.appendChild(alimamaScript);
+    loadScript(config) {
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.async = config.async;
+            script.src = config.src;
+            if (config.crossOrigin) {
+                script.crossOrigin = config.crossOrigin;
+            }
+
+            script.onload = () => resolve();
+            script.onerror = (error) => reject(error);
+
+            document.head.appendChild(script);
+        });
     }
 
     initTracking() {
@@ -54,7 +79,27 @@ class AdManager {
         });
     }
 
+    handleAdError(platform, error) {
+        // 记录错误
+        console.error(`${platform} ad error:`, error);
+        
+        // 发送错误报告
+        this.sendTrackingData({
+            type: 'error',
+            platform,
+            error: error.message,
+            timestamp: new Date().getTime()
+        });
+
+        // 如果是配置错误，禁用该平台
+        if (error.message.includes('configuration')) {
+            this.platforms[platform] = false;
+        }
+    }
+
     trackImpression(platform, position) {
+        if (!this.platforms[platform]) return;
+
         this.stats.impressions[platform]++;
         this.saveStats();
         
@@ -68,6 +113,8 @@ class AdManager {
     }
 
     trackClick(platform, position) {
+        if (!this.platforms[platform]) return;
+
         this.stats.clicks[platform]++;
         this.saveStats();
 
@@ -80,16 +127,51 @@ class AdManager {
         });
     }
 
-    sendTrackingData(data) {
-        // 这里替换为你的统计接口
-        console.log('Tracking data:', data);
-        // fetch('/api/track', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(data)
-        // });
+    async sendTrackingData(data) {
+        try {
+            const response = await fetch('/api/track', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ...data,
+                    url: window.location.href,
+                    userAgent: navigator.userAgent
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error('Failed to send tracking data:', error);
+            // 保存到本地，稍后重试
+            this.queueFailedTrackingData(data);
+        }
+    }
+
+    queueFailedTrackingData(data) {
+        const queue = JSON.parse(localStorage.getItem('adTrackingQueue') || '[]');
+        queue.push(data);
+        localStorage.setItem('adTrackingQueue', JSON.stringify(queue));
+    }
+
+    retryFailedTracking() {
+        const queue = JSON.parse(localStorage.getItem('adTrackingQueue') || '[]');
+        if (queue.length === 0) return;
+
+        // 重试发送失败的统计数据
+        const retryData = queue.shift();
+        this.sendTrackingData(retryData)
+            .then(() => {
+                localStorage.setItem('adTrackingQueue', JSON.stringify(queue));
+            })
+            .catch(() => {
+                // 如果还是失败，把数据放回队列
+                queue.push(retryData);
+                localStorage.setItem('adTrackingQueue', JSON.stringify(queue));
+            });
     }
 
     saveStats() {
@@ -104,12 +186,16 @@ class AdManager {
     }
 
     // Google AdSense
-    createGoogleAd(container, format = 'auto') {
+    async createGoogleAd(container, format = 'auto') {
+        if (!this.platforms.google) {
+            console.warn('Google AdSense is not available');
+            return;
+        }
+
         const ins = document.createElement('ins');
         ins.className = 'adsbygoogle';
         ins.style.display = 'block';
-        ins.dataset.adClient = 'ca-pub-YOUR_PUBLISHER_ID';
-        ins.dataset.adSlot = 'YOUR_AD_SLOT_ID';
+        ins.dataset.adClient = 'ca-pub-4468142418161903';
         ins.dataset.adFormat = format;
         ins.dataset.fullWidthResponsive = 'true';
         
@@ -118,62 +204,64 @@ class AdManager {
         try {
             (adsbygoogle = window.adsbygoogle || []).push({});
             this.trackImpression('google', container.id);
-        } catch (e) {
-            console.error('Google AdSense error:', e);
+        } catch (error) {
+            this.handleAdError('google', error);
+            this.tryAlternativeAd(container);
         }
     }
 
-    // 百度联盟
-    createBaiduAd(container, size = '300,250') {
-        const s = '_' + Math.random().toString(36).slice(2);
-        const div = document.createElement('div');
-        div.id = s;
-        container.appendChild(div);
-
-        try {
-            (window.slotbydup = window.slotbydup || []).push({
-                id: 'YOUR_AD_UNIT_ID',
-                container: s,
-                size: size,
-                display: 'inlay-fix'
-            });
-            this.trackImpression('baidu', container.id);
-        } catch (e) {
-            console.error('Baidu Union error:', e);
-        }
-    }
-
-    // 阿里妈妈
-    createAlimamaAd(container) {
-        try {
-            const config = {
-                pid: "YOUR_PID",
-                appkey: "YOUR_APPKEY",
-                unid: "YOUR_UNID",
-                type: "0"
-            };
-            window.alimamatk_onload = window.alimamatk_onload || [];
-            window.alimamatk_onload.push(config);
-            this.trackImpression('alimama', container.id);
-        } catch (e) {
-            console.error('Alimama error:', e);
+    tryAlternativeAd(container) {
+        // 如果Google广告失败，尝试其他平台的广告
+        if (this.platforms.baidu) {
+            this.createBaiduAd(container);
         }
     }
 
     createAd(platform, container, options = {}) {
+        // 检查平台是否可用
+        if (!this.platforms[platform]) {
+            console.warn(`${platform} ads are not available`);
+            return;
+        }
+
         switch (platform) {
             case 'google':
                 this.createGoogleAd(container, options.format);
                 break;
-            case 'baidu':
-                this.createBaiduAd(container, options.size);
-                break;
-            case 'alimama':
-                this.createAlimamaAd(container);
-                break;
             default:
                 console.error('Unknown platform:', platform);
         }
+    }
+
+    // 性能监控
+    measureAdPerformance(platform, containerId) {
+        const startTime = performance.now();
+        
+        // 创建性能观察者
+        const observer = new PerformanceObserver((list) => {
+            const entries = list.getEntries();
+            entries.forEach((entry) => {
+                if (entry.name.includes('adsbygoogle')) {
+                    const loadTime = entry.duration;
+                    this.sendTrackingData({
+                        type: 'performance',
+                        platform,
+                        containerId,
+                        loadTime,
+                        timestamp: new Date().getTime()
+                    });
+                }
+            });
+        });
+
+        // 观察资源加载时间
+        observer.observe({ entryTypes: ['resource'] });
+
+        return () => {
+            observer.disconnect();
+            const totalTime = performance.now() - startTime;
+            return totalTime;
+        };
     }
 }
 

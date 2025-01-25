@@ -27,11 +27,21 @@ export class I18nManager {
         // 确保在DOMContentLoaded之后初始化
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
-                setTimeout(() => this.init(), 0);
+                // 增加初始化延迟，确保其他资源加载
+                setTimeout(() => this.init(), 100);
             });
         } else {
-            setTimeout(() => this.init(), 0);
+            // 如果DOM已加载，延迟初始化
+            setTimeout(() => this.init(), 100);
         }
+
+        // 添加超时保护
+        setTimeout(() => {
+            if (document.documentElement.hasAttribute('data-i18n-loading')) {
+                console.warn('国际化初始化超时，使用默认显示');
+                this.handleInitTimeout();
+            }
+        }, 3000); // 3秒超时
     }
 
     /**
@@ -114,17 +124,77 @@ export class I18nManager {
         }
 
         try {
-            const response = await fetch(`./locales/${lang}.json`);
+            // 添加超时控制
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒超时
+
+            const response = await fetch(`./locales/${lang}.json`, {
+                signal: controller.signal
+            });
+            
+            clearTimeout(timeoutId);
+            
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
+            
             const translations = await response.json();
             this.translations[lang] = translations;
             this.loadedLanguages.add(lang);
         } catch (error) {
             console.error(`加载语言包失败 ${lang}:`, error);
+            // 如果是当前语言加载失败，立即切换到后备语言
+            if (lang === this.currentLanguage) {
+                this.fallbackToDefault();
+            }
             throw error;
         }
+    }
+
+    /**
+     * 初始化超时处理
+     */
+    handleInitTimeout() {
+        // 移除加载状态
+        document.documentElement.removeAttribute('data-i18n-loading');
+        
+        // 使用内置的默认翻译
+        this.translations[this.fallbackLanguage] = this.getDefaultTranslations();
+        this.loadedLanguages.add(this.fallbackLanguage);
+        
+        // 更新页面内容
+        this.currentLanguage = this.fallbackLanguage;
+        this.updatePageContent();
+    }
+
+    /**
+     * 切换到默认语言
+     */
+    fallbackToDefault() {
+        this.currentLanguage = this.fallbackLanguage;
+        document.documentElement.lang = this.fallbackLanguage;
+        this.updatePageContent();
+    }
+
+    /**
+     * 获取默认翻译
+     */
+    getDefaultTranslations() {
+        // 内置基本的默认翻译
+        return {
+            nav: {
+                home: "Home",
+                tools: "Tools",
+                resources: "Resources",
+                security: "Security",
+                status: "Status"
+            },
+            common: {
+                loading: "Loading...",
+                error: "Error",
+                retry: "Retry"
+            }
+        };
     }
 
     /**

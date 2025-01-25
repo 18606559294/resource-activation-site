@@ -1,0 +1,80 @@
+/* i18n相关样式 */
+
+/* 加载状态下的初始显示 */
+[data-i18n-loading="true"] {
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* 防止加载时内容闪烁 */
+[data-i18n-loading="true"] [data-i18n] {
+    visibility: hidden;
+}
+
+/* 显示加载中的默认内容 */
+[data-i18n-loading="true"] [data-i18n]::before {
+    content: attr(data-i18n-default);
+    visibility: visible;
+    display: inline-block;
+}
+
+/* 导航栏的默认显示 */
+[data-i18n-loading="true"] .navbar [data-i18n="nav.home"]::before {
+    content: "首页";
+}
+[data-i18n-loading="true"] .navbar [data-i18n="nav.tools"]::before {
+    content: "工具";
+}
+[data-i18n-loading="true"] .navbar [data-i18n="nav.resources"]::before {
+    content: "资源";
+}
+[data-i18n-loading="true"] .navbar [data-i18n="nav.security"]::before {
+    content: "安全";
+}
+[data-i18n-loading="true"] .navbar [data-i18n="nav.status"]::before {
+    content: "状态";
+}
+
+/* 优化加载过渡效果 */
+[data-i18n] {
+    transition: opacity 0.3s ease;
+}
+
+/* 语言切换按钮样式优化 */
+.language-switcher {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+[data-i18n-loading="false"] .language-switcher,
+html:not([data-i18n-loading]) .language-switcher {
+    opacity: 1;
+}
+
+/* 添加页面预加载指示器 */
+[data-i18n-loading="true"]::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, #4CAF50, #2196F3);
+    animation: loading-progress 2s ease-in-out infinite;
+    z-index: 9999;
+}
+
+@keyframes loading-progress {
+    0% {
+        width: 0;
+        left: 0;
+    }
+    50% {
+        width: 100%;
+        left: 0;
+    }
+    100% {
+        width: 0;
+        left: 100%;
+    }
+}

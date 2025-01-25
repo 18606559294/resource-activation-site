@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title data-i18n="site.title">资源激活工具站</title>
+    <title data-i18n="site.title" data-i18n-default="资源激活工具站">资源激活工具站</title>
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/i18n.css">
@@ -12,7 +12,7 @@
 <body>
     <header class="navbar">
         <div class="container">
-            <a href="/" class="logo" data-i18n="nav.home">资源激活</a>
+            <a href="/" class="logo" data-i18n="nav.home" data-i18n-default="资源激活">资源激活</a>
             <nav>
                 <a href="toolbox.html" data-i18n="nav.tools">工具</a>
                 <a href="resources.html" data-i18n="nav.resources">资源</a>
@@ -60,13 +60,13 @@
         </aside>
         <section class="search-section">
             <div class="search-box">
-                <input type="text" data-i18n-placeholder="search.placeholder">
-                <button data-i18n="search.button">搜索</button>
+                <input type="text" data-i18n-placeholder="search.placeholder" placeholder="搜索工具和资源">
+                <button data-i18n="search.button" data-i18n-default="搜索">搜索</button>
             </div>
         </section>
 
         <section class="tool-categories">
-            <h2 data-i18n="categories.title">工具分类</h2>
+            <h2 data-i18n="categories.title" data-i18n-default="工具分类">工具分类</h2>
             <div class="category-grid">
                 <div class="category-card">
                     <h3 data-i18n="categories.system.title">系统工具</h3>
@@ -96,7 +96,7 @@
         </section>
 
         <section class="featured-tools">
-            <h2 data-i18n="featured.title">推荐工具</h2>
+            <h2 data-i18n="featured.title" data-i18n-default="推荐工具">推荐工具</h2>
             <div class="tool-grid">
                 <div class="tool-card">
                     <h3 data-i18n="featured.activation.title">激活助手</h3>
@@ -126,12 +126,33 @@
     <script type="module">
         // 等待i18n管理器初始化完成
         document.addEventListener('DOMContentLoaded', () => {
+            // 添加CSS类控制初始显示
+            document.documentElement.classList.add('i18n-initializing');
+            
             if (window.i18nManager) {
                 i18nManager.addObserver(() => {
-                    document.documentElement.removeAttribute('data-i18n-loading');
+                    // 使用延迟移除加载状态
+                    setTimeout(() => {
+                        document.documentElement.removeAttribute('data-i18n-loading');
+                        document.documentElement.classList.remove('i18n-initializing');
+                    }, 300);
                 });
+            } else {
+                // i18n管理器加载失败，移除加载状态显示默认内容
+                setTimeout(() => {
+                    document.documentElement.removeAttribute('data-i18n-loading');
+                    document.documentElement.classList.remove('i18n-initializing');
+                }, 1000);
             }
         });
+
+        // 添加加载超时保护
+        setTimeout(() => {
+            if (document.documentElement.hasAttribute('data-i18n-loading')) {
+                document.documentElement.removeAttribute('data-i18n-loading');
+                document.documentElement.classList.remove('i18n-initializing');
+            }
+        }, 3000);
     </script>
     <script type="module" src="./src/js/modules/i18n-manager.js"></script>
     <script type="module" src="./src/js/components/language-switcher.js"></script>
