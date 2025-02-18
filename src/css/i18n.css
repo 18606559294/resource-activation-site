@@ -6,8 +6,8 @@
     opacity: 1 !important;
 }
 
-/* 防止加载时内容闪烁 */
-[data-i18n-loading="true"] [data-i18n] {
+/* 防止加载时内容闪烁，但允许显示默认内容 */
+[data-i18n-loading="true"] [data-i18n]:not([data-i18n-default]) {
     visibility: hidden;
 }
 
@@ -38,6 +38,7 @@
 /* 优化加载过渡效果 */
 [data-i18n] {
     transition: opacity 0.3s ease;
+    opacity: 1;
 }
 
 /* 语言切换按钮样式优化 */

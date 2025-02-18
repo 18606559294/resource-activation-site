@@ -11,13 +11,13 @@
 export class I18nManager {
     constructor() {
         // 当前语言,默认使用系统语言
-        this.currentLanguage = 'en'; // 默认英语，等待初始化完成后再设置
+        this.currentLanguage = 'zh'; // 默认使用中文，确保初始加载时显示默认内容
         // 翻译内容缓存
         this.translations = {};
         // 语言变化观察者
         this.observers = new Set();
-        // 后备语言(英语)
-        this.fallbackLanguage = 'en';
+        // 后备语言(中文)
+        this.fallbackLanguage = 'zh';
         // 已加载的语言包记录
         this.loadedLanguages = new Set();
         // 日期时间格式化器
@@ -26,7 +26,10 @@ export class I18nManager {
         this.isInitializing = false;
         this.initializationPromise = null;
 
-        // 等待DOM加载完成后立即初始化
+        // 立即显示默认内容
+        this.showDefaultContent();
+
+        // 等待DOM加载完成后初始化
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.init());
         } else {
@@ -38,10 +41,20 @@ export class I18nManager {
             if (document.documentElement.hasAttribute('data-i18n-loading')) {
                 console.warn('国际化初始化超时，使用默认显示');
                 this.handleInitTimeout();
-                // 确保移除加载状态
-                document.documentElement.removeAttribute('data-i18n-loading');
             }
-        }, 5000); // 增加到5秒超时
+        }, 3000); // 减少超时时间到3秒
+    }
+
+    /**
+     * 显示默认内容
+     */
+    showDefaultContent() {
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            const defaultText = element.getAttribute('data-i18n-default');
+            if (defaultText) {
+                element.textContent = defaultText;
+            }
+        });
     }
 
     /**
@@ -55,45 +68,48 @@ export class I18nManager {
         this.isInitializing = true;
         this.initializationPromise = (async () => {
             try {
-                document.documentElement.setAttribute('data-i18n-loading', 'true');
                 const savedLang = localStorage.getItem('preferredLanguage');
                 const systemLang = this.getSystemLanguage();
                 const initialLang = savedLang || systemLang;
                 
                 // 预加载所有语言包，添加重试机制
-                const loadWithRetry = async (lang, retries = 3) => {
+                const loadWithRetry = async (lang, retries = 2) => {
                     for (let i = 0; i < retries; i++) {
                         try {
                             await Promise.race([
                                 this.loadLanguage(lang),
                                 new Promise((_, reject) => 
-                                    setTimeout(() => reject(new Error(`加载${lang}语言包超时`)), 5000)
+                                    setTimeout(() => reject(new Error(`加载${lang}语言包超时`)), 3000)
                                 )
                             ]);
                             return;
                         } catch (error) {
                             if (i === retries - 1) throw error;
-                            await new Promise(resolve => setTimeout(resolve, 1000 * (i + 1)));
+                            await new Promise(resolve => setTimeout(resolve, 500));
                         }
                     }
                 };
 
-                await Promise.all([
-                    loadWithRetry('zh').catch(error => {
-                        console.warn('中文语言包加载失败:', error);
+                // 优先加载当前语言包
+                await loadWithRetry(initialLang).catch(error => {
+                    console.warn(`${initialLang}语言包加载失败:`, error);
+                    return null;
+                });
+
+                // 如果当前语言加载失败，尝试加载其他语言包
+                if (!this.loadedLanguages.has(initialLang)) {
+                    const otherLang = initialLang === 'zh' ? 'en' : 'zh';
+                    await loadWithRetry(otherLang).catch(error => {
+                        console.warn(`${otherLang}语言包加载失败:`, error);
                         return null;
-                    }),
-                    loadWithRetry('en').catch(error => {
-                        console.warn('英文语言包加载失败:', error);
-                        return null;
-                    })
-                ]);
+                    });
+                }
 
                 if (this.loadedLanguages.size === 0) {
                     throw new Error('所有语言包加载失败');
                 }
 
-                await this.setLanguage(initialLang);
+                await this.setLanguage(this.loadedLanguages.has(initialLang) ? initialLang : this.fallbackLanguage);
                 this.initSystemLanguageDetection();
                 
                 console.log('I18n initialized:', {

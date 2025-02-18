@@ -1,4 +1,11 @@
-const WS_CONFIG = {
+    // ...此处为省略代码...
+        this.isConnecting = true;
+        const wsUrl = WS_CONFIG[process.env.NODE_ENV || 'development'];
+        this.ws = new WebSocket(wsUrl);
+
+        this.ws.onopen = () => {
+            console.log('WebSocket连接已建立');
+    // ...此处为省略代码...const WS_CONFIG = {
     development: 'ws://localhost:8765',
     production: 'wss://your-domain.com/ws'
 };

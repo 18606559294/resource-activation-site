@@ -1,4 +1,11 @@
-const CACHE_NAME = 'resource-activation-site-v1';
+// ...此处为省略代码...
+        return Promise.all([
+          // 清理旧缓存
+          caches.keys().then(keys => {
+            return Promise.all(
+              keys.map(key => {
+                if (key !== STATIC_CACHE && key !== DYNAMIC_CACHE) {
+// ...此处为省略代码...const CACHE_NAME = 'resource-activation-site-v1';
 const STATIC_CACHE = 'static-v1';
 const DYNAMIC_CACHE = 'dynamic-v1';
 
