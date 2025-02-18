@@ -1,3 +1,4 @@
+// 导入样式文件
 import './src/css/styles.css';
 import './src/css/ui-feedback.css';
 import './src/css/animations.css';
@@ -14,7 +15,7 @@ const resourcePreloader = new ResourcePreloader();
 
 // 定义关键资源列表
 const criticalResources = [
-    { path: './src/js/app.ts', type: 'module' },
+    { path: './src/js/app.js', type: 'module' },
     { path: './src/js/animations.js', type: 'module' },
     { path: './src/js/theme-manager.js', type: 'module' },
     { path: './src/js/components.js', type: 'module' },
@@ -25,33 +26,40 @@ const criticalResources = [
 // 初始化应用
 async function initializeApp() {
     try {
-        showLoadingIndicator('正在加载应用...');
+        // 显示加载状态
+        showLoadingIndicator('正在初始化应用...');
 
         // 预加载关键资源
         await resourcePreloader.preload(criticalResources, {
             priority: 'high',
-            timeout: 15000, // 增加超时时间到15秒
-            retries: 3, // 增加重试次数到3次
+            timeout: 15000,
+            retries: 3,
             onProgress: (loaded, total) => {
-                showLoadingIndicator(`正在加载应用...(${Math.round(loaded/total*100)}%)`)
+                showLoadingIndicator(`正在加载应用资源...(${Math.round(loaded/total*100)}%)`);
             }
         });
+
+        // 确保页面基础结构可见
+        document.body.style.visibility = 'visible';
         
-        // 动态导入并使用已初始化的应用实例
-        const { default: app } = await import('./src/js/app.ts');
-        // 确保应用已完全初始化
+        // 动态导入并初始化应用
+        const { default: app } = await import('./src/js/app.js');
         if (!app.initialized) {
             await app.init();
         }
-        
+
         // 移除加载状态
         document.documentElement.removeAttribute('data-i18n-loading');
         hideLoadingIndicator();
-        
+
         console.log('应用初始化完成');
     } catch (error) {
         console.error('应用初始化失败:', error);
-        
+
+        // 确保页面至少显示基础内容
+        document.body.style.visibility = 'visible';
+        document.documentElement.removeAttribute('data-i18n-loading');
+
         // 显示用户友好的错误信息
         showErrorMessage({
             title: '应用加载失败',

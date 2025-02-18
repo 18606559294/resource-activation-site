@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/resources.css">
-    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
     <link rel="stylesheet" href="./css/i18n.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
      crossorigin="anonymous"></script>
@@ -32,6 +31,15 @@
 
     <div class="background-gradient"></div>
     <main class="container">
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" 
+                       data-i18n-placeholder="resources.search.placeholder" 
+                       data-i18n-default-placeholder="搜索资源..." 
+                       placeholder="搜索资源...">
+                <button data-i18n="resources.search.button" data-i18n-default="搜索">搜索</button>
+            </div>
+        </section>
         <section class="resource-section">
             <h1 class="page-title" data-i18n="resources.title" data-i18n-default="资源中心">资源中心</h1>
             <div class="resource-grid">

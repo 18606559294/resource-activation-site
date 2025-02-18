@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title data-i18n="site.title" data-i18n-default="资源激活工具站">资源激活工具站</title>
-    <!-- 核心样式 -->
-    <link rel="stylesheet" href="./src/css/styles.css">
-    <link rel="stylesheet" href="./src/css/components.css">
-    <link rel="stylesheet" href="./src/css/animations.css">
-    <link rel="stylesheet" href="./src/css/themes.css">
-    <link rel="stylesheet" href="./src/css/mobile.css">
-    <link rel="stylesheet" href="./src/css/i18n.css">
-    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/i18n.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
+     crossorigin="anonymous"></script>
     <!-- 核心脚本 -->
     <script type="module" src="./main.js"></script>
+    <script type="module" src="./src/js/modules/i18n-manager.js"></script>
+    <script type="module" src="./src/js/components/language-switcher.js"></script>
+    <script type="module" src="./src/js/ad-manager.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -71,6 +71,14 @@
             }).catch(error => {
                 console.error('客服系统加载失败:', error);
                 document.getElementById('chat-container').style.display = 'none';
+            });
+
+            // 初始化国际化管理器
+            import('./src/js/modules/i18n-manager.js').then(module => {
+                window.i18nManager = new module.I18nManager();
+            }).catch(error => {
+                console.error('国际化管理器加载失败:', error);
+                document.documentElement.removeAttribute('data-i18n-loading');
             });
 
             // 添加页面加载状态管理

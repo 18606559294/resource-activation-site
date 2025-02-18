@@ -42,7 +42,7 @@ export class I18nManager {
                 console.warn('国际化初始化超时，使用默认显示');
                 this.handleInitTimeout();
             }
-        }, 3000); // 减少超时时间到3秒
+        }, 5000); // 增加超时时间到5秒
     }
 
     /**
@@ -52,8 +52,26 @@ export class I18nManager {
         document.querySelectorAll('[data-i18n]').forEach(element => {
             const defaultText = element.getAttribute('data-i18n-default');
             if (defaultText) {
-                element.textContent = defaultText;
+                if (element.tagName === 'INPUT' || element.tagName === 'TEXTAREA') {
+                    element.placeholder = defaultText;
+                } else {
+                    element.textContent = defaultText;
+                }
+                element.style.visibility = 'visible';
             }
+        });
+    }
+
+    /**
+     * 处理初始化超时
+     */
+    handleInitTimeout() {
+        this.fallbackToDefault();
+        // 移除加载状态
+        document.documentElement.removeAttribute('data-i18n-loading');
+        // 确保所有元素可见
+        document.querySelectorAll('[data-i18n]').forEach(element => {
+            element.style.visibility = 'visible';
         });
     }
 
@@ -66,50 +84,33 @@ export class I18nManager {
         }
 
         this.isInitializing = true;
+        document.documentElement.setAttribute('data-i18n-loading', 'true');
+
         this.initializationPromise = (async () => {
             try {
                 const savedLang = localStorage.getItem('preferredLanguage');
                 const systemLang = this.getSystemLanguage();
                 const initialLang = savedLang || systemLang;
                 
-                // 预加载所有语言包，添加重试机制
-                const loadWithRetry = async (lang, retries = 2) => {
-                    for (let i = 0; i < retries; i++) {
-                        try {
-                            await Promise.race([
-                                this.loadLanguage(lang),
-                                new Promise((_, reject) => 
-                                    setTimeout(() => reject(new Error(`加载${lang}语言包超时`)), 3000)
-                                )
-                            ]);
-                            return;
-                        } catch (error) {
-                            if (i === retries - 1) throw error;
-                            await new Promise(resolve => setTimeout(resolve, 500));
-                        }
-                    }
-                };
-
-                // 优先加载当前语言包
-                await loadWithRetry(initialLang).catch(error => {
-                    console.warn(`${initialLang}语言包加载失败:`, error);
-                    return null;
-                });
-
-                // 如果当前语言加载失败，尝试加载其他语言包
-                if (!this.loadedLanguages.has(initialLang)) {
-                    const otherLang = initialLang === 'zh' ? 'en' : 'zh';
-                    await loadWithRetry(otherLang).catch(error => {
-                        console.warn(`${otherLang}语言包加载失败:`, error);
+                // 预加载所有语言包
+                await Promise.all([
+                    this.loadLanguage(initialLang).catch(error => {
+                        console.warn(`${initialLang}语言包加载失败:`, error);
                         return null;
-                    });
-                }
+                    }),
+                    this.loadLanguage(this.fallbackLanguage).catch(error => {
+                        console.warn(`${this.fallbackLanguage}语言包加载失败:`, error);
+                        return null;
+                    })
+                ]);
 
                 if (this.loadedLanguages.size === 0) {
                     throw new Error('所有语言包加载失败');
                 }
 
-                await this.setLanguage(this.loadedLanguages.has(initialLang) ? initialLang : this.fallbackLanguage);
+                // 设置初始语言
+                const targetLang = this.loadedLanguages.has(initialLang) ? initialLang : this.fallbackLanguage;
+                await this.setLanguage(targetLang);
                 this.initSystemLanguageDetection();
                 
                 console.log('I18n initialized:', {
@@ -122,6 +123,10 @@ export class I18nManager {
             } finally {
                 this.isInitializing = false;
                 document.documentElement.removeAttribute('data-i18n-loading');
+                // 确保所有元素可见
+                document.querySelectorAll('[data-i18n]').forEach(element => {
+                    element.style.visibility = 'visible';
+                });
             }
         })();
 
@@ -166,17 +171,26 @@ export class I18nManager {
             return;
         }
 
-        try {
-            const response = await fetch(`/locales/${lang}.json`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+        const maxRetries = 3;
+        const retryDelay = 1000; // 1秒延迟
+
+        for (let attempt = 1; attempt <= maxRetries; attempt++) {
+            try {
+                const response = await fetch(`/locales/${lang}.json`);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const translations = await response.json();
+                this.translations[lang] = translations;
+                this.loadedLanguages.add(lang);
+                return;
+            } catch (error) {
+                console.warn(`Failed to load language pack: ${lang} (Attempt ${attempt}/${maxRetries})`, error);
+                if (attempt === maxRetries) {
+                    throw error;
+                }
+                await new Promise(resolve => setTimeout(resolve, retryDelay));
             }
-            const translations = await response.json();
-            this.translations[lang] = translations;
-            this.loadedLanguages.add(lang);
-        } catch (error) {
-            console.error(`Failed to load language pack: ${lang}`, error);
-            throw error;
         }
     }
 
