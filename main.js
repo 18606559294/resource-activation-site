@@ -1,15 +1,70 @@
-// 导入所有样式文件
-import './css/styles.css';
-import './css/ui-feedback.css';
-import './css/animations.css';
-import './css/mobile.css';
-import './css/themes.css';
-import './css/components.css';
+import './src/css/styles.css';
+import './src/css/ui-feedback.css';
+import './src/css/animations.css';
+import './src/css/mobile.css';
+import './src/css/themes.css';
+import './src/css/components.css';
 
-// 导入所有 JavaScript 文件
-import './src/js/app.js';
-import './src/js/animations.js';
-import './src/js/theme-manager.js';
-import './src/js/components.js';
-import './src/js/tools-manager.js';
-import './src/i18n.js';
+// 导入核心模块
+import { ResourcePreloader } from './src/js/modules/resource-preloader.js';
+import { showErrorMessage, showLoadingIndicator, hideLoadingIndicator } from './src/js/components/ui-feedback.js';
+
+// 初始化资源预加载器
+const resourcePreloader = new ResourcePreloader();
+
+// 定义关键资源列表
+const criticalResources = [
+    { path: './src/js/app.ts', type: 'module' },
+    { path: './src/js/animations.js', type: 'module' },
+    { path: './src/js/theme-manager.js', type: 'module' },
+    { path: './src/js/components.js', type: 'module' },
+    { path: './src/js/tools-manager.js', type: 'module' },
+    { path: './src/i18n.js', type: 'module' }
+];
+
+// 初始化应用
+async function initializeApp() {
+    try {
+        showLoadingIndicator('正在加载应用...');
+
+        // 预加载关键资源
+        await resourcePreloader.preload(criticalResources, {
+            priority: 'high',
+            timeout: 15000, // 增加超时时间到15秒
+            retries: 3, // 增加重试次数到3次
+            onProgress: (loaded, total) => {
+                showLoadingIndicator(`正在加载应用...(${Math.round(loaded/total*100)}%)`)
+            }
+        });
+        
+        // 动态导入并使用已初始化的应用实例
+        const { default: app } = await import('./src/js/app.ts');
+        // 确保应用已完全初始化
+        if (!app.initialized) {
+            await app.init();
+        }
+        
+        // 移除加载状态
+        document.documentElement.removeAttribute('data-i18n-loading');
+        hideLoadingIndicator();
+        
+        console.log('应用初始化完成');
+    } catch (error) {
+        console.error('应用初始化失败:', error);
+        
+        // 显示用户友好的错误信息
+        showErrorMessage({
+            title: '应用加载失败',
+            message: '很抱歉，应用加载过程中发生错误。请检查网络连接并刷新页面重试。',
+            actionText: '重新加载',
+            actionHandler: () => location.reload()
+        });
+    }
+}
+
+// 确保DOM加载完成后再初始化应用
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeApp);
+} else {
+    initializeApp();
+}

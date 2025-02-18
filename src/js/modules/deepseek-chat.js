@@ -22,9 +22,12 @@ module.exports = class DeepSeekChat {
 
     initializeEncryption() {
         try {
-            const key = process.env.ENCRYPTION_KEY || 'default-encryption-key-32-bytes-long-123456';
+            const key = process.env.ENCRYPTION_KEY;
+            if (!key || key.length < 32) {
+                throw new Error('Invalid encryption key configuration');
+            }
             this.encryptionKey = Buffer.alloc(32);
-            Buffer.from(key).copy(this.encryptionKey);
+            Buffer.from(key.slice(0, 32)).copy(this.encryptionKey);
         } catch (error) {
             console.error('Failed to initialize encryption:', error);
             throw new Error('Failed to initialize encryption');

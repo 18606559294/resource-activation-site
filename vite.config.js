@@ -5,7 +5,9 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 export default defineConfig({
   root: './',
   base: '/resource-activation-site/',
-  plugins: [tsconfigPaths()],
+  plugins: [
+    tsconfigPaths()
+  ],
   build: {
     outDir: 'dist',
     assetsDir: 'assets',

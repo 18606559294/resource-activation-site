@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/resources.css">
+    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
     <link rel="stylesheet" href="./css/i18n.css">
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
      crossorigin="anonymous"></script>
@@ -130,5 +131,20 @@
     <script type="module" src="./src/js/resources.js"></script>
     <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
     <script type="module" src="./src/js/ad-manager.js"></script>
+    
+    <!-- 智能客服容器 -->
+    <div id="chat-container" class="deepseek-chat"></div>
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            import('./src/js/modules/deepseek-chat.js').then(module => {
+                module.default.init({
+                    container: '#chat-container',
+                    position: 'bottom-right'
+                });
+            }).catch(error => {
+                console.error('客服系统加载失败:', error);
+            });
+        });
+    </script>
 </body>
 </html>
