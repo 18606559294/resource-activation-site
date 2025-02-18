@@ -29,12 +29,22 @@
         </div>
     </header>
 
-    <div class="background-gradient"></div>
     <main class="container">
-        <section class="status-section">
-            <h1 class="page-title" data-i18n="status.title" data-i18n-default="系统状态">系统状态</h1>
-            <div class="status-grid">
-                <div class="status-card">
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" 
+                       data-i18n-placeholder="status.search.placeholder" 
+                       data-i18n-default-placeholder="搜索状态..." 
+                       placeholder="搜索状态...">
+                <button data-i18n="status.search.button" data-i18n-default="搜索">搜索</button>
+            </div>
+        </section>
+
+        <section class="status-content">
+            <h1 data-i18n="status.title" data-i18n-default="系统状态">系统状态</h1>
+            
+            <div class="category-grid">
+                <div class="category-card">
                     <h2>
                         <span class="status-indicator"></span>
                         <span data-i18n="status.server" data-i18n-default="服务器状态">服务器状态</span>

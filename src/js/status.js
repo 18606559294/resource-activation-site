@@ -1,5 +1,9 @@
-// 导入样式
-import './components/ui-feedback.js';
+// 导入样式和依赖
+import '../css/status.css';
+import '../css/components.css';
+import '../css/ui-feedback.css';
+import '../css/status-indicator.css';
+import { showErrorMessage, showLoadingIndicator, hideLoadingIndicator } from './components/ui-feedback.js';
 import './animations.js';
 import '../i18n.js';
 
@@ -94,20 +98,44 @@ function updateLoad(value) {
 function updateStatusIndicator(load) {
     const indicator = document.querySelector('.status-indicator');
     if (indicator) {
-        indicator.classList.remove('status-online', 'status-offline');
-        indicator.classList.add(load < 80 ? 'status-online' : 'status-offline');
+        // 移除所有可能的状态类
+        indicator.classList.remove('status-online', 'status-warning', 'status-offline', 'status-error');
+        
+        // 根据负载值设置对应的状态类
+        if (load < 50) {
+            indicator.classList.add('status-online');
+        } else if (load < 80) {
+            indicator.classList.add('status-warning');
+        } else {
+            indicator.classList.add('status-offline');
+        }
+        
+        // 设置状态提示
+        indicator.title = `服务器负载: ${load}%`;
     }
 }
 
-// 模拟获取状态数据
+// 获取实际状态数据
 async function fetchStatusData() {
-    // 模拟API调用延迟
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    return {
-        uptime: formatUptime(Math.floor(Date.now() / 1000)),
-        load: Math.floor(Math.random() * 100)
-    };
+    try {
+        // 由于API可能还未实现，先使用模拟数据
+        const mockData = {
+            uptime: Math.floor(Date.now() / 1000) - Math.floor(Math.random() * 86400),
+            load: Math.floor(Math.random() * 100)
+        };
+        
+        return {
+            uptime: formatUptime(mockData.uptime),
+            load: mockData.load
+        };
+    } catch (error) {
+        console.error('获取状态数据失败:', error);
+        // 返回默认值
+        return {
+            uptime: formatUptime(Math.floor(Date.now() / 1000)),
+            load: 0
+        };
+    }
 }
 
 // 格式化运行时间

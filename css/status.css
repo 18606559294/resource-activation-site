@@ -4,27 +4,37 @@
     margin: 0 auto;
 }
 
-.status-grid {
+.status-content {
+    padding: var(--spacing-lg);
+}
+
+.status-content h1 {
+    color: var(--heading-color, #333);
+    font-size: 2rem;
+    margin-bottom: var(--spacing-lg);
+}
+
+.category-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    margin-top: 2rem;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
 }
 
-.status-card {
-    background: var(--card-bg, #ffffff);
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+.category-card {
+    background: var(--background-light);
+    border-radius: var(--border-radius-md);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-.status-card:hover {
+.category-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: var(--shadow-md);
 }
 
-.status-card h2 {
+.category-card h2 {
     color: var(--heading-color, #333);
     font-size: 1.5rem;
     margin-bottom: 1rem;
@@ -76,11 +86,11 @@
 }
 
 @media (prefers-color-scheme: dark) {
-    .status-card {
+    .category-card {
         background: var(--dark-card-bg, #2d2d2d);
     }
 
-    .status-card h2 {
+    .category-card h2 {
         color: var(--dark-heading-color, #fff);
     }
 
@@ -94,15 +104,15 @@
 }
 
 @media (max-width: 768px) {
-    .status-grid {
+    .category-grid {
         grid-template-columns: 1fr;
     }
 
-    .status-card {
+    .category-card {
         padding: 1rem;
     }
 
-    .status-card h2 {
+    .category-card h2 {
         font-size: 1.25rem;
     }
 }
