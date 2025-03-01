@@ -9,8 +9,17 @@
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/status.css">
     <link rel="stylesheet" href="./css/i18n.css">
+    <link rel="stylesheet" href="./css/ui-feedback.css">
+    <link rel="stylesheet" href="./css/status-indicator.css">
+    <!-- 核心脚本 -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
      crossorigin="anonymous"></script>
+    <!-- 核心脚本 -->
+    <script type="module" src="./main.js"></script>
+    <script type="module" src="./src/js/status.js"></script>
+    <script type="module" src="./src/js/modules/i18n-manager.js"></script>
+    <script type="module" src="./src/js/components/language-switcher.js"></script>
+    <script type="module" src="./src/js/ad-manager.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -40,24 +49,20 @@
             </div>
         </section>
 
-        <section class="status-content">
-            <h1 data-i18n="status.title" data-i18n-default="系统状态">系统状态</h1>
-            
-            <div class="category-grid">
-                <div class="category-card">
-                    <h2>
-                        <span class="status-indicator"></span>
-                        <span data-i18n="status.server" data-i18n-default="服务器状态">服务器状态</span>
-                    </h2>
-                    <div class="status-info">
-                        <div class="status-item">
-                            <span class="status-label" data-i18n="status.uptime" data-i18n-default="运行时间">运行时间</span>
-                            <span class="status-value" id="uptime">--:--:--</span>
-                        </div>
-                        <div class="status-item">
-                            <span class="status-label" data-i18n="status.load" data-i18n-default="系统负载">系统负载</span>
-                            <span class="status-value" id="load">--%</span>
-                        </div>
+        <section class="category-grid">
+            <div class="category-card">
+                <h2>
+                    <span class="status-indicator"></span>
+                    <span data-i18n="status.server" data-i18n-default="服务器状态">服务器状态</span>
+                </h2>
+                <div class="status-info">
+                    <div class="status-item">
+                        <span class="status-label" data-i18n="status.uptime" data-i18n-default="运行时间">运行时间</span>
+                        <span class="status-value" id="uptime">--:--:--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label" data-i18n="status.load" data-i18n-default="系统负载">系统负载</span>
+                        <span class="status-value" id="load">--%</span>
                     </div>
                 </div>
             </div>
@@ -72,12 +77,19 @@
 
     <!-- 统一客服容器 -->
     <div id="chat-container" class="deepseek-chat"></div>
-
-    <!-- 核心脚本 -->
-    <script type="module" src="./main.js"></script>
-    <script type="module" src="./src/js/status.js"></script>
-    <script type="module" src="./src/js/modules/i18n-manager.js"></script>
-    <script type="module" src="./src/js/components/language-switcher.js"></script>
-    <script type="module" src="./src/js/ad-manager.js"></script>
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化客服系统
+            import('./src/js/modules/deepseek-chat.js').then(module => {
+                module.default.init({
+                    container: '#chat-container',
+                    position: 'bottom-right',
+                    apiKey: window.ENV.DEEPSEEK_API_KEY
+                });
+            }).catch(error => {
+                console.error('客服系统加载失败:', error);
+            });
+        });
+    </script>
 </body>
 </html>

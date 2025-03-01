@@ -4,6 +4,7 @@
 
 // 导入必要的模块
 import { I18nManager } from './modules/i18n-manager.js';
+import { DeepSeekIntegration } from './modules/deepseek-integration.js';
 
 class App {
     constructor() {
@@ -58,6 +59,14 @@ class App {
         ];
 
         await Promise.all(modules);
+        
+        // 初始化DeepSeek智能客服
+        try {
+            new DeepSeekIntegration();
+            console.log('DeepSeek智能客服初始化完成');
+        } catch (error) {
+            console.error('DeepSeek智能客服初始化失败:', error);
+        }
     }
 }
 

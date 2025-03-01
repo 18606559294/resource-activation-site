@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/i18n.css">
+    <!-- 引入谷歌广告脚本 -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
      crossorigin="anonymous"></script>
     <!-- 核心脚本 -->
@@ -15,6 +16,7 @@
     <script type="module" src="./src/js/modules/i18n-manager.js"></script>
     <script type="module" src="./src/js/components/language-switcher.js"></script>
     <script type="module" src="./src/js/ad-manager.js"></script>
+    <script type="module" src="./src/js/ad-init.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -43,6 +45,9 @@
                 <button data-i18n="home.search.button" data-i18n-default="搜索">搜索</button>
             </div>
         </section>
+        
+        <!-- 顶部广告位 -->
+        <div id="top-ad" class="ad-container"></div>
 
         <section class="category-grid">
             <div class="category-card">
@@ -90,12 +95,8 @@
     <script type="module">
         document.addEventListener('DOMContentLoaded', () => {
             // 初始化客服系统
-            import('./src/js/modules/deepseek-chat.js').then(module => {
-                module.default.init({
-                    container: '#chat-container',
-                    position: 'bottom-right',
-                    apiKey: window.ENV.DEEPSEEK_API_KEY
-                });
+            import('./src/js/modules/deepseek-integration.ts').then(module => {
+                new module.DeepSeekIntegration();
             }).catch(error => {
                 console.error('客服系统加载失败:', error);
                 document.getElementById('chat-container').style.display = 'none';
@@ -104,9 +105,18 @@
             // 初始化国际化管理器
             import('./src/js/modules/i18n-manager.js').then(module => {
                 window.i18nManager = new module.I18nManager();
+                // 添加观察者，在国际化加载完成后移除加载状态
+                i18nManager.addObserver(() => {
+                    // 使用延迟移除加载状态
+                    setTimeout(() => {
+                        document.documentElement.removeAttribute('data-i18n-loading');
+                        document.documentElement.classList.remove('i18n-initializing');
+                    }, 300);
+                });
             }).catch(error => {
                 console.error('国际化管理器加载失败:', error);
                 document.documentElement.removeAttribute('data-i18n-loading');
+                document.documentElement.classList.remove('i18n-initializing');
             });
 
             // 添加页面加载状态管理

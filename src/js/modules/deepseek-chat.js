@@ -1,39 +1,62 @@
 // DeepSeek AI 智能客服模块
 const crypto = require('crypto');
 
-module.exports = class DeepSeekChat {
+class DeepSeekChat {
     constructor() {
         this.encryptionKey = null;
         this.apiKey = undefined;
         this.chatContainer = null;
         this.messageHistory = [];
 
+        // 安全地初始化加密和API密钥
         this.initializeEncryption();
-        const encryptedApiKey = 'YOUR_ENCRYPTED_API_KEY';
-        this.apiKey = this.decryptAPIKey(encryptedApiKey) || process.env.DEEPSEEK_API_KEY;
-
-        if (!this.apiKey) {
-            console.warn('DeepSeek API key not found, chat will be disabled');
-            return;
-        }
-
-        this.initChat();
+        this.initializeApiKey();
     }
 
+    /**
+     * 初始化加密密钥
+     */
     initializeEncryption() {
         try {
-            const key = process.env.ENCRYPTION_KEY;
+            const key = process.env.ENCRYPTION_KEY || window.ENV?.ENCRYPTION_KEY;
             if (!key || key.length < 32) {
-                throw new Error('Invalid encryption key configuration');
+                console.warn('Invalid encryption key configuration, using fallback security');
+                return;
             }
             this.encryptionKey = Buffer.alloc(32);
             Buffer.from(key.slice(0, 32)).copy(this.encryptionKey);
         } catch (error) {
             console.error('Failed to initialize encryption:', error);
-            throw new Error('Failed to initialize encryption');
         }
     }
 
+    /**
+     * 初始化API密钥
+     */
+    initializeApiKey() {
+        try {
+            // 优先从环境变量获取API密钥
+            this.apiKey = process.env.DEEPSEEK_API_KEY || window.ENV?.DEEPSEEK_API_KEY;
+            
+            // 如果没有直接的API密钥，尝试从加密存储中获取
+            if (!this.apiKey && window.ENV?.ENCRYPTED_DEEPSEEK_API_KEY) {
+                this.apiKey = this.decryptAPIKey(window.ENV.ENCRYPTED_DEEPSEEK_API_KEY);
+            }
+
+            if (!this.apiKey) {
+                console.warn('DeepSeek API key not found, chat will be disabled');
+                return;
+            }
+
+            this.initChat();
+        } catch (error) {
+            console.error('Failed to initialize API key:', error);
+        }
+    }
+
+    /**
+     * 初始化聊天界面
+     */
     initChat() {
         try {
             this.createChatWindow();
@@ -43,6 +66,9 @@ module.exports = class DeepSeekChat {
         }
     }
 
+    /**
+     * 创建聊天窗口
+     */
     createChatWindow() {
         if (!document.body) {
             throw new Error('Document body not found');
@@ -66,6 +92,9 @@ module.exports = class DeepSeekChat {
         document.body.appendChild(this.chatContainer);
     }
 
+    /**
+     * 初始化事件监听器
+     */
     initEventListeners() {
         if (!this.chatContainer) return;
 
@@ -86,11 +115,17 @@ module.exports = class DeepSeekChat {
         });
     }
 
+    /**
+     * 切换聊天窗口显示状态
+     */
     toggleChat() {
         if (!this.chatContainer) return;
         this.chatContainer.classList.toggle('visible');
     }
 
+    /**
+     * 发送消息
+     */
     async sendMessage() {
         if (!this.chatContainer) return;
 
@@ -145,6 +180,11 @@ module.exports = class DeepSeekChat {
         }
     }
 
+    /**
+     * 查询DeepSeek API
+     * @param {string} message 用户消息
+     * @returns {Promise<string>} 响应内容
+     */
     async queryDeepSeek(message) {
         if (!message || !this.apiKey) {
             throw new Error('Message or API key is missing');
@@ -175,6 +215,12 @@ module.exports = class DeepSeekChat {
         return data.choices[0].message.content;
     }
 
+    /**
+     * 添加消息到聊天窗口
+     * @param {string} sender 发送者类型
+     * @param {string} message 消息内容
+     * @returns {HTMLElement} 消息元素
+     */
     appendMessage(sender, message) {
         if (!this.chatContainer) {
             console.error('Chat container not found');
@@ -211,9 +257,6 @@ module.exports = class DeepSeekChat {
             // Scroll to bottom
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // Scroll to bottom
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
             // Add to history if it's a user or assistant message
             if (sender === 'user' || sender === 'assistant') {
                 this.messageHistory.push({
@@ -231,6 +274,11 @@ module.exports = class DeepSeekChat {
         }
     }
 
+    /**
+     * 解密API密钥
+     * @param {string} encryptedKey 加密的API密钥
+     * @returns {string|undefined} 解密后的API密钥
+     */
     decryptAPIKey(encryptedKey) {
         if (!encryptedKey || !this.encryptionKey) return undefined;
         try {
@@ -273,6 +321,11 @@ module.exports = class DeepSeekChat {
         }
     }
 
+    /**
+     * 加密API密钥
+     * @param {string} plainText 明文API密钥
+     * @returns {string} 加密后的API密钥
+     */
     encryptAPIKey(plainText) {
         if (!plainText || !this.encryptionKey) return '';
         try {
@@ -290,4 +343,44 @@ module.exports = class DeepSeekChat {
             return '';
         }
     }
+    /**
+     * 初始化DeepSeek聊天
+     * @param {Object} options 配置选项
+     */
+    static init(options = {}) {
+        const instance = new DeepSeekChat();
+        
+        // 处理自定义容器
+        if (options.container) {
+            const container = typeof options.container === 'string' 
+                ? document.querySelector(options.container)
+                : options.container;
+                
+            if (container && instance.chatContainer) {
+                // 如果找到了自定义容器，将聊天窗口移动到该容器中
+                container.appendChild(instance.chatContainer);
+            }
+        }
+        
+        // 处理位置选项
+        if (options.position && instance.chatContainer) {
+            instance.chatContainer.classList.add(`position-${options.position}`);
+        }
+        
+        // 处理API密钥
+        if (options.apiKey) {
+            instance.apiKey = options.apiKey;
+        }
+        
+        // 默认显示聊天窗口
+        if (instance.chatContainer) {
+            setTimeout(() => {
+                instance.chatContainer.classList.add('visible');
+            }, 1000);
+        }
+        
+        return instance;
+    }
 }
+
+export default DeepSeekChat;

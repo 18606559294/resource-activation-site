@@ -5,6 +5,7 @@ import './src/css/animations.css';
 import './src/css/mobile.css';
 import './src/css/themes.css';
 import './src/css/components.css';
+import './src/css/deepseek-chat.css';
 
 // 导入核心模块
 import { ResourcePreloader } from './src/js/modules/resource-preloader.js';
