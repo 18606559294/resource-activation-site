@@ -84,18 +84,41 @@
         document.addEventListener('DOMContentLoaded', () => {
             // 初始化客服系统
             import('./src/js/modules/deepseek-chat.js').then(module => {
-                module.default.init({
-                    container: '#chat-container',
-                    position: 'bottom-right',
-                    apiKey: window.ENV.DEEPSEEK_API_KEY_ENCRYPTED ? await import('./src/js/modules/deepseek-integration.js').then(module => {
-                        const integration = new module.DeepSeekIntegration();
+                // 先检查是否有加密的API密钥
+                if (window.ENV && window.ENV.DEEPSEEK_API_KEY_ENCRYPTED) {
+                    // 如果有，先导入集成模块并获取解密后的API密钥
+                    import('./src/js/modules/deepseek-integration.js').then(integrationModule => {
+                        const integration = new integrationModule.DeepSeekIntegration();
                         return integration.getApiKey();
-                    }) : null
-                });
+                    }).then(apiKey => {
+                        // 使用获取到的API密钥初始化客服系统
+                        module.default.init({
+                            container: '#chat-container',
+                            position: 'bottom-right',
+                            apiKey: apiKey
+                        });
+                    }).catch(error => {
+                        console.error('API密钥获取失败:', error);
+                        // 即使没有API密钥，也尝试初始化客服系统
+                        module.default.init({
+                            container: '#chat-container',
+                            position: 'bottom-right',
+                            apiKey: null
+                        });
+                    });
+                } else {
+                    // 如果没有加密的API密钥，直接初始化客服系统
+                    module.default.init({
+                        container: '#chat-container',
+                        position: 'bottom-right',
+                        apiKey: null
+                    });
+                }
             }).catch(error => {
                 console.error('客服系统加载失败:', error);
             });
         });
+    
     </script>
 </body>
 </html>
