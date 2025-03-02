@@ -1,5 +1,5 @@
 // 工具管理器
-import { downloadManager } from './download-manager.js';
+import { frontendDownloadManager } from './modules/frontend-download-manager.js';
 
 /** @typedef {Object} Tool
  * @property {string} id
@@ -28,26 +28,20 @@ class ToolsManager {
 
     async init() {
         try {
-            // 检查工具更新
-            const [toolsResponse, versionResponse] = await Promise.all([
-                fetch('/config/tools.json'),
-                fetch('/api/tools/versions')
-            ]);
+            // 只从本地配置加载工具信息，不再依赖后端API
+            const toolsResponse = await fetch('/config/tools.json');
             
-            if (!toolsResponse.ok || !versionResponse.ok) {
-                throw new Error(`HTTP error! status: ${toolsResponse.status}, ${versionResponse.status}`);
+            if (!toolsResponse.ok) {
+                throw new Error(`HTTP error! status: ${toolsResponse.status}`);
             }
             
-            const [toolsData, versions] = await Promise.all([
-                toolsResponse.json(),
-                versionResponse.json()
-            ]);
+            const toolsData = await toolsResponse.json();
             
-            // 合并版本信息
+            // 使用本地版本信息
             this.tools = toolsData.tools.map(tool => ({
                 ...tool,
-                hasUpdate: versions[tool.id] && versions[tool.id] > tool.version,
-                latestVersion: versions[tool.id] || tool.version
+                hasUpdate: false, // 不再检查更新
+                latestVersion: tool.version
             }));
             
             this.renderTools();
@@ -59,22 +53,26 @@ class ToolsManager {
     }
 
     setupUpdateChecker() {
-        // 每6小时检查一次更新
+        // 每6小时检查一次本地配置文件
         this.updateInterval = setInterval(async () => {
             try {
-                const response = await fetch('/api/tools/versions');
+                const response = await fetch('/config/tools.json');
                 if (!response.ok) return;
                 
-                const versions = await response.json();
-                this.tools = this.tools.map(tool => ({
-                    ...tool,
-                    hasUpdate: versions[tool.id] && versions[tool.id] > tool.version,
-                    latestVersion: versions[tool.id] || tool.version
-                }));
+                const toolsData = await response.json();
+                // 只更新工具信息，不检查版本更新
+                this.tools = toolsData.tools.map(newTool => {
+                    const existingTool = this.tools.find(t => t.id === newTool.id);
+                    return {
+                        ...newTool,
+                        hasUpdate: false,
+                        latestVersion: newTool.version
+                    };
+                });
                 
                 this.renderTools();
             } catch (error) {
-                console.error('检查更新失败:', error);
+                console.error('更新工具信息失败:', error);
             }
         }, 6 * 60 * 60 * 1000);
     }
@@ -106,7 +104,7 @@ class ToolsManager {
      */
     async downloadTool(toolId) {
         try {
-            await downloadManager.downloadTool(toolId);
+            await frontendDownloadManager.downloadTool(toolId);
         } catch (/** @type {any} */ error) {
             this.showError('下载失败：' + error.message);
         }

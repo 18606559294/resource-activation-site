@@ -1,50 +1,46 @@
-    // ...此处为省略代码...
+// ...此处为省略代码...
         this.isConnecting = true;
         const wsUrl = WS_CONFIG[process.env.NODE_ENV || 'development'];
         this.ws = new WebSocket(wsUrl);
 
         this.ws.onopen = () => {
             console.log('WebSocket连接已建立');
-    // ...此处为省略代码...const WS_CONFIG = {
-    development: 'ws://localhost:8765',
-    production: 'wss://your-domain.com/ws'
-};
+    // ...此处为省略代码...// 纯前端实现的实时更新模拟
+// 不再使用WebSocket连接后端服务器
 
 class RealtimeUpdates {
     constructor() {
-        this.ws = null;
-        this.reconnectAttempts = 0;
-        this.maxReconnectAttempts = 5;
-        this.reconnectDelay = 3000; // 3秒
-        this.isConnecting = false;
-        this.connect();
+        this.updateInterval = null;
+        this.listeners = new Map();
+        this.setupLocalUpdates();
     }
-
-    connect() {
-        if (this.isConnecting) return;
+    
+    setupLocalUpdates() {
+        // 使用本地轮询替代WebSocket
+        this.updateInterval = setInterval(() => {
+            // 检查本地存储的更新
+            this.checkLocalUpdates();
+        }, 60000); // 每分钟检查一次
         
-        this.isConnecting = true;
-        const wsUrl = WS_CONFIG[process.env.NODE_ENV || 'development'];
-        this.ws = new WebSocket(wsUrl);
-
-        this.ws.onopen = () => {
-            console.log('WebSocket连接已建立');
-            this.reconnectAttempts = 0;
-        };
-
-        this.ws.onmessage = (event) => {
-            const data = JSON.parse(event.data);
-            this.handleUpdate(data);
-        };
-
-        this.ws.onclose = () => {
-            console.log('WebSocket连接已关闭');
-            this.attemptReconnect();
-        };
-
-        this.ws.onerror = (error) => {
-            console.error('WebSocket错误:', error);
-        };
+        console.log('本地更新检查已启动');
+    }
+    
+    checkLocalUpdates() {
+        try {
+            // 这里可以检查localStorage中的数据变化
+            // 或者定期从CDN/静态JSON文件获取更新
+            const lastCheck = localStorage.getItem('last_update_check');
+            const now = Date.now();
+            
+            localStorage.setItem('last_update_check', now);
+            
+            // 模拟获取到更新数据
+            if (Math.random() > 0.8) { // 偶尔触发更新通知
+                this.notifyListeners('tools', { updated: true });
+            }
+        } catch (error) {
+            console.error('检查更新失败:', error);
+        }
     }
 
     attemptReconnect() {

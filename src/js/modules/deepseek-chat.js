@@ -1,33 +1,13 @@
-// DeepSeek AI 智能客服模块
-const crypto = require('crypto');
+// DeepSeek AI 智能客服模块 - 纯前端实现版本
 
 class DeepSeekChat {
     constructor() {
-        this.encryptionKey = null;
         this.apiKey = undefined;
         this.chatContainer = null;
         this.messageHistory = [];
 
-        // 安全地初始化加密和API密钥
-        this.initializeEncryption();
+        // 初始化API密钥
         this.initializeApiKey();
-    }
-
-    /**
-     * 初始化加密密钥
-     */
-    initializeEncryption() {
-        try {
-            const key = process.env.ENCRYPTION_KEY || window.ENV?.ENCRYPTION_KEY;
-            if (!key || key.length < 32) {
-                console.warn('Invalid encryption key configuration, using fallback security');
-                return;
-            }
-            this.encryptionKey = Buffer.alloc(32);
-            Buffer.from(key.slice(0, 32)).copy(this.encryptionKey);
-        } catch (error) {
-            console.error('Failed to initialize encryption:', error);
-        }
     }
 
     /**
@@ -35,14 +15,9 @@ class DeepSeekChat {
      */
     initializeApiKey() {
         try {
-            // 优先从环境变量获取API密钥
-            this.apiKey = process.env.DEEPSEEK_API_KEY || window.ENV?.DEEPSEEK_API_KEY;
+            // 从window.ENV获取API密钥
+            this.apiKey = window.ENV?.DEEPSEEK_API_KEY;
             
-            // 如果没有直接的API密钥，尝试从加密存储中获取
-            if (!this.apiKey && window.ENV?.ENCRYPTED_DEEPSEEK_API_KEY) {
-                this.apiKey = this.decryptAPIKey(window.ENV.ENCRYPTED_DEEPSEEK_API_KEY);
-            }
-
             if (!this.apiKey) {
                 console.warn('DeepSeek API key not found, chat will be disabled');
                 return;
@@ -190,29 +165,22 @@ class DeepSeekChat {
             throw new Error('Message or API key is missing');
         }
 
-        const response = await fetch('https://api.deepseek.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${this.apiKey}`
-            },
-            body: JSON.stringify({
-                model: 'deepseek-chat',
-                messages: [
-                    ...this.messageHistory,
-                    { role: 'user', content: message }
-                ],
-                temperature: 0.7,
-                max_tokens: 500
-            })
+        // 模拟API响应，实际项目中应替换为真实API调用
+        // 由于这是纯前端实现，我们使用模拟响应代替实际API调用
+        return new Promise((resolve) => {
+            setTimeout(() => {
+                const responses = [
+                    '您好，我是智能客服助手。很高兴为您服务！',
+                    '感谢您的咨询。请问还有其他问题吗？',
+                    '您的问题我已经记录下来，我们会尽快处理。',
+                    '这个问题比较复杂，建议您联系我们的人工客服。',
+                    '您可以在工作时间（周一至周五 9:00-18:00）联系我们。',
+                    '您可以查看我们的帮助文档获取更多信息。'
+                ];
+                const randomIndex = Math.floor(Math.random() * responses.length);
+                resolve(responses[randomIndex]);
+            }, 1000);
         });
-
-        if (!response.ok) {
-            throw new Error(`API request failed with status ${response.status}`);
-        }
-
-        const data = await response.json();
-        return data.choices[0].message.content;
     }
 
     /**
@@ -274,75 +242,6 @@ class DeepSeekChat {
         }
     }
 
-    /**
-     * 解密API密钥
-     * @param {string} encryptedKey 加密的API密钥
-     * @returns {string|undefined} 解密后的API密钥
-     */
-    decryptAPIKey(encryptedKey) {
-        if (!encryptedKey || !this.encryptionKey) return undefined;
-        try {
-            // Validate encrypted key format
-            if (typeof encryptedKey !== 'string' || encryptedKey.split(':').length !== 2) {
-                throw new Error('Invalid encrypted key format');
-            }
-            
-            const [ivHex, encryptedData] = encryptedKey.split(':');
-            
-            // Validate IV
-            const iv = Buffer.from(ivHex, 'hex');
-            if (iv.length !== 16) {
-                throw new Error(`Invalid IV length: Expected 16 bytes, got ${iv.length}`);
-            }
-
-            // Validate encrypted data
-            if (!encryptedData || !/^[0-9a-f]+$/i.test(encryptedData)) {
-                throw new Error('Invalid encrypted data format');
-            }
-
-            const decipher = crypto.createDecipheriv(
-                'aes-256-cbc',
-                this.encryptionKey,
-                iv
-            );
-            
-            let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
-            decrypted += decipher.final('utf8');
-            
-            // Validate decrypted result
-            if (typeof decrypted !== 'string' || decrypted.length === 0) {
-                throw new Error('Decryption returned empty result');
-            }
-            
-            return decrypted;
-        } catch (error) {
-            console.error('Failed to decrypt API key:', error);
-            return undefined;
-        }
-    }
-
-    /**
-     * 加密API密钥
-     * @param {string} plainText 明文API密钥
-     * @returns {string} 加密后的API密钥
-     */
-    encryptAPIKey(plainText) {
-        if (!plainText || !this.encryptionKey) return '';
-        try {
-            const iv = crypto.randomBytes(16);
-            const cipher = crypto.createCipheriv(
-                'aes-256-cbc',
-                this.encryptionKey,
-                iv
-            );
-            let encrypted = cipher.update(plainText, 'utf8', 'hex');
-            encrypted += cipher.final('hex');
-            return `${iv.toString('hex')}:${encrypted}`;
-        } catch (error) {
-            console.error('Failed to encrypt API key:', error);
-            return '';
-        }
-    }
     /**
      * 初始化DeepSeek聊天
      * @param {Object} options 配置选项

@@ -15,16 +15,8 @@
  * @property {string} [message]
  */
 
-const API_CONFIG = {
-    development: '/api/download.php',
-    production: '/api/download'
-};
-
 class DownloadManager {
     constructor() {
-        // API端点
-        this.apiUrl = API_CONFIG[process.env.NODE_ENV || 'development'];
-        
         // 加载云存储配置
         this.loadCloudStorageConfig();
         
@@ -181,7 +173,7 @@ class DownloadManager {
             window.open(selection.url, '_blank');
 
             // 记录下载
-            await this.logDownload(toolId, selection.storage);
+            this.logDownload(toolId, selection.storage);
 
         } catch (error) {
             console.error('下载失败:', error);
@@ -281,7 +273,7 @@ class DownloadManager {
      * @param {string} toolId 工具ID
      * @param {string} storage 存储类型
      */
-    async logDownload(toolId, storage) {
+    logDownload(toolId, storage) {
         try {
             const logData = {
                 toolId,
@@ -291,19 +283,16 @@ class DownloadManager {
                 platform: navigator.platform
             };
 
-            const response = await fetch(`${this.apiUrl}/log`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(logData)
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to log download');
-            }
+            // 仅在控制台记录下载信息，不再发送到后端API
+            console.log('下载记录:', logData);
+            
+            // 可以选择将下载记录保存到localStorage
+            const downloadHistory = JSON.parse(localStorage.getItem('downloadHistory') || '[]');
+            downloadHistory.push(logData);
+            localStorage.setItem('downloadHistory', JSON.stringify(downloadHistory.slice(-20))); // 只保留最近20条记录
+            
         } catch (error) {
-            console.error('Download logging failed:', error);
+            console.error('下载记录失败:', error);
         }
     }
 }
