@@ -1,15 +1,10 @@
-// 导入样式文件
-import './src/css/styles.css';
-import './src/css/ui-feedback.css';
-import './src/css/animations.css';
-import './src/css/mobile.css';
-import './src/css/themes.css';
-import './src/css/components.css';
-import './src/css/deepseek-chat.css';
+// CSS文件已在HTML中通过link标签引入
+// 不再通过ES模块方式导入CSS文件
 
 // 导入核心模块
 import { ResourcePreloader } from './src/js/modules/resource-preloader.js';
-import { showErrorMessage, showLoadingIndicator, hideLoadingIndicator } from './src/js/components/ui-feedback.js';
+import { showLoadingIndicator, hideLoadingIndicator } from './src/js/components/ui-feedback.js';
+import initGlobalChat from './src/js/global-chat-init.js';
 
 // 初始化资源预加载器
 const resourcePreloader = new ResourcePreloader();
@@ -48,6 +43,9 @@ async function initializeApp() {
         if (!app.initialized) {
             await app.init();
         }
+        
+        // 初始化全局聊天窗口
+        initGlobalChat();
 
         // 移除加载状态
         document.documentElement.removeAttribute('data-i18n-loading');
@@ -60,14 +58,10 @@ async function initializeApp() {
         // 确保页面至少显示基础内容
         document.body.style.visibility = 'visible';
         document.documentElement.removeAttribute('data-i18n-loading');
-
-        // 显示用户友好的错误信息
-        showErrorMessage({
-            title: '应用加载失败',
-            message: '很抱歉，应用加载过程中发生错误。请检查网络连接并刷新页面重试。',
-            actionText: '重新加载',
-            actionHandler: () => location.reload()
-        });
+        hideLoadingIndicator();
+        
+        // 不再显示错误消息窗口
+        // 静默处理错误，不打扰用户体验
     }
 }
 

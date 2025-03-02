@@ -49,6 +49,15 @@
         "title": "Port Scanner",
         "description": "Scan for open ports and services"
       }
+    },
+    "software": {
+      "title": "Software Tools",
+      "idm": {
+        "title": "IDM Registration Code",
+        "description": "Internet Download Manager software registration code",
+        "download": "Download",
+        "extractCode": "Extract code: 9xlu"
+      }
     }
   },
   "resources": {
@@ -112,6 +121,13 @@
   "status": {
     "pageTitle": "System Status - Resource Activation Tools",
     "title": "System Status",
+    "search": {
+      "placeholder": "Search status...",
+      "button": "Search"
+    },
+    "server": "Server Status",
+    "uptime": "Uptime",
+    "load": "System Load",
     "sections": {
       "server": {
         "title": "Server Status",
@@ -130,8 +146,29 @@
       }
     }
   },
+  "home": {
+    "search": {
+      "placeholder": "Search resources...",
+      "button": "Search"
+    },
+    "tools": {
+      "title": "Common Tools",
+      "activation": "Resource Activation",
+      "activation.desc": "Quickly activate various resources and software",
+      "security": "Security Check",
+      "security.desc": "Comprehensive security protection tools"
+    },
+    "resources": {
+      "title": "Popular Resources",
+      "software": "Software Resources",
+      "software.desc": "Selected quality software resources",
+      "tools": "Tool Resources",
+      "tools.desc": "Practical tool collection"
+    }
+  },
   "common": {
-    "use": "Use Now"
+    "use": "Use Now",
+    "explore": "Explore"
   },
   "footer": {
     "copyright": "© 2023 Resource Activation Tools"
@@ -161,6 +198,23 @@
     "status": {
       "success": "Feedback submitted successfully",
       "error": "Submission failed, please try again"
+    }
+  },
+  "deepseek": {
+    "title": "Online Support",
+    "openChat": "Open support chat",
+    "closeChat": "Close chat window",
+    "inputPlaceholder": "Type your question...",
+    "sendMessage": "Send message",
+    "welcomeMessage": "Hello! I'm an AI support assistant, happy to help you.<br><br>You can ask about:<br>1. Product features and usage<br>2. Account activation and subscription issues<br>3. Technical support and troubleshooting<br>4. Payment and invoice related questions<br><br>How can I assist you today?",
+    "errors": {
+      "initializing": "Support system is initializing, please try again later",
+      "initFailed": "Failed to initialize support system, please try again later",
+      "sendFailed": "Failed to send message, please try again later"
+    },
+    "logs": {
+      "initialized": "DeepSeek support chat window initialized",
+      "initFailed": "Failed to initialize DeepSeek support chat window:"
     }
   }
 }

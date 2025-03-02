@@ -100,7 +100,15 @@ const translations = {
         "status.uptime": "Uptime: ",
         "status.updates": "Recent Updates",
         "status.online": "Online",
-        "status.offline": "Offline"
+        "status.offline": "Offline",
+
+        // DeepSeek客服相关翻译
+        "deepseek.logs.initialized": "DeepSeek chat widget initialized",
+        "deepseek.logs.initFailed": "Failed to initialize DeepSeek chat widget:",
+        "deepseek.errors.initFailed": "Chat system initialization failed, please try again later",
+        "deepseek.openChat": "Open customer service chat",
+        "deepseek.closeChat": "Close chat window",
+        "deepseek.title": "Online Customer Service"
     },
     zh: {
         // 主页翻译
@@ -203,7 +211,15 @@ const translations = {
         "status.uptime": "运行时间: ",
         "status.updates": "最近更新",
         "status.online": "在线",
-        "status.offline": "离线"
+        "status.offline": "离线",
+
+        // DeepSeek客服相关翻译
+        "deepseek.logs.initialized": "DeepSeek客服聊天窗口已加载",
+        "deepseek.logs.initFailed": "初始化DeepSeek客服聊天窗口失败:",
+        "deepseek.errors.initFailed": "客服系统初始化失败，请稍后再试",
+        "deepseek.openChat": "打开客服聊天",
+        "deepseek.closeChat": "关闭聊天窗口",
+        "deepseek.title": "在线客服"
     }
 };
 
@@ -235,6 +251,15 @@ function updateContent() {
             element.placeholder = translations[currentLanguage][key];
         }
     });
+    
+    // 更新HTML内容
+    const htmlElements = document.querySelectorAll('[data-i18n-html]');
+    htmlElements.forEach(element => {
+        const key = element.getAttribute('data-i18n-html');
+        if (translations[currentLanguage][key]) {
+            element.innerHTML = translations[currentLanguage][key];
+        }
+    });
 }
 
 // 切换语言
@@ -244,5 +269,18 @@ function changeLanguage(lang) {
     updateContent();
 }
 
-// 页面加载时更新内容
-document.addEventListener('DOMContentLoaded', updateContent);
+// 翻译函数
+function t(key, fallback) {
+    return translations[currentLanguage][key] || fallback || key;
+}
+
+const i18n = {
+    translations,
+    updateContent,
+    switchLanguage: changeLanguage,
+    currentLanguage,
+    t
+};
+
+export { updateContent, changeLanguage as switchLanguage, currentLanguage, t };
+export default i18n;

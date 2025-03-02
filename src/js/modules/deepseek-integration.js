@@ -1,82 +1,58 @@
-// DeepSeek AI 集成模块
-import { DeepSeekChat } from './deepseek-chat.js';
+// DeepSeek API 集成模块 - 仅用于API调用，不包含客服窗口
 import { frontendDownloadManager } from './frontend-download-manager.js';
+import CryptoUtils from './crypto-utils.js';
 
 export class DeepSeekIntegration {
     constructor() {
-        this.chatInstance = null;
         this.downloadManager = frontendDownloadManager;
         this.init();
     }
 
-    init() {
+    async init() {
         try {
-            this.chatInstance = new DeepSeekChat();
-            this.integrateWithPages();
+            // 设置环境变量，确保API密钥可用但已加密
+            if (!window.ENV) window.ENV = {};
+            
+            // 导入API密钥配置
+            const apiKeysConfig = await import('../../../src/config/api-keys.js');
+            
+            // 从配置文件中获取API密钥（如果已经存在于配置中）
+            if (!apiKeysConfig.default.DEEPSEEK_API_KEY) {
+                console.error('DeepSeek API密钥未在配置文件中设置');
+                return;
+            }
+            
+            // 加密的API密钥
+            const encryptedApiKey = await CryptoUtils.encrypt(apiKeysConfig.default.DEEPSEEK_API_KEY, apiKeysConfig.default.ENCRYPTION_KEY);
+            window.ENV.DEEPSEEK_API_KEY_ENCRYPTED = encryptedApiKey;
+            
+            console.log('DeepSeek API integration initialized with encrypted key');
         } catch (error) {
             console.error('Failed to initialize DeepSeek integration:', error);
         }
     }
-
-    integrateWithPages() {
-        const pages = [
-            'index.html',
-            'resources.html',
-            'security.html',
-            'status.html',
-            'toolbox.html',
-            'feedback.html'
-        ];
-
-        if (this.chatInstance) {
-            this.addChatButton();
-            this.setupChatCommands();
-        }
-    }
-
-    addChatButton() {
-        const chatButton = document.createElement('button');
-        chatButton.id = 'deepseek-chat-button';
-        chatButton.className = 'chat-trigger-button';
-        chatButton.textContent = '智能客服';
-        chatButton.addEventListener('click', () => this.toggleChat());
-
-        const header = document.querySelector('header');
-        if (header) {
-            header.appendChild(chatButton);
-        }
-    }
-
-    toggleChat() {
-        if (this.chatInstance) {
-            this.chatInstance.toggleChat();
-        }
-    }
     
     /**
-     * 设置聊天命令
-     * 允许用户通过聊天界面下载工具
+     * 获取解密后的API密钥
+     * @returns {Promise<string>} 解密后的API密钥
      */
-    setupChatCommands() {
-        if (!this.chatInstance) return;
-        
-        // 添加下载命令处理
-        this.chatInstance.addCommandHandler('download', async (params) => {
-            if (!params || !params.toolId) {
-                return { success: false, message: '请指定要下载的工具ID' };
+    async getApiKey() {
+        try {
+            if (!window.ENV?.DEEPSEEK_API_KEY_ENCRYPTED) {
+                throw new Error('Encrypted API key not found');
             }
             
-            try {
-                const result = await this.downloadManager.downloadTool(params.toolId);
-                return { 
-                    success: !!result, 
-                    message: result ? '下载已开始，请查看浏览器下载窗口' : '下载失败，请稍后重试' 
-                };
-            } catch (error) {
-                console.error('聊天下载命令执行失败:', error);
-                return { success: false, message: '下载失败: ' + error.message };
-            }
-        });
+            // 导入API密钥配置
+            const apiKeysConfig = await import('../../../src/config/api-keys.js');
+            
+            return await CryptoUtils.decrypt(
+                window.ENV.DEEPSEEK_API_KEY_ENCRYPTED, 
+                apiKeysConfig.default.ENCRYPTION_KEY
+            );
+        } catch (error) {
+            console.error('Failed to decrypt API key:', error);
+            throw new Error('API key decryption failed');
+        }
     }
 }
 

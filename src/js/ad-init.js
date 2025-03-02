@@ -55,7 +55,19 @@ class AdInitializer {
 }
 
 // 在DOM加载完成后初始化广告
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+    // 确保广告管理器已加载
+    if (!window.adManager) {
+        try {
+            const { default: AdManager } = await import('./ad-manager.js');
+            window.adManager = new AdManager();
+            await window.adManager.init();
+        } catch (error) {
+            console.error('广告管理器加载失败:', error);
+            return;
+        }
+    }
+
     const adInitializer = new AdInitializer();
     adInitializer.init();
 });

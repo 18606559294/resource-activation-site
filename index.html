@@ -9,6 +9,12 @@
     <link rel="stylesheet" href="./css/styles.css">
     <link rel="stylesheet" href="./css/components.css">
     <link rel="stylesheet" href="./css/i18n.css">
+    <link rel="stylesheet" href="./css/deepseek-chat.css">
+    <link rel="stylesheet" href="./src/css/ui-feedback.css">
+    <link rel="stylesheet" href="./src/css/animations.css">
+    <link rel="stylesheet" href="./src/css/mobile.css">
+    <link rel="stylesheet" href="./src/css/themes.css">
+
     <!-- 引入谷歌广告脚本 -->
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
      crossorigin="anonymous"></script>
@@ -18,6 +24,7 @@
     <script type="module" src="./src/js/components/language-switcher.js"></script>
     <script type="module" src="./src/js/ad-manager.js"></script>
     <script type="module" src="./src/js/ad-init.js"></script>
+    <script type="module" src="./src/js/deepseek-chat-init.js"></script>
 </head>
 <body>
     <header class="navbar">
@@ -91,21 +98,13 @@
         </div>
     </footer>
 
-    <!-- 统一客服容器 -->
-    <div id="chat-container" class="deepseek-chat"></div>
     <script type="module">
         document.addEventListener('DOMContentLoaded', () => {
-            // 初始化客服系统
-            import('./src/js/modules/deepseek-integration.js').then(module => {
-                new module.DeepSeekIntegration();
-            }).catch(error => {
-                console.error('客服系统加载失败:', error);
-                document.getElementById('chat-container').style.display = 'none';
-            });
 
             // 初始化国际化管理器
             import('./src/js/modules/i18n-manager.js').then(module => {
-                window.i18nManager = new module.I18nManager();
+                // 使用导入的单例实例，而不是创建新实例
+                const i18nManager = module.default;
                 // 添加观察者，在国际化加载完成后移除加载状态
                 i18nManager.addObserver(() => {
                     // 使用延迟移除加载状态

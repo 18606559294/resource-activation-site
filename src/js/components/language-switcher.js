@@ -67,7 +67,7 @@ class LanguageSwitcher {
             if (!isSystemChange) {
                 // 显示成功提示
                 uiFeedback.showToast(
-                    i18nManager.getTranslation('messages.languageChanged') || '语言已切换',
+                    i18nManager.translate('messages.languageChanged', '语言已切换'),
                     'success'
                 );
             }
@@ -77,7 +77,7 @@ class LanguageSwitcher {
             
             // 显示错误提示
             uiFeedback.showToast(
-                i18nManager.getTranslation('messages.languageChangeFailed') || '语言切换失败',
+                i18nManager.translate('messages.languageChangeFailed', '语言切换失败'),
                 'error'
             );
 
@@ -105,14 +105,14 @@ class LanguageSwitcher {
             try {
                 // 更新无障碍标签
                 const labelKey = isActive ? 'currentLanguage' : 'switchTo';
-                const language = i18nManager.getTranslation(`languages.${lang}`) || lang;
-                const ariaLabel = i18nManager.getTranslation(`accessibility.${labelKey}`, { language });
+                const language = i18nManager.translate(`languages.${lang}`, lang);
+                const ariaLabel = i18nManager.translate(`accessibility.${labelKey}`, labelKey === 'currentLanguage' ? '当前语言' : '切换到');
                 if (ariaLabel) {
-                    button.setAttribute('aria-label', ariaLabel);
+                    button.setAttribute('aria-label', `${ariaLabel}: ${language}`);
                 }
 
                 // 更新按钮文本
-                const buttonText = i18nManager.getTranslation(`languages.${lang}`) || lang.toUpperCase();
+                const buttonText = i18nManager.translate(`languages.${lang}`, lang.toUpperCase());
                 button.textContent = buttonText;
             } catch (error) {
                 console.warn('Failed to update button text:', error);

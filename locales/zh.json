@@ -162,5 +162,22 @@
       "success": "反馈提交成功",
       "error": "提交失败，请重试"
     }
+  },
+  "deepseek": {
+    "title": "在线客服",
+    "openChat": "打开客服聊天",
+    "closeChat": "关闭聊天窗口",
+    "inputPlaceholder": "请输入您的问题...",
+    "sendMessage": "发送消息",
+    "welcomeMessage": "您好！我是AI客服助手，很高兴为您服务。<br><br>您可以咨询以下问题：<br>1. 产品功能与使用方法<br>2. 账户激活与订阅问题<br>3. 技术支持与故障排除<br>4. 付款与发票相关<br><br>请告诉我您需要什么帮助？",
+    "errors": {
+      "initializing": "客服系统正在初始化，请稍后再试",
+      "initFailed": "客服系统初始化失败，请稍后再试",
+      "sendFailed": "消息发送失败，请稍后再试"
+    },
+    "logs": {
+      "initialized": "DeepSeek 客服聊天窗口已初始化",
+      "initFailed": "初始化DeepSeek客服聊天窗口失败:"
+    }
   }
 }

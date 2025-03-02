@@ -15,10 +15,22 @@ export class ResourcePreloader {
      * @param {Object} resource 资源对象
      * @param {Object} options 加载选项
      * @private
+     * @returns {Promise} 加载资源的Promise
      */
     _addToQueue(resource, options) {
         this.queue.push({ resource, options });
-        this._processQueue();
+        return new Promise((resolve, reject) => {
+            // 创建一个Promise来跟踪资源加载
+            const originalProcess = this._processQueue.bind(this);
+            this._processQueue = async () => {
+                await originalProcess();
+                // 当资源加载完成时，检查是否是当前资源
+                if (this.loadedResources.has(resource.url)) {
+                    resolve();
+                }
+            };
+            this._processQueue().catch(reject);
+        });
     }
 
     /**

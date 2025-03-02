@@ -10,6 +10,12 @@
  */
 export class I18nManager {
     constructor() {
+        // 检查是否已经存在实例，避免重复初始化
+        if (window.i18nManager instanceof I18nManager) {
+            console.log('I18nManager已经初始化，返回现有实例');
+            return window.i18nManager;
+        }
+        
         // 当前语言,默认使用系统语言
         this.currentLanguage = 'zh'; // 默认使用中文，确保初始加载时显示默认内容
         // 翻译内容缓存
@@ -43,6 +49,9 @@ export class I18nManager {
                 this.handleInitTimeout();
             }
         }, 5000); // 增加超时时间到5秒
+        
+        // 保存实例到全局
+        window.i18nManager = this;
     }
 
     /**
@@ -176,13 +185,25 @@ export class I18nManager {
 
         for (let attempt = 1; attempt <= maxRetries; attempt++) {
             try {
-                const response = await fetch(`/locales/${lang}.json`);
+                // 使用相对路径加载语言文件，避免在不同环境下的路径问题
+                const response = await fetch(`./locales/${lang}.json`);
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    console.warn(`尝试备用路径加载语言包: ${lang}`);
+                    // 尝试备用路径
+                    const backupResponse = await fetch(`../locales/${lang}.json`);
+                    if (!backupResponse.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}, backup status: ${backupResponse.status}`);
+                    }
+                    const translations = await backupResponse.json();
+                    this.translations[lang] = translations;
+                    this.loadedLanguages.add(lang);
+                    console.log(`成功从备用路径加载语言包: ${lang}`);
+                    return;
                 }
                 const translations = await response.json();
                 this.translations[lang] = translations;
                 this.loadedLanguages.add(lang);
+                console.log(`成功加载语言包: ${lang}`);
                 return;
             } catch (error) {
                 console.warn(`Failed to load language pack: ${lang} (Attempt ${attempt}/${maxRetries})`, error);
