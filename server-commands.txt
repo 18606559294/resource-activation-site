@@ -1,0 +1,18 @@
+# 在腾讯云 Web 终端 (OrcaTerm) 执行的命令指南
+
+# 第一步：安装上传工具和 Nginx
+yum install -y lrzsz unzip nginx
+
+# 第二步：上传文件
+# 1. 在终端输入 rz 并回车
+# 2. 在弹出的文件选择窗口中，找到并选择 D:\推广Trae的网站1\deploy_package.zip
+rz
+
+# 第三步：执行部署 (复制以下所有命令粘贴执行)
+mkdir -p /var/www/trae-promo
+unzip -o deploy_package.zip -d /var/www/trae-promo
+mv -f /var/www/trae-promo/nginx-config.conf /etc/nginx/conf.d/ndtool.cn.conf
+systemctl enable nginx
+systemctl restart nginx
+rm -f deploy_package.zip
+echo "部署完成！请访问 http://ndtool.cn"

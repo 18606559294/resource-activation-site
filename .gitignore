@@ -1,0 +1,6 @@
+deploy_package.zip
+trae-deploy.tar.gz
+*.log
+.DS_Store
+.vscode/
+.idea/

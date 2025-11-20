@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(deploy.bat)",
+      "Bash(chmod +x quick-deploy.sh)",
+      "Bash(./quick-deploy.sh)",
+      "Bash(cat \"d:\\推广Trae的网站1\\server-commands.txt\")"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
