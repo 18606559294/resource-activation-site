@@ -1,0 +1,5 @@
+{
+    "toolsDirectory": "./tools",
+    "downloadDirectory": "./downloads",
+    "tempDirectory": "./temp"
+}

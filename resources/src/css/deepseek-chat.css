@@ -1,0 +1,235 @@
+/**
+ * DeepSeek 客服聊天窗口样式
+ */
+
+/* 聊天窗口容器 */
+.deepseek-chat-widget {
+    position: fixed;
+    left: 20px;
+    top: 100px;
+    z-index: 9999;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* 聊天按钮 */
+.deepseek-chat-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: var(--primary-color, #2563eb);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.deepseek-chat-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.4);
+}
+
+.deepseek-chat-button:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+/* 聊天窗口 */
+.deepseek-chat-window {
+    position: absolute;
+    top: 70px;
+    left: 0;
+    width: 350px;
+    height: 500px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+/* 聊天窗口头部 */
+.deepseek-chat-header {
+    padding: 15px 20px;
+    background: var(--primary-color, #2563eb);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deepseek-chat-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.deepseek-chat-close {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+}
+
+.deepseek-chat-close:hover {
+    opacity: 1;
+}
+
+/* 消息区域 */
+.deepseek-chat-messages {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* 消息气泡 */
+.deepseek-chat-message {
+    max-width: 80%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    line-height: 1.5;
+    font-size: 14px;
+    word-break: break-word;
+}
+
+.deepseek-chat-message.user {
+    align-self: flex-end;
+    background: var(--primary-color, #2563eb);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.deepseek-chat-message.assistant {
+    align-self: flex-start;
+    background: #f1f5f9;
+    color: #1e293b;
+    border-bottom-left-radius: 4px;
+}
+
+.deepseek-chat-message.error {
+    align-self: center;
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    opacity: 0.9;
+    transition: opacity 0.5s;
+}
+
+.deepseek-chat-message.error.fade-out {
+    opacity: 0;
+}
+
+/* 输入区域 */
+.deepseek-chat-input-area {
+    padding: 15px;
+    border-top: 1px solid #e2e8f0;
+    display: flex;
+    gap: 10px;
+    background: #f8fafc;
+}
+
+.deepseek-chat-input {
+    flex: 1;
+    border: 1px solid #cbd5e1;
+    border-radius: 20px;
+    padding: 10px 15px;
+    font-size: 14px;
+    resize: none;
+    max-height: 120px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.deepseek-chat-input:focus {
+    border-color: var(--primary-color, #2563eb);
+}
+
+.deepseek-chat-send {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--primary-color, #2563eb);
+    color: white;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.3s;
+}
+
+.deepseek-chat-send:hover {
+    background: var(--secondary-color, #1e40af);
+}
+
+/* 加载动画 */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #94a3b8;
+    display: inline-block;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+
+.typing-indicator span:nth-child(1) {
+    animation-delay: 0s;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+/* 响应式设计 */
+@media (max-width: 480px) {
+    .deepseek-chat-window {
+        width: 300px;
+        height: 450px;
+        top: 70px;
+    }
+    
+    .deepseek-chat-button {
+        width: 50px;
+        height: 50px;
+    }
+}

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html data-i18n-loading="true" lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title data-i18n="status.pageTitle" data-i18n-default="系统状态 - 资源激活工具站">系统状态 - 资源激活工具站</title>
+    <link rel="stylesheet" href="./css/mixin-style.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/status.css">
+    <link rel="stylesheet" href="./css/i18n.css">
+    <link rel="stylesheet" href="./css/ui-feedback.css">
+    <link rel="stylesheet" href="./css/status-indicator.css">
+    <link rel="stylesheet" href="./css/deepseek-chat.css">
+    <!-- 核心脚本 -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
+        crossorigin="anonymous"></script>
+    <!-- 核心脚本 -->
+    <script type="module" src="./main.js"></script>
+    <script type="module" src="./src/js/status.js"></script>
+    <script type="module" src="./src/js/modules/i18n-manager.js"></script>
+    <script type="module" src="./src/js/components/language-switcher.js"></script>
+    <script type="module" src="./src/js/ad-manager.js"></script>
+    <script type="module" src="./src/js/deepseek-chat-init.js"></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo" data-i18n="nav.home" data-i18n-default="资源激活">资源激活</a>
+            <nav>
+                <a href="../index.html" class="nav-link" style="font-weight: 800; color: var(--primary-color);">← 返回
+                    Trae 主页</a>
+                <a href="toolbox.html" data-i18n="nav.tools" data-i18n-default="工具">工具</a>
+                <a href="resources.html" data-i18n="nav.resources" data-i18n-default="资源">资源</a>
+                <a href="security.html" data-i18n="nav.security" data-i18n-default="安全">安全</a>
+                <a href="status.html" class="active" data-i18n="nav.status" data-i18n-default="状态">状态</a>
+                <div class="language-switcher" role="navigation" aria-label="语言选择">
+                    <button data-lang="zh" aria-label="切换到中文" data-i18n="languages.zh"
+                        data-i18n-default="中文">中文</button>
+                    <button data-lang="en" aria-label="Switch to English" data-i18n="languages.en"
+                        data-i18n-default="English">English</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" data-i18n-placeholder="status.search.placeholder"
+                    data-i18n-default-placeholder="搜索状态..." placeholder="搜索状态...">
+                <button data-i18n="status.search.button" data-i18n-default="搜索">搜索</button>
+            </div>
+        </section>
+
+        <section class="category-grid">
+            <div class="category-card">
+                <h2>
+                    <span class="status-indicator"></span>
+                    <span data-i18n="status.server" data-i18n-default="服务器状态">服务器状态</span>
+                </h2>
+                <div class="status-info">
+                    <div class="status-item">
+                        <span class="status-label" data-i18n="status.uptime" data-i18n-default="运行时间">运行时间</span>
+                        <span class="status-value" id="uptime">--:--:--</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label" data-i18n="status.load" data-i18n-default="系统负载">系统负载</span>
+                        <span class="status-value" id="load">--%</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="footer.copyright" data-i18n-default="© 2024 资源激活工具站 | Trae.ai 合作伙伴">&copy; 2024 资源激活工具站 |
+                Trae.ai 合作伙伴</p>
+        </div>
+    </footer>
+
+    <!-- 统一客服容器 -->
+    <div id="chat-container" class="deepseek-chat"></div>
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化客服系统
+            import('./src/js/modules/deepseek-chat.js').then(module => {
+                // 先检查是否有加密的API密钥
+                if (window.ENV && window.ENV.DEEPSEEK_API_KEY_ENCRYPTED) {
+                    // 如果有，先导入集成模块并获取解密后的API密钥
+                    import('./src/js/modules/deepseek-integration.js').then(integrationModule => {
+                        const integration = new integrationModule.DeepSeekIntegration();
+                        return integration.getApiKey();
+                    }).then(apiKey => {
+                        // 使用获取到的API密钥初始化客服系统
+                        module.default.init({
+                            container: '#chat-container',
+                            position: 'bottom-right',
+                            apiKey: apiKey
+                        });
+                    }).catch(error => {
+                        console.error('API密钥获取失败:', error);
+                        // 即使没有API密钥，也尝试初始化客服系统
+                        module.default.init({
+                            container: '#chat-container',
+                            position: 'bottom-right',
+                            apiKey: null
+                        });
+                    });
+                } else {
+                    // 如果没有加密的API密钥，直接初始化客服系统
+                    module.default.init({
+                        container: '#chat-container',
+                        position: 'bottom-right',
+                        apiKey: null
+                    });
+                }
+            }).catch(error => {
+                console.error('客服系统加载失败:', error);
+            });
+        });
+
+    </script>
+</body>
+
+</html>

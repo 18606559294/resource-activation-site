@@ -1,0 +1,278 @@
+/* 移动端优化样式 */
+
+/* 基础响应式布局 */
+@media (max-width: 768px) {
+    :root {
+        --spacing-xs: 0.2rem;
+        --spacing-sm: 0.4rem;
+        --spacing-md: 0.8rem;
+        --spacing-lg: 1.2rem;
+        --spacing-xl: 1.6rem;
+    }
+
+    html {
+        font-size: 14px;
+    }
+
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+}
+
+/* 移动导航栏 */
+@media (max-width: 768px) {
+    .navbar {
+        height: 60px;
+    }
+
+    .navbar-container {
+        height: 60px;
+    }
+
+    .nav-controls {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: var(--background-light);
+        padding: var(--spacing-sm);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-around;
+        z-index: 1000;
+    }
+
+    .dark .nav-controls {
+        background: var(--background-dark);
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+    }
+}
+
+/* 移动端英雄区域 */
+@media (max-width: 768px) {
+    .hero {
+        min-height: 80vh;
+        padding: 6rem 0 8rem;
+        text-align: center;
+    }
+
+    .hero-title {
+        font-size: 2.5rem;
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .hero-subtitle {
+        font-size: 1rem;
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .hero-cta {
+        flex-direction: column;
+        gap: var(--spacing-md);
+    }
+
+    .hero-cta .btn {
+        width: 100%;
+    }
+}
+
+/* 移动端卡片网格 */
+@media (max-width: 768px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-md);
+    }
+
+    .card {
+        padding: var(--spacing-lg);
+    }
+
+    .card-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .card .number {
+        font-size: 3rem;
+    }
+}
+
+/* 移动端统计部分 */
+@media (max-width: 768px) {
+    .stats-section {
+        margin: var(--spacing-lg) calc(var(--spacing-md) * -1);
+        padding: var(--spacing-xl) var(--spacing-md);
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-md);
+    }
+
+    .stat-item {
+        padding: var(--spacing-md);
+    }
+
+    .stat-number {
+        font-size: 2rem;
+    }
+
+    .stat-label {
+        font-size: 0.9rem;
+    }
+}
+
+/* 移动端页脚 */
+@media (max-width: 768px) {
+    .footer {
+        padding: var(--spacing-xl) 0 calc(60px + var(--spacing-xl));
+    }
+
+    .footer-grid {
+        grid-template-columns: 1fr;
+        gap: var(--spacing-lg);
+        text-align: center;
+    }
+
+    .footer-section h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .social-links {
+        justify-content: center;
+    }
+}
+
+/* 移动端手势支持 */
+@media (max-width: 768px) {
+    .card {
+        cursor: pointer;
+        user-select: none;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .card:active {
+        transform: scale(0.98);
+    }
+
+    .btn {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:active {
+        transform: scale(0.98);
+    }
+}
+
+/* 移动端性能优化 */
+@media (max-width: 768px) {
+    * {
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .hero,
+    .stats-section {
+        background-attachment: scroll;
+    }
+
+    .card,
+    .stat-item {
+        will-change: transform;
+    }
+}
+
+/* 移动端触摸反馈 */
+@media (max-width: 768px) {
+    .touch-feedback {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .touch-feedback::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 100px;
+        height: 100px;
+        background: radial-gradient(circle, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0) 70%);
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+        transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+    }
+
+    .touch-feedback:active::after {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 1;
+    }
+}
+
+/* 移动端加载优化 */
+@media (max-width: 768px) {
+    .loading {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--background-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    .loading-spinner {
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(var(--primary-rgb), 0.1);
+        border-top-color: var(--primary-color);
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+}
+
+/* 移动端滚动优化 */
+@media (max-width: 768px) {
+    .smooth-scroll {
+        scroll-behavior: smooth;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .scroll-snap-container {
+        scroll-snap-type: y mandatory;
+        overflow-y: scroll;
+        height: 100vh;
+    }
+
+    .scroll-snap-item {
+        scroll-snap-align: start;
+        height: 100vh;
+    }
+}
+
+/* 移动端字体优化 */
+@media (max-width: 768px) {
+    body {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-rendering: optimizeLegibility;
+    }
+}
+
+/* 移动端深色模式优化 */
+@media (max-width: 768px) and (prefers-color-scheme: dark) {
+    .navbar,
+    .nav-controls {
+        background: rgba(15, 23, 42, 0.8);
+    }
+
+    .card {
+        background: rgba(30, 41, 59, 0.8);
+    }
+
+    .touch-feedback::after {
+        background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 70%);
+    }
+}

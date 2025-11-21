@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html data-i18n-loading="true" lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; script-src 'self' https://pagead2.googlesyndication.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: *; frame-src *;">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <title data-i18n="feedback.title" data-i18n-default="问题反馈与解决">问题反馈与解决</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/ui-feedback.css">
+    <link rel="stylesheet" href="./css/feedback.css">
+    <link rel="stylesheet" href="./src/css/deepseek-chat.css">
+    <link rel="stylesheet" href="./css/i18n.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
+        crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo" data-i18n="nav.home" data-i18n-default="资源激活">资源激活</a>
+            <nav>
+                <a href="../index.html" class="nav-link" style="font-weight: 800; color: var(--primary-color);">← 返回
+                    Trae 主页</a>
+                <a href="toolbox.html" data-i18n="nav.tools" data-i18n-default="工具">工具</a>
+                <a href="resources.html" data-i18n="nav.resources" data-i18n-default="资源">资源</a>
+                <a href="security.html" data-i18n="nav.security" data-i18n-default="安全">安全</a>
+                <a href="status.html" data-i18n="nav.status" data-i18n-default="状态">状态</a>
+                <div class="language-switcher" role="navigation" aria-label="语言选择">
+                    <button data-lang="zh" aria-label="切换到中文" data-i18n="languages.zh"
+                        data-i18n-default="中文">中文</button>
+                    <button data-lang="en" aria-label="Switch to English" data-i18n="languages.en"
+                        data-i18n-default="English">English</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="feedback-form">
+            <h1 data-i18n="feedback.title" data-i18n-default="问题反馈与解决">问题反馈与解决</h1>
+            <form id="feedbackForm">
+                <div class="form-group">
+                    <label data-i18n="feedback.form.name" data-i18n-default="您的称呼：">您的称呼：</label>
+                    <input type="text" id="name" required data-i18n-placeholder="feedback.form.namePlaceholder"
+                        placeholder="请输入您的称呼">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="feedback.form.contact" data-i18n-default="联系方式（选填）：">联系方式（选填）：</label>
+                    <input type="text" id="contact" data-i18n-placeholder="feedback.form.contactPlaceholder"
+                        placeholder="邮箱/电话/微信">
+                </div>
+                <div class="form-group">
+                    <label data-i18n="feedback.form.question" data-i18n-default="问题描述：">问题描述：</label>
+                    <textarea id="question" required data-i18n-placeholder="feedback.form.questionPlaceholder"
+                        placeholder="请详细描述您遇到的问题..."></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" data-i18n="feedback.form.submit"
+                    data-i18n-default="提交问题">提交问题</button>
+            </form>
+        </section>
+
+        <section class="feedback-history">
+            <h2 data-i18n="feedback.history.title" data-i18n-default="历史问题">历史问题</h2>
+            <div id="historyList" class="history-list">
+                <p class="no-data" data-i18n="feedback.history.noData" data-i18n-default="暂无历史反馈">暂无历史反馈</p>
+            </div>
+        </section>
+
+        <!-- 广告容器 -->
+        <div class="ad-container">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4468142418161903"
+                data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="footer.copyright" data-i18n-default="© 2024 资源激活工具站 | Trae.ai 合作伙伴">&copy; 2024 资源激活工具站 |
+                Trae.ai 合作伙伴</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            // 添加CSS类控制初始显示
+            document.documentElement.classList.add('i18n-initializing');
+
+            if (window.i18nManager) {
+                i18nManager.addObserver(() => {
+                    // 使用延迟移除加载状态
+                    setTimeout(() => {
+                        document.documentElement.removeAttribute('data-i18n-loading');
+                        document.documentElement.classList.remove('i18n-initializing');
+                    }, 300);
+                });
+            } else {
+                // i18n管理器加载失败，移除加载状态显示默认内容
+                setTimeout(() => {
+                    document.documentElement.removeAttribute('data-i18n-loading');
+                    document.documentElement.classList.remove('i18n-initializing');
+                }, 1000);
+            }
+        });
+
+        // 添加加载超时保护
+        setTimeout(() => {
+            if (document.documentElement.hasAttribute('data-i18n-loading')) {
+                document.documentElement.removeAttribute('data-i18n-loading');
+                document.documentElement.classList.remove('i18n-initializing');
+            }
+        }, 3000);
+    </script>
+    <script type="module" src="./src/js/modules/i18n-manager.js"></script>
+    <script type="module" src="./src/js/components/language-switcher.js"></script>
+    <script type="module" src="./src/js/feedback.js"></script>
+    <script type="module" src="./src/js/modules/deepseek-chat.js"></script>
+    <script type="module" src="./src/js/ad-manager.js"></script>
+</body>
+
+</html>

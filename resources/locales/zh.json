@@ -1,0 +1,183 @@
+{
+  "languages": {
+    "zh": "中文",
+    "en": "English"
+  },
+  "accessibility": {
+    "currentLanguage": "当前语言：{{language}}",
+    "switchTo": "切换到{{language}}"
+  },
+  "messages": {
+    "languageChanged": "语言已切换",
+    "languageChangeFailed": "语言切换失败，请重试"
+  },
+  "site": {
+    "title": "资源激活工具站"
+  },
+  "nav": {
+    "home": "返回主页",
+    "tools": "工具",
+    "resources": "资源",
+    "security": "安全",
+    "status": "状态"
+  },
+  "toolbox": {
+    "pageTitle": "工具箱 - 资源激活工具站",
+    "title": "工具箱",
+    "search": {
+      "placeholder": "搜索工具...",
+      "button": "搜索"
+    },
+    "system": {
+      "title": "系统工具",
+      "sysinfo": {
+        "title": "系统信息",
+        "description": "查看系统硬件和软件信息"
+      },
+      "performance": {
+        "title": "性能监控",
+        "description": "实时监控系统性能指标"
+      }
+    },
+    "network": {
+      "title": "网络工具",
+      "diagnostic": {
+        "title": "网络诊断",
+        "description": "网络连接测试和诊断"
+      },
+      "portscan": {
+        "title": "端口扫描",
+        "description": "扫描开放端口和服务"
+      }
+    }
+  },
+  "resources": {
+    "pageTitle": "资源中心 - 资源激活工具站",
+    "title": "资源中心",
+    "system": {
+      "alt": "系统资源图标",
+      "title": "系统资源",
+      "iso": "系统镜像",
+      "drivers": "驱动程序",
+      "patches": "系统补丁"
+    },
+    "dev": {
+      "alt": "开发资源图标",
+      "title": "开发资源",
+      "sdk": "SDK下载",
+      "api": "API文档",
+      "examples": "代码示例"
+    },
+    "security": {
+      "alt": "安全资源图标",
+      "title": "安全资源",
+      "patches": "安全补丁",
+      "guides": "安全指南",
+      "vulndb": "漏洞数据库"
+    }
+  },
+  "categories": {
+    "title": "工具分类",
+    "system": {
+      "title": "系统工具",
+      "activation": "激活工具",
+      "optimization": "优化工具",
+      "diagnostic": "诊断工具"
+    },
+    "dev": {
+      "title": "开发工具",
+      "codeGen": "代码生成",
+      "apiTest": "API 测试",
+      "database": "数据库工具"
+    },
+    "security": {
+      "pageTitle": "安全中心 - 资源激活工具站",
+      "title": "安全中心",
+      "sections": {
+        "detection": {
+          "title": "安全检测",
+          "description": "所有工具均经过严格的安全检测，确保无毒无害。"
+        },
+        "instructions": {
+          "title": "使用说明",
+          "description": "请按照说明文档正确使用工具，避免因不当操作导致的安全问题。"
+        },
+        "disclaimer": {
+          "title": "免责声明",
+          "description": "本平台提供的工具仅供学习交流使用，请勿用于商业用途。"
+        }
+      }
+    }
+  },
+  "status": {
+    "pageTitle": "系统状态 - 资源激活工具站",
+    "title": "系统状态",
+    "sections": {
+      "server": {
+        "title": "服务器状态",
+        "online": "在线",
+        "offline": "离线"
+      },
+      "services": {
+        "title": "服务状态",
+        "api": "API服务",
+        "database": "数据库服务"
+      },
+      "system": {
+        "title": "系统信息",
+        "version": "版本号：",
+        "lastUpdate": "最后更新时间："
+      }
+    }
+  },
+  "common": {
+    "use": "立即使用"
+  },
+  "footer": {
+    "copyright": "© 2023 资源激活工具站"
+  },
+  "feedback": {
+    "title": "问题反馈与解决",
+    "form": {
+      "name": "您的称呼：",
+      "namePlaceholder": "请输入您的称呼",
+      "contact": "联系方式（选填）：",
+      "contactPlaceholder": "邮箱/电话/微信",
+      "question": "问题描述：",
+      "questionPlaceholder": "请详细描述您遇到的问题...",
+      "submit": "提交问题"
+    },
+    "history": {
+      "title": "历史问题",
+      "noData": "暂无历史反馈",
+      "date": "提交时间：",
+      "status": {
+        "pending": "等待处理",
+        "processing": "处理中",
+        "resolved": "已解决",
+        "closed": "已关闭"
+      }
+    },
+    "status": {
+      "success": "反馈提交成功",
+      "error": "提交失败，请重试"
+    }
+  },
+  "deepseek": {
+    "title": "在线客服",
+    "openChat": "打开客服聊天",
+    "closeChat": "关闭聊天窗口",
+    "inputPlaceholder": "请输入您的问题...",
+    "sendMessage": "发送消息",
+    "welcomeMessage": "您好！我是AI客服助手，很高兴为您服务。<br><br>您可以咨询以下问题：<br>1. 产品功能与使用方法<br>2. 账户激活与订阅问题<br>3. 技术支持与故障排除<br>4. 付款与发票相关<br><br>请告诉我您需要什么帮助？",
+    "errors": {
+      "initializing": "客服系统正在初始化，请稍后再试",
+      "initFailed": "客服系统初始化失败，请稍后再试",
+      "sendFailed": "消息发送失败，请稍后再试"
+    },
+    "logs": {
+      "initialized": "DeepSeek 客服聊天窗口已初始化",
+      "initFailed": "初始化DeepSeek客服聊天窗口失败:"
+    }
+  }
+}

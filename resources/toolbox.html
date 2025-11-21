@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html data-i18n-loading="true" lang="zh">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title data-i18n="toolbox.pageTitle" data-i18n-default="工具箱 - 资源激活工具站">工具箱 - 资源激活工具站</title>
+    <link rel="stylesheet" href="./css/mixin-style.css">
+    <link rel="stylesheet" href="./css/styles.css">
+    <link rel="stylesheet" href="./css/components.css">
+    <link rel="stylesheet" href="./css/toolbox.css">
+    <link rel="stylesheet" href="./css/i18n.css">
+    <link rel="stylesheet" href="./css/deepseek-chat.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4468142418161903"
+        crossorigin="anonymous"></script>
+    <!-- 核心脚本 -->
+    <script type="module" src="./src/js/deepseek-chat-init.js"></script>
+</head>
+
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="index.html" class="logo" data-i18n="nav.home" data-i18n-default="资源激活">资源激活</a>
+            <nav>
+                <a href="../index.html" class="nav-link" style="font-weight: 800; color: var(--primary-color);">← 返回
+                    Trae 主页</a>
+                <a href="toolbox.html" class="active" data-i18n="nav.tools" data-i18n-default="工具">工具</a>
+                <a href="resources.html" data-i18n="nav.resources" data-i18n-default="资源">资源</a>
+                <a href="security.html" data-i18n="nav.security" data-i18n-default="安全">安全</a>
+                <a href="status.html" data-i18n="nav.status" data-i18n-default="状态">状态</a>
+                <div class="language-switcher" role="navigation" aria-label="语言选择">
+                    <button data-lang="zh" aria-label="切换到中文" data-i18n="languages.zh"
+                        data-i18n-default="中文">中文</button>
+                    <button data-lang="en" aria-label="Switch to English" data-i18n="languages.en"
+                        data-i18n-default="English">English</button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="search-section">
+            <div class="search-box">
+                <input type="text" data-i18n-placeholder="toolbox.search.placeholder"
+                    data-i18n-default-placeholder="搜索工具..." placeholder="搜索工具...">
+                <button data-i18n="toolbox.search.button" data-i18n-default="搜索">搜索</button>
+            </div>
+        </section>
+
+        <section class="toolbox-content">
+            <h1 data-i18n="toolbox.title" data-i18n-default="工具箱">工具箱</h1>
+
+            <div class="category-grid">
+                <div class="category-card">
+                    <h2 data-i18n="toolbox.system.title" data-i18n-default="系统工具">系统工具</h2>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.system.sysinfo.title" data-i18n-default="系统信息">系统信息</h3>
+                            <p data-i18n="toolbox.system.sysinfo.description" data-i18n-default="查看系统硬件和软件信息">
+                                查看系统硬件和软件信息</p>
+                            <a href="#" class="btn" data-i18n="common.use" data-i18n-default="使用">使用</a>
+                        </div>
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.system.performance.title" data-i18n-default="性能监控">性能监控</h3>
+                            <p data-i18n="toolbox.system.performance.description" data-i18n-default="实时监控系统性能指标">
+                                实时监控系统性能指标</p>
+                            <a href="#" class="btn" data-i18n="common.use" data-i18n-default="使用">使用</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <h2 data-i18n="toolbox.network.title" data-i18n-default="网络工具">网络工具</h2>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.network.diagnostic.title" data-i18n-default="网络诊断">网络诊断</h3>
+                            <p data-i18n="toolbox.network.diagnostic.description" data-i18n-default="网络连接测试和诊断">
+                                网络连接测试和诊断</p>
+                            <a href="#" class="btn" data-i18n="common.use" data-i18n-default="使用">使用</a>
+                        </div>
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.network.portscan.title" data-i18n-default="端口扫描">端口扫描</h3>
+                            <p data-i18n="toolbox.network.portscan.description" data-i18n-default="扫描开放端口和服务">扫描开放端口和服务
+                            </p>
+                            <a href="#" class="btn" data-i18n="common.use" data-i18n-default="使用">使用</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category-card">
+                    <h2 data-i18n="toolbox.software.title" data-i18n-default="软件工具">软件工具</h2>
+                    <div class="tool-list">
+                        <div class="tool-item">
+                            <h3 data-i18n="toolbox.software.idm.title" data-i18n-default="IDM注册码">IDM注册码</h3>
+                            <p data-i18n="toolbox.software.idm.description"
+                                data-i18n-default="Internet Download Manager软件注册码">Internet Download Manager软件注册码</p>
+                            <div class="tool-actions">
+                                <a href="https://wwsa.lanzouu.com/b00y9v0dla" class="btn download-btn"
+                                    data-i18n="toolbox.software.idm.download" data-i18n-default="下载"
+                                    target="_blank">下载</a>
+                                <span class="extract-code" data-i18n="toolbox.software.idm.extractCode"
+                                    data-i18n-default="提取码：9xlu">提取码：9xlu</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 广告容器 -->
+        <div class="ad-container">
+            <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-4468142418161903"
+                data-ad-format="auto" data-full-width-responsive="true"></ins>
+            <script>
+                (adsbygoogle = window.adsbygoogle || []).push({});
+            </script>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p data-i18n="footer.copyright" data-i18n-default="© 2024 资源激活工具站 | Trae.ai 合作伙伴">&copy; 2024 资源激活工具站 |
+                Trae.ai 合作伙伴</p>
+        </div>
+    </footer>
+
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            // 添加CSS类控制初始显示
+            document.documentElement.classList.add('i18n-initializing');
+
+            if (window.i18nManager) {
+                i18nManager.addObserver(() => {
+                    // 使用延迟移除加载状态
+                    setTimeout(() => {
+                        document.documentElement.removeAttribute('data-i18n-loading');
+                        document.documentElement.classList.remove('i18n-initializing');
+                    }, 300);
+                });
+            } else {
+                // i18n管理器加载失败，移除加载状态显示默认内容
+                setTimeout(() => {
+                    document.documentElement.removeAttribute('data-i18n-loading');
+                    document.documentElement.classList.remove('i18n-initializing');
+                }, 1000);
+            }
+        });
+
+        // 添加加载超时保护
+        setTimeout(() => {
+            if (document.documentElement.hasAttribute('data-i18n-loading')) {
+                document.documentElement.removeAttribute('data-i18n-loading');
+                document.documentElement.classList.remove('i18n-initializing');
+            }
+        }, 3000);
+    </script>
+    <script type="module" src="./src/js/modules/i18n-manager.js"></script>
+    <script type="module" src="./src/js/components/language-switcher.js"></script>
+    <script type="module" src="./src/js/toolbox.js"></script>
+    <script type="module" src="./src/js/ad-manager.js"></script>
+
+    <!-- 智能客服容器 -->
+    <div id="chat-container" class="deepseek-chat"></div>
+    <script type="module">
+        document.addEventListener('DOMContentLoaded', () => {
+            import('./src/js/modules/deepseek-chat.js').then(module => {
+                module.default.init({
+                    container: '#chat-container',
+                    position: 'bottom-right'
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

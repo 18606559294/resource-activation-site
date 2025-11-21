@@ -1,0 +1,6 @@
+{
+    "tools_root": "E:/工具箱",
+    "toolsDirectory": "./tools",
+    "downloadDirectory": "./downloads", 
+    "tempDirectory": "./temp"
+}
