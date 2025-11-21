@@ -1,0 +1,56 @@
+name: Deploy to Tencent Cloud
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create deployment package
+        run: |
+          zip -r deploy_package.zip index.html resources nginx-config.conf
+
+      - name: Copy files to server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.TENCENT_HOST }}
+          username: ${{ secrets.TENCENT_USERNAME }}
+          password: ${{ secrets.TENCENT_PASSWORD }}
+          source: "deploy_package.zip"
+          target: "/tmp/"
+
+      - name: Execute remote commands
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.TENCENT_HOST }}
+          username: ${{ secrets.TENCENT_USERNAME }}
+          password: ${{ secrets.TENCENT_PASSWORD }}
+          script: |
+            # Install dependencies if missing (idempotent)
+            if ! command -v nginx &> /dev/null; then
+                apt-get update && apt-get install -y nginx unzip
+            fi
+            
+            # Prepare target directory
+            mkdir -p /var/www/trae-promo
+            
+            # Unzip
+            unzip -o /tmp/deploy_package.zip -d /var/www/trae-promo
+            
+            # Configure Nginx
+            cp /var/www/trae-promo/nginx-config.conf /etc/nginx/sites-available/ndtool.cn.conf
+            ln -sf /etc/nginx/sites-available/ndtool.cn.conf /etc/nginx/sites-enabled/
+            
+            # Test and Reload Nginx
+            nginx -t
+            systemctl reload nginx
+            
+            # Cleanup
+            rm /tmp/deploy_package.zip

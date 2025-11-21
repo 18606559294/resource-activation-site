@@ -63,3 +63,9 @@ systemctl restart nginx
 访问 http://ndtool.cn 查看效果。
 - 主页应该是 Trae 的推广页。
 - 点击导航栏的“资源激活工具”或底部的链接，应跳转到资源激活站。
+
+## 7. 自动部署 (推荐)
+
+我们已经为您配置了 GitHub Actions。请查看 [GITHUB_ACTIONS_SETUP.md](GITHUB_ACTIONS_SETUP.md) 了解如何配置密钥以启用自动部署。
+一旦配置完成，您只需将代码推送到 GitHub，服务器就会自动更新。
+
