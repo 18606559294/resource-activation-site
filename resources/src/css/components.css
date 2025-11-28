@@ -96,8 +96,28 @@
   font-weight: 500;
   border-radius: 4px;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+.btn:hover::before {
+  width: 300px;
+  height: 300px;
 }
 
 .btn:disabled {
@@ -106,12 +126,14 @@
 }
 
 .btn-primary {
-  background: #1890ff;
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
   color: white;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
 }
 
 .btn-primary:hover {
-  background: #40a9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
 }
 
 .btn-secondary {
@@ -147,9 +169,9 @@
 }
 
 .language-switcher button.active {
-  background: #fff;
-  color: #1890ff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .language-switcher button.is-loading {
@@ -162,7 +184,7 @@
   position: absolute;
   width: 14px;
   height: 14px;
-  border: 2px solid #1890ff;
+  border: 2px solid #667eea;
   border-top-color: transparent;
   border-radius: 50%;
   animation: button-spin 0.8s linear infinite;

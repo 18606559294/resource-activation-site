@@ -65,6 +65,13 @@
             background: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 20px rgba(102, 126, 234, 0.5));
         }
 
         .cta-button {
@@ -103,6 +110,29 @@
             background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
         }
 
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+            animation: floatEffect 15s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes floatEffect {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-30px);
+            }
+        }
+
         .hero-content {
             position: relative;
             z-index: 1;
@@ -113,7 +143,18 @@
             margin-bottom: 1.5rem;
             font-weight: 800;
             text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 0.8s ease-out;
+            animation: fadeInUp 0.8s ease-out, textGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% {
+                text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+                             0 0 30px rgba(255, 255, 255, 0.2);
+            }
+            50% {
+                text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
+                             0 0 50px rgba(255, 255, 255, 0.4);
+            }
         }
 
         .hero-subtitle {
@@ -137,11 +178,31 @@
             display: inline-block;
             animation: fadeInUp 0.8s ease-out 0.4s both;
             border: 3px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .main-cta::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(102, 126, 234, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .main-cta:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .main-cta:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
         }
 
         /* 巨大优势展示区 */
@@ -172,13 +233,14 @@
             padding: 40px;
             border-radius: 20px;
             text-align: center;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
         .advantage-card:hover {
-            transform: translateY(-10px);
+            transform: translateY(-10px) scale(1.05);
             background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
         }
 
         .advantage-number {
@@ -218,13 +280,31 @@
             padding: 40px;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .feature-card:hover::before {
+            opacity: 1;
         }
 
         .feature-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.2);
         }
 
         .feature-icon {

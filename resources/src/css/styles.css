@@ -1,9 +1,9 @@
 /* 现代商务风格样式 */
 :root {
   /* 更新配色方案 */
-  --primary-color: #2563eb;
-  --secondary-color: #1e40af;
-  --accent-color: #3b82f6;
+  --primary-color: #667eea;
+  --secondary-color: #764ba2;
+  --accent-color: #8b7bea;
   --background-light: #f8fafc;
   --background-dark: #0f172a;
   --text-light: #f1f5f9;
@@ -11,6 +11,9 @@
   --success-color: #10b981;
   --warning-color: #f59e0b;
   --error-color: #ef4444;
+  
+  /* Trae.ai 品牌渐变色 */
+  --trae-gradient: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
 
   /* 间距系统 */
   --spacing-xs: 0.5rem;
@@ -91,14 +94,17 @@ body {
   gap: 0.75rem;
   font-size: 1.25rem;
   font-weight: 600;
-  color: var(--primary-color);
+  background: var(--trae-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .logo:hover {
   transform: scale(1.05);
-  color: var(--accent-color);
+  filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3));
 }
 
 .nav-controls {
@@ -126,8 +132,9 @@ body {
 }
 
 .language-switcher button[aria-pressed="true"] {
-  background: var(--primary-color);
+  background: var(--trae-gradient);
   color: white;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
 }
 
 .theme-toggle {
@@ -160,7 +167,7 @@ body {
   border-radius: var(--border-radius-lg);
   padding: var(--spacing-lg);
   box-shadow: var(--shadow-md);
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border: 1px solid rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
@@ -173,7 +180,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: var(--gradient-primary);
+  background: var(--trae-gradient);
   opacity: 0;
   transition: opacity var(--transition-normal);
   z-index: 0;
@@ -189,8 +196,8 @@ body {
 }
 
 .feature-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-xl);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
 }
 
 .card-icon {
@@ -199,7 +206,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--primary-color);
+  background: var(--trae-gradient);
   border-radius: var(--border-radius-md);
   margin-bottom: var(--spacing-md);
 }
@@ -210,10 +217,26 @@ body {
 
 /* 统计部分 */
 .stats {
-  background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+  background: var(--trae-gradient);
   color: white;
   padding: var(--spacing-xl) 0;
   margin: var(--spacing-xl) 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: 
+    radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.15) 0%, transparent 50%);
+  animation: floatSlow 15s ease-in-out infinite;
+  pointer-events: none;
 }
 
 .stats-grid {
@@ -322,3 +345,12 @@ body {
 .stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
 .stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
 .stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+
+/* Trae.ai 品牌文字渐变样式 */
+.trae-brand {
+  background: var(--trae-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 700;
+}
