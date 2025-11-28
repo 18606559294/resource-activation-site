@@ -12,8 +12,10 @@
   --warning-color: #f59e0b;
   --error-color: #ef4444;
   
-  /* Trae.ai 品牌渐变色 */
-  --trae-gradient: linear-gradient(45deg, #667eea 0%, #764ba2 100%);
+  /* Trae.ai 品牌渐变色 - 绿叶色 */
+  --trae-gradient: linear-gradient(45deg, #10b981 0%, #059669 100%);
+  --trae-color-light: #34d399;
+  --trae-color-dark: #047857;
 
   /* 间距系统 */
   --spacing-xs: 0.5rem;
@@ -104,7 +106,7 @@ body {
 
 .logo:hover {
   transform: scale(1.05);
-  filter: drop-shadow(0 0 10px rgba(102, 126, 234, 0.3));
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
 }
 
 .nav-controls {
@@ -134,7 +136,7 @@ body {
 .language-switcher button[aria-pressed="true"] {
   background: var(--trae-gradient);
   color: white;
-  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
 }
 
 .theme-toggle {
@@ -197,7 +199,7 @@ body {
 
 .feature-card:hover {
   transform: translateY(-8px) scale(1.02);
-  box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+  box-shadow: 0 20px 40px rgba(16, 185, 129, 0.25);
 }
 
 .card-icon {

@@ -245,12 +245,12 @@
 
 @keyframes glowPulse {
     0%, 100% {
-        box-shadow: 0 0 20px rgba(102, 126, 234, 0.4),
-                    0 0 40px rgba(118, 75, 162, 0.3);
+        box-shadow: 0 0 20px rgba(16, 185, 129, 0.4),
+                    0 0 40px rgba(5, 150, 105, 0.3);
     }
     50% {
-        box-shadow: 0 0 40px rgba(102, 126, 234, 0.6),
-                    0 0 60px rgba(118, 75, 162, 0.5);
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.6),
+                    0 0 60px rgba(5, 150, 105, 0.5);
     }
 }
 
@@ -290,33 +290,33 @@
 
 @keyframes ripple {
     0% {
-        box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4),
-                    0 0 0 0 rgba(118, 75, 162, 0.4);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4),
+                    0 0 0 0 rgba(5, 150, 105, 0.4);
     }
     50% {
-        box-shadow: 0 0 0 15px rgba(102, 126, 234, 0.1),
-                    0 0 0 30px rgba(118, 75, 162, 0.1);
+        box-shadow: 0 0 0 15px rgba(16, 185, 129, 0.1),
+                    0 0 0 30px rgba(5, 150, 105, 0.1);
     }
     100% {
-        box-shadow: 0 0 0 30px rgba(102, 126, 234, 0),
-                    0 0 0 60px rgba(118, 75, 162, 0);
+        box-shadow: 0 0 0 30px rgba(16, 185, 129, 0),
+                    0 0 0 60px rgba(5, 150, 105, 0);
     }
 }
 
 @keyframes textGlow {
     0%, 100% {
-        text-shadow: 0 0 10px rgba(102, 126, 234, 0.5),
-                     0 0 20px rgba(118, 75, 162, 0.3);
+        text-shadow: 0 0 10px rgba(16, 185, 129, 0.5),
+                     0 0 20px rgba(5, 150, 105, 0.3);
     }
     50% {
-        text-shadow: 0 0 20px rgba(102, 126, 234, 0.8),
-                     0 0 40px rgba(118, 75, 162, 0.6);
+        text-shadow: 0 0 20px rgba(16, 185, 129, 0.8),
+                     0 0 40px rgba(5, 150, 105, 0.6);
     }
 }
 
 /* 新增动画类 */
 .animate-gradient {
-    background: linear-gradient(45deg, #667eea, #764ba2, #667eea);
+    background: linear-gradient(45deg, #10b981, #059669, #10b981);
     background-size: 200% 200%;
     animation: gradientShift 3s ease infinite;
 }
@@ -352,8 +352,8 @@
 
 .hover-lift:hover {
     transform: translateY(-10px) scale(1.02);
-    box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3),
-                0 10px 20px rgba(118, 75, 162, 0.2);
+    box-shadow: 0 20px 40px rgba(16, 185, 129, 0.3),
+                0 10px 20px rgba(5, 150, 105, 0.2);
 }
 
 .hover-gradient-shift {
@@ -399,9 +399,9 @@
     width: 100%;
     height: 100%;
     background-image: 
-        radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(102, 126, 234, 0.05) 0%, transparent 50%);
+        radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(5, 150, 105, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 40% 20%, rgba(16, 185, 129, 0.05) 0%, transparent 50%);
     animation: floatSlow 15s ease-in-out infinite;
     pointer-events: none;
 }
